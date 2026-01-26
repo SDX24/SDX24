@@ -2,7 +2,7 @@
 
 ### 🚀 About Me
 
-Software developer passionate about building modern web applications with cutting-edge technologies and best practices.
+Full stack web developer passionate about building modern web applications with cutting-edge technologies and best practices.
 
 ### 💼 Portfolio
 
@@ -19,56 +19,6 @@ This repository serves as my GitHub profile and contains my portfolio website.
 - 🧪 **Playwright** - End-to-end testing
 - 🔒 **Automated DevOps** - Pre-commit hooks, CI/CD, security scanning
 
-### 🛠️ Tech Stack
-
-```typescript
-const skills = {
-  frontend: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-  backend: ["Node.js", "Bun"],
-  devops: ["GitHub Actions", "Vercel", "Docker"],
-  testing: ["Playwright", "Jest", "Bun Test"],
-  tools: ["Git", "Turborepo", "ESLint", "Prettier"],
-};
-```
-
-### 📊 Current Focus
-
-- 🎯 Building AI-friendly development workflows
-- 🔐 Implementing automated security guardrails
-- 📈 Optimizing build pipelines and performance
-- 🎨 Creating accessible, modern web experiences
-
-### 🔥 Featured Projects
-
-Coming soon! Check back as I populate this portfolio with exciting projects.
-
-### 📫 Get In Touch
-
-- 💼 Portfolio: [sdx24.vercel.app](https://sdx24.vercel.app)
-- 💬 Open to collaborations and interesting projects!
-
-### 📈 GitHub Stats
-
-![SDX24's GitHub stats](https://github-readme-stats.vercel.app/api?username=lonelyhope&show_icons=true&theme=dark)
-
-### 🏆 Development Philosophy
-
-> "Code is poetry, but good code is poetry with automated spell-check, linting, and a strict review process."
-
-I believe in:
-
-- ✅ Automated quality gates over manual reviews
-- ✅ Type safety over runtime errors
-- ✅ Tests over hope
-- ✅ Documentation over memory
-- ✅ Continuous improvement over perfection
-
 ---
 
-### 📚 Project Documentation
-
-For development setup and technical details, see [MASTER_SETUP.md](MASTER_SETUP.md)
-
----
-
-⭐️ From [SDX24](https://github.com/lonelyhope)
+⭐️ From [SDX24](https://github.com/sdx24)
