@@ -37,9 +37,21 @@ SDX24/
         │   └── logo-bw-inverse.svg # B&W inverse variant
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
+│       │   │   ├── api/       # API routes
+│       │   │   │   └── health/ # Health check endpoint
+│       │   │   ├── test/      # Test page (/test)
 │       │   │   ├── layout.tsx # Root layout
 │       │   │   ├── page.tsx   # Landing page
 │       │   │   └── globals.css # Global styles + fonts
+│       │   ├── components/    # Reusable UI components
+│       │   │   └── index.ts   # Barrel export
+│       │   ├── lib/           # Utilities and configurations
+│       │   │   ├── utils.ts   # cn() className utility
+│       │   │   └── index.ts   # Barrel export
+│       │   ├── utils/         # Helper functions
+│       │   │   └── index.ts   # Barrel export
+│       │   ├── types/         # TypeScript type definitions
+│       │   │   └── index.ts   # Barrel export
 │       │   └── env.ts         # Environment validation
 │       ├── .env.example       # Environment template
 │       ├── next.config.js     # Next.js configuration
@@ -106,14 +118,60 @@ apps/web/src/app/
 
 #### Component Organization
 
+**Current Structure (Next.js 13+ App Router):**
+
 ```
 apps/web/src/
-├── app/                  # Pages (routes)
-├── components/           # Reusable components
-│   ├── ui/              # UI primitives
-│   └── features/        # Feature-specific components
-├── lib/                 # Utilities and helpers
-└── types/               # TypeScript type definitions
+├── app/                  # Pages & API routes (Next.js App Router)
+│   ├── page.tsx         # / (Landing page)
+│   ├── layout.tsx       # Root layout
+│   ├── globals.css      # Global styles
+│   ├── test/
+│   │   └── page.tsx     # /test (Logo variations)
+│   └── api/             # API routes
+│       └── health/
+│           └── route.ts # GET /api/health
+├── components/           # Reusable UI components
+│   └── index.ts         # Barrel export for easy imports
+├── lib/                 # Utilities, configurations, API clients
+│   ├── utils.ts         # cn() for className merging
+│   └── index.ts         # Barrel export
+├── utils/               # Pure utility functions
+│   └── index.ts         # Barrel export
+├── types/               # TypeScript type definitions
+│   └── index.ts         # Barrel export
+└── env.ts               # Environment variable validation (T3 Env)
+```
+
+**Why `/apps/web/src/app`?**
+
+This is the **Next.js App Router** (introduced in Next.js 13, default in 14+). It's NOT the old `/pages` directory structure. The `/src/app` pattern is the modern standard:
+
+- `app/` - File-based routing with React Server Components
+- `app/layout.tsx` - Root layout wrapping all pages
+- `app/page.tsx` - Index route (/)
+- `app/api/` - API route handlers
+- `app/[dynamic]/` - Dynamic routes
+
+**Old structure (Pages Router, deprecated):**
+
+```
+pages/
+├── index.tsx           # /
+├── about.tsx           # /about
+└── api/
+    └── hello.ts        # /api/hello
+```
+
+**Import Aliases:**
+
+TypeScript is configured with path aliases for clean imports:
+
+```typescript
+// Instead of: import { cn } from "../../../lib/utils"
+// Instead of: import Button from "../../components/ui/Button"
+import { Button } from "@/components";
+import { cn } from "@/lib";
 ```
 
 ### `packages/config/` - Shared Configuration
