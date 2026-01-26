@@ -90,13 +90,15 @@ SDX24/
 
 ```
 apps/web/src/app/
-├── page.tsx              → /
+├── page.tsx              → / (Landing page: Portfolio with logo, bio, CTAs, projects)
+├── test/
+│   └── page.tsx          → /test (Logo visibility test page with 11 variations)
 ├── about/
-│   └── page.tsx          → /about
+│   └── page.tsx          → /about (Not yet created)
 └── projects/
-    ├── page.tsx          → /projects
+    ├── page.tsx          → /projects (Not yet created)
     └── [slug]/
-        └── page.tsx      → /projects/:slug
+        └── page.tsx      → /projects/:slug (Not yet created)
 ```
 
 #### Component Organization
