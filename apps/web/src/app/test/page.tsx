@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 // Logo SVG component with customizable colors
 function LogoSVG({
@@ -213,12 +214,12 @@ export default function TestPage() {
 
         {/* Navigation */}
         <div className="mt-12 text-center">
-          <a
+          <Link
             href="/"
             className="inline-block rounded-lg bg-brand-teal-light px-6 py-3 font-bold text-white transition-colors hover:bg-brand-teal"
           >
             ← Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </main>
