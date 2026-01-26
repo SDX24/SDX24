@@ -92,7 +92,7 @@ SDX24/
 apps/web/src/app/
 ├── page.tsx              → / (Landing page: Portfolio with logo, bio, CTAs, projects)
 ├── test/
-│   └── page.tsx          → /test (Logo visibility test page with 11 variations)
+│   └── page.tsx          → /test (Logo color variations with customizable LogoSVG component - 9 options)
 ├── about/
 │   └── page.tsx          → /about (Not yet created)
 └── projects/
