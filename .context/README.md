@@ -14,8 +14,33 @@ This directory contains essential context files that AI assistants **MUST** read
 
 **The guardrails exist to prevent AI from going off-task. Respect them.**
 
+## 🚨 CLI COMMAND CONFIRMATION REQUIRED
+
+**CRITICAL**: Ask for user confirmation BEFORE running any CLI commands that:
+
+1. **Are Irreversible (High Risk)**:
+   - `git push --force` - Force push (rewrites history)
+   - `git reset --hard` - Discards changes permanently
+   - `git clean -fd` - Removes untracked files
+   - Database migrations, drops, or destructive operations
+
+2. **Bypass Safety Checks**:
+   - `--no-verify` flag (Git hooks)
+   - `--skip-*` flags (Skip validations)
+   - `--force` flags (Override protections)
+   - Modifying hook files to disable checks
+
+3. **Check Git History First**:
+   - Before suggesting irreversible commands, check `git log` or recent commits
+   - Verify if files exist before deletion
+   - Confirm backup/safety measures
+
+**Note**: File deletion (`rm`), directory removal, and dependency changes are allowed without confirmation.\*\*
+
 ## 📋 Context Files
 
+- **[README.md](README.md)** - This file, context directory guide
+- **[branding.md](branding.md)** - Brand guidelines, colors, typography, logo usage (STRICT)
 - **[devops-rules.md](devops-rules.md)** - Strict DevOps standards and quality gates
 - **[project-structure.md](project-structure.md)** - Complete project structure and file paths
 - **[tech-stack.md](tech-stack.md)** - All packages, tools, and technologies used
@@ -69,6 +94,18 @@ This directory contains essential context files that AI assistants **MUST** read
 - Username: **SDX24**
 - No variations like "SDX 2024" or "SDX2024"
 - Keep branding consistent
+
+## 🚫 DO NOT EDIT: Main README.md
+
+**CRITICAL**: `/README.md` (root) is the **GitHub profile page**, NOT project documentation.
+
+- ❌ DO NOT edit main README.md for project documentation
+- ❌ DO NOT add setup instructions or technical details there
+- ✅ It should ONLY contain portfolio/profile information
+- ✅ For project docs, update `.context/` files instead
+- ✅ Main README is separate from this repository's development
+
+**Purpose**: GitHub profile page visible at `github.com/sdx24/sdx24`
 
 ## 🔍 AI Workflow
 

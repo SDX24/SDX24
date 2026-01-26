@@ -46,17 +46,14 @@ SDX24/
 │       ├── tsconfig.json      # TypeScript config
 │       └── vercel.json        # Vercel deployment config
 ├── packages/                    # Shared packages
-│   └── confindex.ts           # TypeScript placeholder
-│       ├── ig/                 # Shared configurations
+│   └── config/                 # Shared configurations
+│       ├── index.ts           # TypeScript placeholder
 │       ├── package.json       # Config package metadata
 │       ├── prettier.config.js # Prettier settings
 │       └── tsconfig.json      # Base TypeScript config
-├── docs/                        # Documentation (moved from root)
-│   ├── GITHUB_SETUP.md        # GitHub configuration guide
-│   ├── SETUP_COMPLETE.md      # Setup completion guide
-│   temp-brand/                  # Temporary brand assets (can delete)
+├── scripts/                     # Utility scripts
+│   └── dev-setup.sh           # Automated development setup
 ├── .eslintrc.json              # ESLint configuration
-├── └── QUICK_REFERENCE.md     # Daily command reference
 ├── .gitignore                   # Git ignore rules
 ├── commitlint.config.js        # Commit message rules
 ├── knip.config.ts              # Dead code detection
@@ -144,11 +141,6 @@ Tools:
 
 - Trivy (vulnerability scanning)
 - Results uploaded to GitHub Security
-
-### `docs/` - Documentation
-
-**Purpose**: Developer documentation and setup guides
-**Note**: Separate from README.md (which is GitHub profile page)
 
 ## 📝 File Naming Conventions
 

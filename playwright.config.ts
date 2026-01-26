@@ -18,8 +18,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "cd apps/web && bun run dev",
+    command: "cd apps/web && bun run build && bun run start",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
 });
