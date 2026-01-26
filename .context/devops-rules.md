@@ -78,9 +78,14 @@ import { helper } from "./utils";
 1. **Build** - Production build must succeed
 2. **Lint** - ESLint must pass
 3. **Type Check** - TypeScript must compile
-4. **E2E Tests** - Playwright tests must pass
-5. **Security Scan** - Trivy vulnerability scan
-6. **Dead Code** - Knip detection (warning only)
+4. **Security Scan** - Trivy vulnerability scan
+5. **Dead Code** - Knip detection (warning only)
+
+### Optional Local Tests
+
+- **E2E Tests** - Playwright tests available locally (`bun run test:e2e`)
+  - Currently disabled in CI to reduce pipeline complexity
+  - Re-enable in `.github/workflows/ci.yml` when needed
 
 ### Branch Protection (GitHub)
 
