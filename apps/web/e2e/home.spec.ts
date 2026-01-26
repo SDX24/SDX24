@@ -1,8 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-test("homepage displays SDX24", async ({ page }) => {
+test("homepage displays Stefan Dorosh portfolio", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: /SDX24/i })).toBeVisible();
-  await expect(page.getByText(/Portfolio Coming Soon/i)).toBeVisible();
+  // Check name is visible
+  await expect(page.getByRole("heading", { name: /Stefan Dorosh/i })).toBeVisible();
+
+  // Check title is visible
+  await expect(page.getByText(/Full Stack Web Developer/i)).toBeVisible();
+
+  // Check CTA buttons exist
+  await expect(page.getByRole("link", { name: /View GitHub/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /LinkedIn/i })).toBeVisible();
+
+  // Check featured projects section
+  await expect(page.getByRole("heading", { name: /Featured Projects/i })).toBeVisible();
+  await expect(page.getByText(/Tandem/i)).toBeVisible();
+  await expect(page.getByText(/InsurFlow/i)).toBeVisible();
 });

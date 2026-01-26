@@ -82,6 +82,9 @@ SDX24/
 **Purpose**: Main portfolio website
 **Entry point**: `src/app/page.tsx`
 **Routing**: File-based routing in `src/app/`
+**Current pages**:
+
+- `/` - Landing page with portfolio, projects, and contact information
 
 #### Adding New Pages
 
