@@ -2,6 +2,14 @@
 
 > **ENFORCED**: Pre-commit hooks validate these requirements. Commits will be **BLOCKED** if violated.
 
+## ⚠️ NEVER BYPASS COMMIT CHECKS
+
+**DO NOT** disable or bypass pre-commit hooks unless explicitly instructed by the user.
+
+- The guardrails exist for a reason: to minimize risk of going off-task
+- ALWAYS fix the root cause instead of disabling checks
+- ONLY use `--no-verify` if user explicitly requests it
+
 ## 🎯 Conventional Commits (Required)
 
 ### Format

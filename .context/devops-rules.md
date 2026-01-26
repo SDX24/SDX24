@@ -2,6 +2,19 @@
 
 > **CRITICAL**: These rules are **ENFORCED** by automated tooling. Commits will be **BLOCKED** if violated.
 
+## ⚠️ NEVER BYPASS COMMIT CHECKS
+
+**RULE**: Do NOT disable, skip, or bypass any commit checks (Husky hooks, lint-staged, ESLint, TypeScript, Prettier) unless the user **EXPLICITLY** instructs you to do so.
+
+- ❌ DO NOT use `git commit --no-verify`
+- ❌ DO NOT modify lint-staged to remove checks
+- ❌ DO NOT add `@ts-ignore` or `eslint-disable` comments
+- ❌ DO NOT simplify configurations to make commits "easier"
+- ✅ ALWAYS fix the underlying issue that's blocking the commit
+- ✅ ONLY bypass if user explicitly says "skip the checks" or "bypass the hooks"
+
+**The guardrails exist to prevent AI from going off-task. Respect them.**
+
 ## 🛡️ Pre-Commit Requirements
 
 ### 1. Code Quality Gates (Enforced by Husky)

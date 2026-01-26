@@ -2,6 +2,18 @@
 
 This directory contains essential context files that AI assistants **MUST** read before making any changes to the codebase.
 
+## ⚠️ NEVER BYPASS COMMIT CHECKS
+
+**CRITICAL RULE**: Do NOT disable, skip, or bypass any commit checks (Husky hooks, lint-staged, ESLint, TypeScript, Prettier) unless the user **EXPLICITLY** instructs you to do so.
+
+- ❌ DO NOT use `git commit --no-verify`
+- ❌ DO NOT modify lint-staged to remove checks
+- ❌ DO NOT simplify configurations to make commits "easier"
+- ✅ ALWAYS fix the underlying issue that's blocking the commit
+- ✅ ONLY bypass if user explicitly says "skip the checks" or "bypass the hooks"
+
+**The guardrails exist to prevent AI from going off-task. Respect them.**
+
 ## 📋 Context Files
 
 - **[devops-rules.md](devops-rules.md)** - Strict DevOps standards and quality gates
