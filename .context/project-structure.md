@@ -8,6 +8,7 @@ Complete file tree and organization for the SDX24 portfolio monorepo.
 SDX24/
 ├── .context/                    # AI context files (READ FIRST!)
 │   ├── README.md               # Context directory guide
+│   ├── branding.md             # Brand guidelines (STRICT)
 │   ├── devops-rules.md         # DevOps standards (ENFORCED)
 │   ├── project-structure.md    # This file
 │   ├── tech-stack.md           # All packages and tools
@@ -25,11 +26,17 @@ SDX24/
 │       ├── e2e/               # Playwright E2E tests
 │       │   └── home.spec.ts   # Homepage test
 │       ├── public/            # Static assets
+│       │   ├── fonts/         # Web fonts
+│       │   │   ├── SpaceGrotesk-Regular.woff2
+│       │   │   └── SpaceGrotesk-Bold.woff2
+│       │   ├── logo.svg       # Primary brand logo
+│       │   ├── logo-expanded.svg # Expanded logo variant
+│       │   └── logo-bw.svg    # Black & white logo
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── layout.tsx # Root layout
 │       │   │   ├── page.tsx   # Landing page
-│       │   │   └── globals.css # Global styles
+│       │   │   └── globals.css # Global styles + fonts
 │       │   └── env.ts         # Environment validation
 │       ├── .env.example       # Environment template
 │       ├── next.config.js     # Next.js configuration
@@ -39,14 +46,17 @@ SDX24/
 │       ├── tsconfig.json      # TypeScript config
 │       └── vercel.json        # Vercel deployment config
 ├── packages/                    # Shared packages
-│   └── config/                 # Shared configurations
+│   └── confindex.ts           # TypeScript placeholder
+│       ├── ig/                 # Shared configurations
 │       ├── package.json       # Config package metadata
 │       ├── prettier.config.js # Prettier settings
 │       └── tsconfig.json      # Base TypeScript config
 ├── docs/                        # Documentation (moved from root)
 │   ├── GITHUB_SETUP.md        # GitHub configuration guide
 │   ├── SETUP_COMPLETE.md      # Setup completion guide
-│   └── QUICK_REFERENCE.md     # Daily command reference
+│   temp-brand/                  # Temporary brand assets (can delete)
+├── .eslintrc.json              # ESLint configuration
+├── └── QUICK_REFERENCE.md     # Daily command reference
 ├── .gitignore                   # Git ignore rules
 ├── commitlint.config.js        # Commit message rules
 ├── knip.config.ts              # Dead code detection

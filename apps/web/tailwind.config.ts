@@ -7,7 +7,26 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: {
+          teal: {
+            light: "#00A991",
+            DEFAULT: "#006658",
+            dark: "#00241F",
+          },
+        },
+        semantic: {
+          success: "#10B981",
+          warning: "#F59E0B",
+          error: "#EF4444",
+          info: "#3B82F6",
+        },
+      },
+      fontFamily: {
+        sans: ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };
