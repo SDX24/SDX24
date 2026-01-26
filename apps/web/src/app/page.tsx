@@ -7,11 +7,12 @@ export default function Home() {
         {/* Logo */}
         <div className="mb-4">
           <Image
-            src="/logo.svg"
+            src="/logo-main-inverse.svg"
             alt="SDX24 Logo"
             width={120}
             height={120}
             className="animate-pulse"
+            priority
           />
         </div>
 

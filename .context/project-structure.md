@@ -29,9 +29,12 @@ SDX24/
 │       │   ├── fonts/         # Web fonts
 │       │   │   ├── SpaceGrotesk-Regular.woff2
 │       │   │   └── SpaceGrotesk-Bold.woff2
-│       │   ├── logo.svg       # Primary brand logo
-│       │   ├── logo-expanded.svg # Expanded logo variant
-│       │   └── logo-bw.svg    # Black & white logo
+        │   ├── logo.svg       # Primary brand logo (dark - original)
+        │   ├── logo-main-inverse.svg  # Inverse logo for dark backgrounds (current)
+        │   ├── logo-expanded.svg # Expanded logo variant (dark)
+        │   ├── logo-expanded-inverse.svg # Expanded inverse variant
+        │   ├── logo-bw.svg    # Black & white logo
+        │   └── logo-bw-inverse.svg # B&W inverse variant
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── layout.tsx # Root layout
