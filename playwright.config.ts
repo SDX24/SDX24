@@ -21,10 +21,11 @@ export default defineConfig({
     // In CI, build already ran via Turborepo, just start the server
     // Locally, build first if needed
     command: process.env.CI
-      ? "(cd apps/web && bun run start)"
-      : "bun run build && (cd apps/web && bun run start)",
+      ? "bash -c 'cd apps/web && bun run start'"
+      : "bun run build && bash -c 'cd apps/web && bun run start'",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    cwd: "./",
   },
 });

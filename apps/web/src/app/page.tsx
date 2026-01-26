@@ -11,8 +11,8 @@ export default function Home() {
             alt="SDX24 Logo"
             width={120}
             height={120}
-            className="animate-pulse"
             priority
+            quality={100}
           />
         </div>
 
