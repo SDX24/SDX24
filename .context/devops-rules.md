@@ -19,11 +19,23 @@
 
 ### 1. Code Quality Gates (Enforced by Husky)
 
+#### Automated Checks (All Must Pass):
+
 - ✅ **Prettier formatting** - All code must be formatted
-- ✅ **ESLint passing** - No linting errors allowed
+- ✅ **ESLint passing** - No linting errors allowed (`--max-warnings 0`)
 - ✅ **TypeScript compilation** - No type errors allowed
 - ✅ **Conventional Commits** - Commit messages must follow format
-- ✅ **Context documentation** - New features must update context
+- ✅ **Context documentation** - New features must update `.context/` files
+
+#### Safety Checks (Blocking):
+
+- 🚫 **Debugger statements** - Blocks if `debugger` found in source files
+- 🚫 **Empty TODO/FIXME** - Blocks if TODO/FIXME without description
+- 🚫 **Hardcoded localhost** - Blocks localhost URLs outside configs
+- 🚫 **Large files** - Blocks files over 500KB
+- ⚠️ **Console.log** - Warns if console.log in production code (non-blocking)
+
+**These checks prevent common agent mistakes and ensure code quality.**
 
 ### 2. TypeScript Strict Mode (Non-Negotiable)
 

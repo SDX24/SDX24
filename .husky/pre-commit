@@ -12,4 +12,63 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Check for common issues
+echo "Checking for common issues..."
+
+# Get list of source files (exclude hooks, configs, build artifacts)
+SOURCE_FILES=$(git diff --cached --name-only | grep -v -E '(\.husky|node_modules|\.next|dist|build)' | grep -E '\.(tsx?|jsx?)$' || true)
+
+# Check for console.log in production code - WARNING ONLY
+if [ -n "$SOURCE_FILES" ]; then
+  CONSOLE_FILES=$(echo "$SOURCE_FILES" | grep -v -E '(test|spec|e2e|\.config\.)' | xargs grep -l 'console\.log' 2>/dev/null || true)
+  if [ -n "$CONSOLE_FILES" ]; then
+    echo "⚠️  Warning: console.log found in source files (removed in production build)"
+  fi
+fi
+
+# Check for TODO/FIXME without context in source files
+if [ -n "$SOURCE_FILES" ]; then
+  TODO_MATCHES=$(echo "$SOURCE_FILES" | xargs grep -n -E '(TODO|FIXME):?\s*$' 2>/dev/null || true)
+  if [ -n "$TODO_MATCHES" ]; then
+    echo "$TODO_MATCHES"
+    echo "❌ TODO/FIXME found without description. Add context after TODO/FIXME"
+    exit 1
+  fi
+fi
+
+# Check for debugger statements in source files
+if [ -n "$SOURCE_FILES" ]; then
+  DEBUGGER_MATCHES=$(echo "$SOURCE_FILES" | xargs grep -n '\bdebugger\b' 2>/dev/null || true)
+  if [ -n "$DEBUGGER_MATCHES" ]; then
+    echo "$DEBUGGER_MATCHES"
+    echo "❌ debugger statement found. Remove before committing."
+    exit 1
+  fi
+fi
+
+# Check for hardcoded localhost URLs (except in config files)
+CONFIG_EXCLUDED=$(git diff --cached --name-only | grep -v -E '(config|\.env|\.husky|playwright\.config)' || true)
+if [ -n "$CONFIG_EXCLUDED" ]; then
+  LOCALHOST_MATCHES=$(echo "$CONFIG_EXCLUDED" | xargs grep -n 'http://localhost' 2>/dev/null || true)
+  if [ -n "$LOCALHOST_MATCHES" ]; then
+    echo "$LOCALHOST_MATCHES"
+    echo "❌ Hardcoded localhost URL found. Use environment variables."
+    exit 1
+  fi
+fi
+
+# Check for large files (>500KB)
+for file in $(git diff --cached --name-only); do
+  if [ -f "$file" ]; then
+    size=$(wc -c < "$file" 2>/dev/null || echo 0)
+    if [ "$size" -gt 512000 ]; then
+      echo "❌ Large file detected: $file ($(($size / 1024))KB)"
+      echo "Files over 500KB should not be committed to git"
+      exit 1
+    fi
+  fi
+done
+
+echo "✅ Pre-commit checks passed!"
+
 echo "✅ Pre-commit checks passed!"
