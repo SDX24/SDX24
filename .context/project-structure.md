@@ -55,7 +55,6 @@ SDX24/
 ├── playwright.config.ts        # E2E test configuration
 ├── prettier.config.js          # Prettier configuration
 ├── README.md                   # GitHub profile README
-├── sonar-project.properties    # SonarCloud configuration
 └── turbo.json                  # Turborepo configuration
 ```
 

@@ -8,6 +8,8 @@ Software developer passionate about building modern web applications with cuttin
 
 This repository serves as my GitHub profile and contains my portfolio website.
 
+🌐 **Live Site**: [sdx24.vercel.app](https://sdx24.vercel.app)
+
 **Tech Stack:**
 
 - ⚡ **Next.js 14** - React framework with App Router
@@ -42,12 +44,12 @@ Coming soon! Check back as I populate this portfolio with exciting projects.
 
 ### 📫 Get In Touch
 
-- 💼 Portfolio: [Coming Soon]
+- 💼 Portfolio: [sdx24.vercel.app](https://sdx24.vercel.app)
 - 💬 Open to collaborations and interesting projects!
 
 ### 📈 GitHub Stats
 
-![SDX24's GitHub stats](https://github-readme-stats.vercel.app/api?username=SDX24&show_icons=true&theme=dark)
+![SDX24's GitHub stats](https://github-readme-stats.vercel.app/api?username=lonelyhope&show_icons=true&theme=dark)
 
 ### 🏆 Development Philosophy
 
@@ -69,4 +71,4 @@ For development setup and technical details, see [MASTER_SETUP.md](MASTER_SETUP.
 
 ---
 
-⭐️ From [SDX24](https://github.com/SDX24)
+⭐️ From [SDX24](https://github.com/lonelyhope)

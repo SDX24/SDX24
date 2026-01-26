@@ -437,12 +437,6 @@ gh secret set SENTRY_AUTH_TOKEN
 2. Install GitHub app
 3. Automatic secrets scanning
 
-**SonarCloud (Code Quality):**
-
-1. Go to [sonarcloud.io](https://sonarcloud.io)
-2. Import repository
-3. Update `sonar-project.properties` with your org
-
 ---
 
 ## 🔧 Troubleshooting

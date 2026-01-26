@@ -313,10 +313,6 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
    - Secrets scanning
    - GitHub app
 
-5. **SonarCloud** (Optional)
-   - Code quality
-   - Complexity monitoring
-
 ### Future Integrations
 
 6. **Sentry**

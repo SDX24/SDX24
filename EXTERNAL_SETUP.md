@@ -34,12 +34,6 @@ This document lists **ALL** actions you need to take **OUTSIDE of VS Code** to f
 - **Purpose**: Scan for accidentally committed secrets
 - **Action**: Sign up with GitHub, enable for SDX24 repo
 
-#### SonarCloud (Code Quality)
-
-- **URL**: https://sonarcloud.io
-- **Purpose**: Static code analysis, security hotspots, code smells
-- **Action**: Sign up with GitHub, import SDX24 project
-
 ---
 
 ## 2. GitHub Repository Configuration
@@ -93,12 +87,13 @@ Branch name pattern: main
 
 **Click**: "New repository secret"
 
+**🔒 Security Note**: GitHub Secrets are encrypted and NEVER exposed to the public or to pull requests from forks. Even though this is a public repo, your secrets remain private and secure. Only you (repo owner) can view or use them.
+
 **Required Secrets**:
 
-| Secret Name    | Purpose                        | How to Get                                          |
-| -------------- | ------------------------------ | --------------------------------------------------- |
-| `VERCEL_TOKEN` | Deploy to Vercel from CI       | Vercel → Settings → Tokens → Create Token           |
-| `SONAR_TOKEN`  | SonarCloud analysis (if using) | SonarCloud → My Account → Security → Generate Token |
+| Secret Name    | Purpose                  | How to Get                                |
+| -------------- | ------------------------ | ----------------------------------------- |
+| `VERCEL_TOKEN` | Deploy to Vercel from CI | Vercel → Settings → Tokens → Create Token |
 
 ### D. Enable GitHub Actions
 
@@ -327,7 +322,7 @@ bun add posthog-js
 
 **Vercel Dashboard**: https://vercel.com/lonelyhope/sdx24  
 **GitHub Repository**: https://github.com/lonelyhope/SDX24  
-**Production URL**: https://sdx24.vercel.app (after deployment)  
+**Production URL**: https://sdx24.vercel.app ✅  
 **Full Setup Guide**: See `MASTER_SETUP.md` in repository
 
 ---
