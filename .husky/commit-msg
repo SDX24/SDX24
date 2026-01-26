@@ -1,0 +1,74 @@
+#!/bin/sh
+
+# Get commit message
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Validate conventional commit format
+bunx --no -- commitlint --edit "$1"
+if [ $? -ne 0 ]; then
+  echo "❌ Commit message does not follow Conventional Commits format."
+  exit 1
+fi
+
+# Extract commit type and scope
+commit_type=$(echo "$commit_msg" | head -n1 | sed -E 's/^([a-z]+)(\([a-z-]+\))?:.*/\1/')
+commit_scope=$(echo "$commit_msg" | head -n1 | sed -E 's/^[a-z]+\(([a-z-]+)\)?:.*/\1/')
+
+echo "Commit type: $commit_type"
+
+# Check if context files need to be updated
+needs_context=false
+
+# feat: commits always need context check
+if [ "$commit_type" = "feat" ]; then
+  needs_context=true
+  echo "⚠️  Feature commit detected - checking for context updates..."
+fi
+
+# chore(deps): commits need tech-stack update
+if [ "$commit_type" = "chore" ] && [ "$commit_scope" = "deps" ]; then
+  needs_context=true
+  echo "⚠️  Dependency commit detected - checking for tech-stack update..."
+fi
+
+# ci: or build: commits need devops-rules update
+if [ "$commit_type" = "ci" ] || [ "$commit_type" = "build" ]; then
+  needs_context=true
+  echo "⚠️  CI/Build commit detected - checking for devops-rules update..."
+fi
+
+# If context update is needed, check if .context/ files are staged
+if [ "$needs_context" = true ]; then
+  context_files_staged=$(git diff --cached --name-only | grep "^\.context/" || true)
+  
+  if [ -z "$context_files_staged" ]; then
+    echo ""
+    echo "❌ ERROR: Context documentation required but not found!"
+    echo ""
+    echo "This commit requires updating .context/ files:"
+    echo ""
+    if [ "$commit_type" = "feat" ]; then
+      echo "  → Update .context/project-structure.md (if adding files/routes)"
+      echo "  → Update .context/tech-stack.md (if using new packages)"
+    fi
+    if [ "$commit_type" = "chore" ] && [ "$commit_scope" = "deps" ]; then
+      echo "  → Update .context/tech-stack.md with new dependency"
+    fi
+    if [ "$commit_type" = "ci" ] || [ "$commit_type" = "build" ]; then
+      echo "  → Update .context/devops-rules.md with new CI/build rules"
+    fi
+    echo ""
+    echo "Please:"
+    echo "  1. Update appropriate .context/ files"
+    echo "  2. Stage them: git add .context/"
+    echo "  3. Commit again"
+    echo ""
+    echo "See .context/commit-guidelines.md for details."
+    exit 1
+  else
+    echo "✅ Context files updated: $context_files_staged"
+  fi
+fi
+
+echo "✅ Commit message validated!"
