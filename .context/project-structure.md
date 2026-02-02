@@ -39,7 +39,8 @@ SDX24/
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── api/       # API routes
 │       │   │   │   └── health/ # Health check endpoint
-│       │   │   ├── test/      # Test page (/test)
+│       │   │   ├── test/      # Test page - Tandem app iframe embed
+│       │   │   │   └── page.tsx # Phone-shaped iframe display (402x874)
 │       │   │   ├── layout.tsx # Root layout
 │       │   │   ├── page.tsx   # Landing page
 │       │   │   └── globals.css # Global styles + fonts
