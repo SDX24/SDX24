@@ -34,7 +34,8 @@ SDX24/
         │   ├── logo-expanded.svg # Expanded logo variant (dark)
         │   ├── logo-expanded-inverse.svg # Expanded inverse variant
         │   ├── logo-bw.svg    # Black & white logo
-        │   └── logo-bw-inverse.svg # B&W inverse variant
+        │   ├── logo-bw-inverse.svg # B&W inverse variant
+        │   └── profile.jpg   # Profile photo (hero card)
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── api/       # API routes
@@ -43,8 +44,10 @@ SDX24/
 │       │   │   │   └── page.tsx # Phone-shaped iframe display (402x874)
 │       │   │   ├── layout.tsx # Root layout
 │       │   │   ├── page.tsx   # Landing page
+│       │   │   ├── not-found.tsx # 404 page
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
+│       │   │   ├── ui/        # UI primitives (CometCard, loaders)
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
@@ -101,12 +104,14 @@ SDX24/
 **Current pages**:
 
 - `/` - Landing page with portfolio, projects, and contact information
+- `not-found.tsx` - Custom 404 page
 
 #### Adding New Pages
 
 ```
 apps/web/src/app/
 ├── page.tsx              → / (Landing page: Portfolio with logo, bio, CTAs, projects)
+├── not-found.tsx         → Custom 404 page
 ├── test/
 │   └── page.tsx          → /test (Logo color variations with customizable LogoSVG component - 9 options)
 ├── about/
@@ -126,6 +131,7 @@ apps/web/src/
 ├── app/                  # Pages & API routes (Next.js App Router)
 │   ├── page.tsx         # / (Landing page)
 │   ├── layout.tsx       # Root layout
+│   ├── not-found.tsx    # Custom 404 page
 │   ├── globals.css      # Global styles
 │   ├── test/
 │   │   └── page.tsx     # /test (Logo variations)
@@ -133,6 +139,7 @@ apps/web/src/
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
+│   ├── ui/               # UI primitives (CometCard, loaders)
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients
 │   ├── utils.ts         # cn() for className merging

@@ -12,13 +12,13 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Frontend Framework
 
-- **Next.js** `14.1.0` - React framework
+- **Next.js** `15.1.6` - React framework
   - App Router (RSC)
   - Server-side rendering
   - Static generation
   - API routes
 
-- **React** `18.2.0` - UI library
+- **React** `19.0.0` - UI library
   - Server Components
   - Client Components
   - Hooks
@@ -39,6 +39,15 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 - **PostCSS** `8.x` - CSS processing
 - **Autoprefixer** `10.x` - CSS vendor prefixing
+
+### UI Utilities
+
+- **clsx** `2.1.1` - Conditional className utility
+- **tailwind-merge** `3.4.0` - Tailwind class merging
+
+### Animation
+
+- **Motion** `12.30.0` - Animation library for interactive UI
 
 ## 🏗️ Monorepo & Build Tools
 
@@ -198,9 +207,12 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 ```json
 {
   "@t3-oss/env-nextjs": "^0.9.2",
-  "next": "14.1.0",
-  "react": "^18.2.0",
-  "react-dom": "^18.2.0",
+  "clsx": "^2.1.1",
+  "motion": "^12.30.0",
+  "next": "^15.1.6",
+  "react": "^19.0.0",
+  "react-dom": "^19.0.0",
+  "tailwind-merge": "^3.4.0",
   "zod": "^3.22.4"
 }
 ```
@@ -211,11 +223,11 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 {
   "@playwright/test": "^1.41.0",
   "@types/node": "^20",
-  "@types/react": "^18",
-  "@types/react-dom": "^18",
+  "@types/react": "^19",
+  "@types/react-dom": "^19",
   "autoprefixer": "^10.0.1",
   "eslint": "^8",
-  "eslint-config-next": "14.1.0",
+  "eslint-config-next": "^15.1.0",
   "postcss": "^8",
   "tailwindcss": "^3.3.0",
   "typescript": "^5"
@@ -260,7 +272,6 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Animation (Planned)
 
-- **Framer Motion** - Animation library
 - **GSAP** - Advanced animations
 
 ## 🗄️ Data & Backend (Future)
