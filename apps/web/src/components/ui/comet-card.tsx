@@ -65,8 +65,8 @@ export const CometCard = React.memo(
     hoverScaleY,
     hoverDuration = 0.2,
     hoverSpringConfig,
-    fluidStrength = 0.12,
-    fluidMax = 0.08,
+    fluidStrength = 0,
+    fluidMax = 0,
     springConfig,
     glareSpringConfig,
     flipSpringConfig,
@@ -158,12 +158,14 @@ export const CometCard = React.memo(
     const velocityX = useVelocity(x);
     const velocityY = useVelocity(y);
 
-    const stretchX = useTransform(velocityX, (v) =>
-      Math.min(Math.abs(v) * fluidStrength, fluidMax)
-    );
-    const stretchY = useTransform(velocityY, (v) =>
-      Math.min(Math.abs(v) * fluidStrength, fluidMax)
-    );
+    const stretchX = useTransform(velocityX, (v) => {
+      if (fluidStrength <= 0) return 0;
+      return Math.min(Math.abs(v) * fluidStrength, fluidMax);
+    });
+    const stretchY = useTransform(velocityY, (v) => {
+      if (fluidStrength <= 0) return 0;
+      return Math.min(Math.abs(v) * fluidStrength, fluidMax);
+    });
 
     const scaleX = useTransform([hoverSpringX, stretchX], ([base, stretch]) => {
       const baseScale = typeof base === "number" ? base : 1;

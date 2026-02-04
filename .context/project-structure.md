@@ -11,9 +11,11 @@ SDX24/
 │   ├── branding.md             # Brand guidelines (STRICT)
 │   ├── components.md           # Component architecture and behavior
 │   ├── devops-rules.md         # DevOps standards (ENFORCED)
+│   ├── monorepo-structure-explained.md # Monorepo rationale and conventions
 │   ├── project-structure.md    # This file
 │   ├── tech-stack.md           # All packages and tools
 │   └── commit-guidelines.md    # Commit and documentation rules
+├── .e2e-tracker                 # Local E2E reminder state (gitignored)
 ├── .github/                     # GitHub configuration
 │   ├── workflows/              # CI/CD pipelines
 │   │   ├── ci.yml             # Main CI pipeline
@@ -22,6 +24,7 @@ SDX24/
 ├── .husky/                      # Git hooks
 │   ├── pre-commit             # Runs lint-staged
 │   └── commit-msg             # Validates commit message
+├── .turbo/                      # Turborepo cache (gitignored)
 ├── apps/                        # Applications
 │   └── web/                    # Next.js portfolio app
 │       ├── e2e/               # Playwright E2E tests
@@ -30,13 +33,20 @@ SDX24/
 │       │   ├── fonts/         # Web fonts
 │       │   │   ├── SpaceGrotesk-Regular.woff2
 │       │   │   └── SpaceGrotesk-Bold.woff2
-        │   ├── logo.svg       # Primary brand logo (dark - original)
-        │   ├── logo-main-inverse.svg  # Inverse logo for dark backgrounds (current)
-        │   ├── logo-expanded.svg # Expanded logo variant (dark)
-        │   ├── logo-expanded-inverse.svg # Expanded inverse variant
-        │   ├── logo-bw.svg    # Black & white logo
-        │   ├── logo-bw-inverse.svg # B&W inverse variant
-        │   └── profile.jpg   # Profile photo (hero card)
+│       │   ├── images/
+│       │   │   └── profile.jpg # Profile photo (hero card)
+│       │   └── logos/
+│       │       ├── sdx24/
+│       │       │   ├── logo.svg
+│       │       │   ├── logo-main-inverse.svg
+│       │       │   ├── logo-expanded.svg
+│       │       │   ├── logo-expanded-inverse.svg
+│       │       │   ├── logo-bw.svg
+│       │       │   └── logo-bw-inverse.svg
+│       │       └── tandem/
+│       │           ├── cover.png
+│       │           ├── logo.svg
+│       │           └── wordmark.svg
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── api/       # API routes
@@ -48,7 +58,7 @@ SDX24/
 │       │   │   ├── not-found.tsx # 404 page
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
-│       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, loaders)
+│       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
@@ -78,6 +88,7 @@ SDX24/
 ├── commitlint.config.js        # Commit message rules
 ├── knip.config.ts              # Dead code detection
 ├── lint-staged.config.js       # Pre-commit linting
+├── bun.lock                     # Bun lockfile
 ├── package.json                # Root workspace config
 ├── playwright.config.ts        # E2E test configuration
 ├── prettier.config.js          # Prettier configuration
@@ -105,7 +116,9 @@ SDX24/
 **Current pages**:
 
 - `/` - Landing page with portfolio, projects, and contact information
+- `/test` - Tandem app embed (iframe) using `NEXT_PUBLIC_TANDEM_URL`
 - `/test1` - CometCard motion lab (scroll movement + flip + content variations)
+- `/test2` - Project card lab (Tandem compact + expanded variants)
 - `not-found.tsx` - Custom 404 page
 
 #### Adding New Pages
@@ -115,9 +128,11 @@ apps/web/src/app/
 ├── page.tsx              → / (Landing page: Portfolio with logo, bio, CTAs, projects)
 ├── not-found.tsx         → Custom 404 page
 ├── test/
-│   └── page.tsx          → /test (Logo color variations with customizable LogoSVG component - 9 options)
+│   └── page.tsx          → /test (Tandem app iframe embed via NEXT_PUBLIC_TANDEM_URL)
 ├── test1/
 │   └── page.tsx          → /test1 (CometCard motion lab: scroll movement + flip + content)
+├── test2/
+│   └── page.tsx          → /test2 (Project card lab: Tandem compact + expanded)
 ├── about/
 │   └── page.tsx          → /about (Not yet created)
 └── projects/
@@ -138,14 +153,16 @@ apps/web/src/
 │   ├── not-found.tsx    # Custom 404 page
 │   ├── globals.css      # Global styles
 │   ├── test/
-│   │   └── page.tsx     # /test (Logo variations)
+│   │   └── page.tsx     # /test (Tandem app embed)
 │   ├── test1/
 │   │   └── page.tsx     # /test1 (CometCard motion lab)
+│   ├── test2/
+│   │   └── page.tsx     # /test2 (Project card lab: Tandem compact + expanded)
 │   └── api/             # API routes
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
-│   ├── ui/               # UI primitives (CometCard, MainTealCard, loaders)
+│   ├── ui/               # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients
 │   ├── utils.ts         # cn() for className merging
@@ -301,9 +318,7 @@ component.module.css
 
 ```
 apps/web/e2e/
-├── home.spec.ts          # Homepage tests
-├── navigation.spec.ts    # Navigation tests
-└── projects.spec.ts      # Projects page tests
+└── home.spec.ts          # Homepage tests
 ```
 
 ### Unit Tests (Bun Test)

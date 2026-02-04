@@ -30,6 +30,8 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        alan: ["Alan Sans", "Space Grotesk", "sans-serif"],
+        omnes: ["omnes-pro", "Space Grotesk", "sans-serif"],
       },
     },
   },

@@ -11,4 +11,5 @@
 
 export { CometCard } from "./ui/comet-card";
 export { MainTealCard } from "./ui/main-teal-card";
-export { LoaderOne, LoaderTwo, LoaderThree, LoaderFour, LoaderFive } from "./ui/loader";
+export { ProjectCardCompact } from "./ui/project-card-compact";
+export { ProjectCardExpanded } from "./ui/project-card-expanded";

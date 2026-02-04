@@ -6,11 +6,11 @@
 
 ### Primary (Brand Core)
 
-| Color Name      | Hex Code  | RGB              | Usage                                        |
-| --------------- | --------- | ---------------- | -------------------------------------------- |
-| **Teal Light**  | `#00A991` | rgb(0, 169, 145) | Primary brand color, CTAs, links, highlights |
-| **Teal Medium** | `#006658` | rgb(0, 102, 88)  | Hover states, secondary elements, borders    |
-| **Teal Dark**   | `#00241F` | rgb(0, 36, 31)   | Dark backgrounds, text on light backgrounds  |
+| Color Name      | Hex Code  | RGB              | Usage                                      |
+| --------------- | --------- | ---------------- | ------------------------------------------ |
+| **Teal Light**  | `#00A991` | rgb(0, 169, 145) | Core brand accent, borders, glows, UI trim |
+| **Teal Medium** | `#006658` | rgb(0, 102, 88)  | Hover states, secondary accents, dividers  |
+| **Teal Dark**   | `#00241F` | rgb(0, 36, 31)   | Deep surfaces, gradient anchors            |
 
 ### Secondary (Warm Neutrals)
 
@@ -55,13 +55,25 @@
 
 ## 🔤 Typography
 
+### Typography Color Rules (Updated)
+
+- **Do not use teal for body or headline text.**
+- Use **White / Gray** for primary text on dark backgrounds.
+- Use **Apricot Cream / Sandy Clay / Light Coral** for accent text, labels, and microcopy.
+- Teal is reserved for **borders, glows, and UI accents** (not text).
+
 ### Font Family
 
 **Primary Font**: **Space Grotesk**
 
 - **Weights**: Regular (400), Bold (700)
 - **Styles**: Normal, Italic
-- **Usage**: All text across the website
+- **Usage**: Global site typography
+
+**Project Brand Fonts (Tandem)**
+
+- **Alan Sans**: Display + headings (`font-alan`)
+- **omnes-pro**: Body + supporting text (`font-omnes`)
 
 ### Font Styles
 
@@ -70,6 +82,11 @@
 | **Bold**    | 700    | Headings (h1-h3), emphasis, CTAs   |
 | **Regular** | 400    | Body text, paragraphs, UI elements |
 | **Italic**  | 400    | Quotes, subtle emphasis, captions  |
+
+**Project brand text rules**:
+
+- Compact project cards: `font-alan` for title/label, `font-omnes` for body.
+- Expanded project cards: `font-alan` for title, `font-omnes` for description + metadata.
 
 ### Type Scale
 
@@ -86,6 +103,14 @@
 | **Body Small** | 0.875rem (14px) | Regular (400) | 1.5         |
 | **Caption**    | 0.75rem (12px)  | Regular (400) | 1.4         |
 
+### Tandem Type Scale (Project Cards)
+
+- **Display H2**: `font-alan` 23px / 36px, weight 800
+- **Display H3**: `font-alan` 20px / 28px, weight 700
+- **Body**: `font-omnes` 16px / 20px, weight 500
+- **Caption**: `font-omnes` 14px / 16px, weight 500
+- **Label**: `font-alan` 10px / 14px, weight 300
+
 ### Character Set
 
 ```
@@ -98,17 +123,17 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 ### Logo Variants
 
-1. **Primary Logo** (`logo.svg`)
+1. **Primary Logo** (`/public/logos/sdx24/logo.svg`)
    - **Colors**: Teal gradient (#00A991 → #006658)
    - **Usage**: Main logo for headers, branding
    - **Use by default** in most cases
 
-2. **Expanded Logo** (`logo-expanded.svg`)
+2. **Expanded Logo** (`/public/logos/sdx24/logo-expanded.svg`)
    - **Colors**: Teal gradient (#00A991 → #006658)
    - **Usage**: Rarely - only for wide spaces, landing pages
    - **Note**: Use sparingly
 
-3. **Black & White Logo** (`logo-bw.svg`)
+3. **Black & White Logo** (`/public/logos/sdx24/logo-bw.svg`)
    - **Colors**: Monochrome black
    - **Usage**: Print materials, high-contrast situations
 
@@ -121,6 +146,27 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 - ❌ **DON'T**: Change colors
 - ❌ **DON'T**: Add effects (shadows, gradients, outlines)
 - ❌ **DON'T**: Place on busy backgrounds
+
+### Project Brand: Tandem
+
+**Fonts**:
+
+- **Alan Sans**: Display + headings (`font-alan`)
+- **omnes-pro**: Body + supporting text (`font-omnes`)
+
+**Palette (Hex)**:
+
+- **Primary**: `#3373CC`
+- **Primary Light**: `#91B3E3`
+- **Secondary**: `#92F189`
+- **Analogous**: `#68D5FF`
+- **Neutral Light**: `#E6E6E8`
+- **Neutral Dark**: `#00001B`
+
+**Usage**:
+
+- Compact project cards: muted SDX24 neutrals with subtle brand accents.
+- Expanded project cards: stronger Tandem palette (primary/analogous) and branded cover.
 
 ### Clear Space
 
@@ -173,7 +219,7 @@ padding: 12px 24px
 background: transparent
 border: 2px solid #00A991
 hover: background #00A99110
-text: #00A991
+text: #DDAE7E (Sandy Clay)
 font-weight: 700 (Bold)
 ```
 
@@ -191,8 +237,8 @@ hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
 ### Links
 
 ```css
-color: #00A991 (Teal Light)
-hover: #006658 (Teal Medium)
+color: #DDAE7E (Sandy Clay)
+hover: #F2C57C (Apricot Cream)
 underline: on hover
 font-weight: 400 (Regular)
 ```
@@ -231,5 +277,5 @@ When implementing dark mode:
 
 ---
 
-**Last Updated**: January 26, 2026  
+**Last Updated**: February 03, 2026  
 **Brand Owner**: SDX24

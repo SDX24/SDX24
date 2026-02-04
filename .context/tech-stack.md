@@ -249,6 +249,14 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 }
 ```
 
+### Root Dependencies
+
+```json
+{
+  "next": "^16.1.4"
+}
+```
+
 ## 🔄 Version Management
 
 ### Node.js Version
@@ -259,7 +267,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Package Manager Lock
 
-- Using: `bun.lockb`
+- Using: `bun.lock`
 - **Do not use**: `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
 
 ## 🎨 UI & Design (Future)

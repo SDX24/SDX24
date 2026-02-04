@@ -43,14 +43,14 @@ export default function Test1Page() {
               <p className="text-xs uppercase tracking-[0.3em] text-brand-teal-muted">Image Only</p>
               <div className="flex items-center justify-center gap-4">
                 <Image
-                  src="/profile.jpg"
+                  src="/images/profile.jpg"
                   alt="Profile"
                   width={64}
                   height={64}
                   className="rounded-2xl"
                 />
                 <Image
-                  src="/profile.jpg"
+                  src="/images/profile.jpg"
                   alt="Profile"
                   width={64}
                   height={64}
@@ -69,7 +69,7 @@ export default function Test1Page() {
               </p>
               <div className="flex items-start gap-4">
                 <Image
-                  src="/profile.jpg"
+                  src="/images/profile.jpg"
                   alt="Profile"
                   width={56}
                   height={56}
