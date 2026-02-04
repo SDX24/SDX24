@@ -14,7 +14,12 @@ const config: Config = {
             light: "#00A991",
             DEFAULT: "#006658",
             dark: "#00241F",
+            muted: "#7FB685",
+            deep: "#426A5A",
           },
+          apricot: "#F2C57C",
+          clay: "#DDAE7E",
+          coral: "#EF6F6C",
         },
         semantic: {
           success: "#10B981",

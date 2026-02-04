@@ -4,13 +4,28 @@
 
 ## 🎨 Color Palette
 
-### Primary Colors
+### Primary (Brand Core)
 
 | Color Name      | Hex Code  | RGB              | Usage                                        |
 | --------------- | --------- | ---------------- | -------------------------------------------- |
 | **Teal Light**  | `#00A991` | rgb(0, 169, 145) | Primary brand color, CTAs, links, highlights |
 | **Teal Medium** | `#006658` | rgb(0, 102, 88)  | Hover states, secondary elements, borders    |
 | **Teal Dark**   | `#00241F` | rgb(0, 36, 31)   | Dark backgrounds, text on light backgrounds  |
+
+### Secondary (Warm Neutrals)
+
+| Color Name        | Hex Code  | RGB                | Usage                                    |
+| ----------------- | --------- | ------------------ | ---------------------------------------- |
+| **Apricot Cream** | `#F2C57C` | rgb(242, 197, 124) | Soft accents, pill badges, warm panels   |
+| **Sandy Clay**    | `#DDAE7E` | rgb(221, 174, 126) | Muted highlights, borders, neutral chips |
+
+### Highlights (Accents)
+
+| Color Name      | Hex Code  | RGB                | Usage                                  |
+| --------------- | --------- | ------------------ | -------------------------------------- |
+| **Light Coral** | `#EF6F6C` | rgb(239, 111, 108) | Attention grabs, alert tags, emphasis  |
+| **Muted Teal**  | `#7FB685` | rgb(127, 182, 133) | Soft teal accent surfaces              |
+| **Deep Teal**   | `#426A5A` | rgb(66, 106, 90)   | Alternative dark teal surfaces/borders |
 
 ### Neutral Colors (Extended)
 

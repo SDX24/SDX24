@@ -9,6 +9,7 @@ SDX24/
 ├── .context/                    # AI context files (READ FIRST!)
 │   ├── README.md               # Context directory guide
 │   ├── branding.md             # Brand guidelines (STRICT)
+│   ├── components.md           # Component architecture and behavior
 │   ├── devops-rules.md         # DevOps standards (ENFORCED)
 │   ├── project-structure.md    # This file
 │   ├── tech-stack.md           # All packages and tools
@@ -47,7 +48,7 @@ SDX24/
 │       │   │   ├── not-found.tsx # 404 page
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
-│       │   │   ├── ui/        # UI primitives (CometCard, loaders)
+│       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, loaders)
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
@@ -104,6 +105,7 @@ SDX24/
 **Current pages**:
 
 - `/` - Landing page with portfolio, projects, and contact information
+- `/test1` - CometCard motion lab (scroll movement + flip + content variations)
 - `not-found.tsx` - Custom 404 page
 
 #### Adding New Pages
@@ -114,6 +116,8 @@ apps/web/src/app/
 ├── not-found.tsx         → Custom 404 page
 ├── test/
 │   └── page.tsx          → /test (Logo color variations with customizable LogoSVG component - 9 options)
+├── test1/
+│   └── page.tsx          → /test1 (CometCard motion lab: scroll movement + flip + content)
 ├── about/
 │   └── page.tsx          → /about (Not yet created)
 └── projects/
@@ -135,11 +139,13 @@ apps/web/src/
 │   ├── globals.css      # Global styles
 │   ├── test/
 │   │   └── page.tsx     # /test (Logo variations)
+│   ├── test1/
+│   │   └── page.tsx     # /test1 (CometCard motion lab)
 │   └── api/             # API routes
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
-│   ├── ui/               # UI primitives (CometCard, loaders)
+│   ├── ui/               # UI primitives (CometCard, MainTealCard, loaders)
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients
 │   ├── utils.ts         # cn() for className merging

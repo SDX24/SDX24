@@ -45,6 +45,7 @@ This directory contains essential context files that AI assistants **MUST** read
 - **[project-structure.md](project-structure.md)** - Complete project structure and file paths
 - **[tech-stack.md](tech-stack.md)** - All packages, tools, and technologies used
 - **[commit-guidelines.md](commit-guidelines.md)** - Commit requirements and context documentation rules
+- **[components.md](components.md)** - Component architecture, behavior, and usage rules
 
 ## ⚠️ CRITICAL: CONTEXT-FIRST WORKFLOW
 

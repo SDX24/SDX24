@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { CometCard } from "@/components";
+import { MainTealCard } from "@/components";
 
 const heroDescription =
   "BCIT Full-Stack Web Development diploma candidate shipping Tandem's realtime childcare scheduler, leading InsurFlow's AI InsurTech stack, and crafting modern UI/UX touches for W3rlds while operating as a dependable web developer.";
@@ -39,36 +39,33 @@ export default function Home() {
             <p className="max-w-xl text-lg leading-relaxed text-gray-300">{heroDescription}</p>
           </div>
           <div className="flex w-full justify-center lg:justify-end">
-            <div className="w-full max-w-[360px]">
-              <CometCard className="w-full">
-                <button
-                  type="button"
-                  className="my-6 flex w-full cursor-pointer flex-col items-stretch rounded-[20px] border border-white/30 bg-white/5 p-2 shadow-[0_40px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl md:my-10 md:p-4"
-                  aria-label="View the Comet-inspired profile"
-                  style={{
-                    transformStyle: "preserve-3d",
-                    transform: "none",
-                    opacity: 1,
-                  }}
-                >
-                  <div className="mx-2 flex-1">
-                    <div className="relative mt-2 h-0 w-full flex-1 overflow-hidden rounded-[16px] pb-[133%]">
-                      <Image
-                        src="/profile.jpg"
-                        alt="Stefan Dorosh profile"
-                        fill
-                        className="absolute inset-0 h-full w-full rounded-[16px] border border-white/10 object-cover"
-                        sizes="(max-width: 640px) 100vw, 320px"
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-4 flex flex-col items-center gap-1 px-4 pb-6 text-center">
-                    <p className="text-lg font-semibold">Stefan Dorosh</p>
-                    <p className="text-xs text-gray-200">Web Developer</p>
-                  </div>
-                </button>
-              </CometCard>
-            </div>
+            <MainTealCard className="max-w-[360px]" contentClassName="p-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white">
+                  <Image
+                    src="/logo-main-inverse.svg"
+                    alt="SDX24"
+                    width={18}
+                    height={18}
+                    className="rounded-full"
+                  />
+                  SDX24
+                </div>
+                <div className="relative mt-1 h-0 w-full overflow-hidden rounded-[16px] pb-[133%]">
+                  <Image
+                    src="/profile.jpg"
+                    alt="Stefan Dorosh profile"
+                    fill
+                    className="absolute inset-0 h-full w-full rounded-[16px] border border-white/10 object-cover"
+                    sizes="(max-width: 640px) 100vw, 320px"
+                  />
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-semibold">Stefan Dorosh</p>
+                  <p className="text-xs text-gray-200">Web Developer</p>
+                </div>
+              </div>
+            </MainTealCard>
           </div>
         </div>
 
