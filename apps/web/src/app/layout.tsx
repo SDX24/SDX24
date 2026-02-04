@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   description:
     "Full Stack Web Developer specializing in React, Next.js, and TypeScript. View my projects and experience.",
   icons: {
-    icon: "/logo-main-inverse.svg",
-    apple: "/logo-main-inverse.svg",
+    icon: "/logos/sdx24/logo-main-inverse.svg",
+    apple: "/logos/sdx24/logo-main-inverse.svg",
   },
 };
 

@@ -23,7 +23,7 @@ Both are gitignored and safe to delete (will regenerate).
 Located at: `/Users/lonelyhope/repos/SDX24/`
 
 ```
-├── .eslintrc.json         # Shared ESLint rules
+├── eslint.config.cjs      # Shared ESLint rules
 ├── prettier.config.js     # Shared Prettier rules
 ├── tsconfig.json          # Would be here (currently in packages/config)
 ├── commitlint.config.js   # Commit message rules
@@ -129,12 +129,14 @@ apps/web/pages/
 - Fast parallel builds
 - Workspace dependencies
 
-#### 2. **Next.js 16 App Router**
+#### 2. **Next.js App Router (16.x in app)**
 
-- Latest stable version (16.1.4)
+- App uses Next.js `16.1.4`
 - Using modern `/app` directory
 - React 19 with Server Components
 - TypeScript strict mode
+
+**Note**: Root `package.json` includes `next@^16.1.4`; keep root/app versions aligned.
 
 #### 3. **Quality Gates**
 
@@ -159,7 +161,7 @@ apps/web/pages/
 
 - Automated security scanning (Trivy)
 - Dependabot updates
-- No vulnerabilities (Next.js 16.1.4)
+- No vulnerabilities noted (Next.js 16.1.4)
 - Environment variable validation
 
 #### 6. **Scalability**

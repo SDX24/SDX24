@@ -43,6 +43,7 @@ This directory contains essential context files that AI assistants **MUST** read
 - **[branding.md](branding.md)** - Brand guidelines, colors, typography, logo usage (STRICT)
 - **[devops-rules.md](devops-rules.md)** - Strict DevOps standards and quality gates
 - **[project-structure.md](project-structure.md)** - Complete project structure and file paths
+- **[monorepo-structure-explained.md](monorepo-structure-explained.md)** - Monorepo conventions and structure rationale
 - **[tech-stack.md](tech-stack.md)** - All packages, tools, and technologies used
 - **[commit-guidelines.md](commit-guidelines.md)** - Commit requirements and context documentation rules
 - **[components.md](components.md)** - Component architecture, behavior, and usage rules

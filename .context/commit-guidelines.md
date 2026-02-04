@@ -158,17 +158,24 @@ git commit -m "ci(github): add lighthouse performance checks
 - Updated devops-rules.md with performance standards"
 ```
 
-## ⚠️ Pre-Commit Hook Validation
+## ⚠️ Hook Validation
 
 ### Automatic Checks
 
-The pre-commit hook (`/.husky/pre-commit`) runs:
+The hooks run:
+
+**Pre-commit (`/.husky/pre-commit`)**
 
 1. **Lint-staged** - Format and lint changed files
 2. **Type check** - Verify TypeScript compiles
-3. **Context validation** - Check if context needs update
+3. **Safety checks** - TODO/FIXME context, debugger, hardcoded localhost, large files
 
-### Context Validation Logic
+**Commit-msg (`/.husky/commit-msg`)**
+
+1. **Commitlint** - Validate conventional commit format
+2. **Context validation** - Require `.context/` updates for specific commit types
+
+### Context Validation Logic (Commit-msg)
 
 ```bash
 # If commit message starts with "feat:", "chore(deps):", or "ci:"

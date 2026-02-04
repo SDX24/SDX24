@@ -13,7 +13,7 @@ export default function Home() {
           <div className="space-y-6">
             <div className="inline-flex items-center gap-4 rounded-full border border-white/10 bg-white/5 px-4 py-2">
               <Image
-                src="/logo-main-inverse.svg"
+                src="/logos/sdx24/logo-main-inverse.svg"
                 alt="SDX24 Logo"
                 width={56}
                 height={56}
@@ -43,7 +43,7 @@ export default function Home() {
               <div className="space-y-3">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white">
                   <Image
-                    src="/logo-main-inverse.svg"
+                    src="/logos/sdx24/logo-main-inverse.svg"
                     alt="SDX24"
                     width={18}
                     height={18}
@@ -53,7 +53,7 @@ export default function Home() {
                 </div>
                 <div className="relative mt-1 h-0 w-full overflow-hidden rounded-[16px] pb-[133%]">
                   <Image
-                    src="/profile.jpg"
+                    src="/images/profile.jpg"
                     alt="Stefan Dorosh profile"
                     fill
                     className="absolute inset-0 h-full w-full rounded-[16px] border border-white/10 object-cover"

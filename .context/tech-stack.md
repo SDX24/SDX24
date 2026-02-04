@@ -12,7 +12,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Frontend Framework
 
-- **Next.js** `15.1.6` - React framework
+- **Next.js** `16.1.4` - React framework
   - App Router (RSC)
   - Server-side rendering
   - Static generation
@@ -84,7 +84,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Linting
 
-- **ESLint** `8.x` - JavaScript/TypeScript linter
+- **ESLint** `9.x` - JavaScript/TypeScript linter
   - `eslint-config-next` - Next.js rules
   - TypeScript integration
 
@@ -209,7 +209,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
   "@t3-oss/env-nextjs": "^0.9.2",
   "clsx": "^2.1.1",
   "motion": "^12.30.0",
-  "next": "^15.1.6",
+  "next": "^16.1.4",
   "react": "^19.0.0",
   "react-dom": "^19.0.0",
   "tailwind-merge": "^3.4.0",
@@ -226,8 +226,8 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
   "@types/react": "^19",
   "@types/react-dom": "^19",
   "autoprefixer": "^10.0.1",
-  "eslint": "^8",
-  "eslint-config-next": "^15.1.0",
+  "eslint": "^9.0.0",
+  "eslint-config-next": "^16.1.4",
   "postcss": "^8",
   "tailwindcss": "^3.3.0",
   "typescript": "^5"
@@ -249,6 +249,14 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 }
 ```
 
+### Root Dependencies
+
+```json
+{
+  "next": "^16.1.4"
+}
+```
+
 ## 🔄 Version Management
 
 ### Node.js Version
@@ -259,7 +267,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Package Manager Lock
 
-- Using: `bun.lockb`
+- Using: `bun.lock`
 - **Do not use**: `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
 
 ## 🎨 UI & Design (Future)
