@@ -1,0 +1,12 @@
+module.exports = [
+  {
+    ignores: ["apps/web/next-env.d.ts"],
+  },
+  require("@next/eslint-plugin-next").configs["core-web-vitals"],
+  {
+    rules: {
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "@next/next/no-html-link-for-pages": ["error", "apps/web/src/app"],
+    },
+  },
+];

@@ -83,7 +83,7 @@ SDX24/
 │       └── tsconfig.json      # Base TypeScript config
 ├── scripts/                     # Utility scripts
 │   └── dev-setup.sh           # Automated development setup
-├── .eslintrc.json              # ESLint configuration
+├── eslint.config.cjs           # ESLint flat config
 ├── .gitignore                   # Git ignore rules
 ├── commitlint.config.js        # Commit message rules
 ├── knip.config.ts              # Dead code detection

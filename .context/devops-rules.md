@@ -23,6 +23,7 @@
 
 - ✅ **Prettier formatting** - All code must be formatted
 - ✅ **ESLint passing** - No linting errors allowed (`--max-warnings 0`)
+- ✅ **ESLint ignores** - Warnings for ignored files are suppressed (`--no-warn-ignored`)
 - ✅ **TypeScript compilation** - No type errors allowed
 - ✅ **Conventional Commits** - Commit messages must follow format
 - ✅ **Context documentation** - Enforced by commit-msg hook for required commit types
