@@ -6,6 +6,7 @@ import Image from "next/image";
 
 import {
   motion,
+  useMotionTemplate,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
@@ -95,8 +96,9 @@ export const HeroFlipCard = ({ imageSrc, imageAlt, name, role, project }: HeroFl
     const arcValue = typeof arc === "number" ? arc : 0;
     return baseValue + arcValue;
   });
-  const flipProgress = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
-  const flipRotation = useTransform(flipProgress, [0, 1], [0, 180]);
+  const flipProgress = useTransform(scrollYProgress, [0.02, 0.7], [0, 1]);
+  const flipAngle = useTransform(flipProgress, [0, 0.15, 0.85, 1], [0, -40, -140, -180]);
+  const combinedAngle = flipAngle;
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     setIsMoving(value > 0.02 && value < 0.7);
@@ -113,7 +115,9 @@ export const HeroFlipCard = ({ imageSrc, imageAlt, name, role, project }: HeroFl
   const shouldPin = isLanded && targetPosition;
   const translateX = prefersReducedMotion || shouldPin ? 0 : moveX;
   const translateY = prefersReducedMotion || shouldPin ? 0 : moveY;
-  const rotateY = prefersReducedMotion ? 0 : flipRotation;
+  const rotateTransform = prefersReducedMotion
+    ? "rotate3d(1, 1, 0, 0deg)"
+    : useMotionTemplate`rotate3d(1, 1, 0, ${combinedAngle}deg)`;
   const disableMotion = isMoving || isFlipping;
 
   return (
@@ -130,7 +134,10 @@ export const HeroFlipCard = ({ imageSrc, imageAlt, name, role, project }: HeroFl
       className={disableMotion ? "pointer-events-none" : undefined}
     >
       <div style={{ perspective: "1200px" }}>
-        <motion.div className="relative" style={{ rotateY, transformStyle: "preserve-3d" }}>
+        <motion.div
+          className="relative"
+          style={{ transform: rotateTransform, transformStyle: "preserve-3d" }}
+        >
           <div
             className={
               showBack
@@ -166,10 +173,13 @@ export const HeroFlipCard = ({ imageSrc, imageAlt, name, role, project }: HeroFl
           <div
             className={
               showBack
-                ? "absolute inset-0 opacity-100 [transform:rotateY(180deg)]"
-                : "pointer-events-none absolute inset-0 opacity-0 [transform:rotateY(180deg)]"
+                ? "absolute inset-0 opacity-100"
+                : "pointer-events-none absolute inset-0 opacity-0"
             }
-            style={{ backfaceVisibility: "hidden" }}
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotate3d(1, 1, 0, 180deg)",
+            }}
           >
             <ProjectCardCompact
               className="max-w-[380px]"
