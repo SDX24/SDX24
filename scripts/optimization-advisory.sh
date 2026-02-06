@@ -7,7 +7,7 @@ CODE_FILES=$(echo "$STAGED_FILES" | grep -E '\.(tsx?|jsx?)$' || true)
 ASSET_FILES=$(echo "$STAGED_FILES" | grep -E '\.(png|jpe?g|svg|webp|gif|mp4|webm)$' || true)
 
 warn() {
-  echo "⚠️  $1"
+  echo "WARN: $1"
 }
 
 if [ -n "$CODE_FILES" ]; then
@@ -21,11 +21,11 @@ if [ -n "$CODE_FILES" ]; then
     fi
   fi
 
-  if echo "$CODE_FILES" | xargs grep -n -E 'from\s+["\']lodash["\']|require\(["\']lodash["\']\)' 2>/dev/null | grep -q .; then
+  if echo "$CODE_FILES" | xargs grep -n -E "from\\s+['\"]lodash['\"]|require\\(['\"]lodash['\"]\\)" 2>/dev/null | grep -q .; then
     warn "Lodash import detected; consider targeted imports to reduce bundle size."
   fi
 
-  if echo "$CODE_FILES" | xargs grep -n -E 'from\s+["\']moment["\']|require\(["\']moment["\']\)' 2>/dev/null | grep -q .; then
+  if echo "$CODE_FILES" | xargs grep -n -E "from\\s+['\"]moment['\"]|require\\(['\"]moment['\"]\\)" 2>/dev/null | grep -q .; then
     warn "Moment.js import detected; consider lighter date libraries to reduce bundle size."
   fi
 
@@ -35,7 +35,7 @@ if [ -n "$CODE_FILES" ]; then
 
   if echo "$CODE_FILES" | xargs grep -n "use client" 2>/dev/null | grep -q .; then
     if echo "$CODE_FILES" | xargs grep -n 'fetch\(' 2>/dev/null | grep -q .; then
-      warn "fetch() in client components detected; consider server-side data fetching or caching."
+      warn "Fetch in client components detected; consider server-side data fetching or caching."
     fi
     if echo "$CODE_FILES" | grep -E '/app/.*/(page|layout)\.tsx$' | xargs grep -n "use client" 2>/dev/null | grep -q .; then
       warn "Client directive in app page/layout detected; consider keeping these server-side when possible."
