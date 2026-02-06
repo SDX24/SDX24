@@ -37,7 +37,7 @@ SDX24/
 │       │   │   └── profile.jpg # Profile photo (hero card)
 │       │   └── logos/
 │       │       ├── sdx24/
-│       │       │   ├── logo.svg
+│       │       │   ├── sdx24-logo.svg
 │       │       │   ├── logo-main-inverse.svg
 │       │       │   ├── logo-expanded.svg
 │       │       │   ├── logo-expanded-inverse.svg
@@ -45,7 +45,7 @@ SDX24/
 │       │       │   └── logo-bw-inverse.svg
 │       │       └── tandem/
 │       │           ├── cover.png
-│       │           ├── logo.svg
+│       │           ├── tandem-logo.svg
 │       │           └── wordmark.svg
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router

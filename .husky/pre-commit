@@ -12,6 +12,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Non-blocking optimization advisory on staged files
+bash scripts/optimization-advisory.sh || true
+
 # Check for common issues
 echo "Checking for common issues..."
 

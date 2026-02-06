@@ -40,7 +40,13 @@ export const ProjectCardCompact = ({
     <div className="space-y-4 text-gray-100">
       <div className="flex items-center gap-4">
         <div className="relative h-12 w-12 overflow-hidden rounded-2xl bg-white/10">
-          <Image src={logoSrc} alt={`${title} logo`} fill className="object-contain p-2" />
+          <Image
+            src={logoSrc}
+            alt={`${title} logo`}
+            fill
+            className="object-contain p-2"
+            sizes="48px"
+          />
         </div>
         <div>
           {wordmarkSrc ? (

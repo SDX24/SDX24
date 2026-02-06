@@ -16,7 +16,7 @@ const tandem = {
   ],
   stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
   achievements: ["Trust", "Balance", "Support"],
-  logoSrc: "/logos/tandem/logo.svg",
+  logoSrc: "/logos/tandem/tandem-logo.svg",
   wordmarkSrc: "/logos/tandem/wordmark.svg",
   coverSrc: "/logos/tandem/cover.png",
   brand: {

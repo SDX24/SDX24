@@ -28,6 +28,12 @@
 - ✅ **Conventional Commits** - Commit messages must follow format
 - ✅ **Context documentation** - Enforced by commit-msg hook for required commit types
 
+#### Optimization Advisory (Non-Blocking):
+
+- ⚠️ **Staged-file optimization hints** - Runs a soft advisory scan for bundles, media, React patterns, and Next.js usage
+- ⚠️ **No behavior changes** - Advisory only, does not modify code or block commits
+- ⚠️ **Script** - `scripts/optimization-advisory.sh`
+
 #### Safety Checks (Blocking):
 
 - 🚫 **Debugger statements** - Blocks if `debugger` found in source files

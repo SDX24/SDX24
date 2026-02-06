@@ -20,7 +20,7 @@ export default function Home() {
                 width={56}
                 height={56}
                 priority
-                quality={100}
+                quality={85}
                 className="rounded-2xl bg-white/10 p-2"
               />
               <div className="space-y-1">

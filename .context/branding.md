@@ -123,7 +123,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 
 ### Logo Variants
 
-1. **Primary Logo** (`/public/logos/sdx24/logo.svg`)
+1. **Primary Logo** (`/public/logos/sdx24/sdx24-logo.svg`)
    - **Colors**: Teal gradient (#00A991 → #006658)
    - **Usage**: Main logo for headers, branding
    - **Use by default** in most cases
@@ -197,6 +197,12 @@ Maintain minimum clear space around logo equal to the height of the hourglass el
 - Subtle animations and transitions
 - Sharp, clean edges
 - Contemporary design patterns
+
+## 🧩 Iconography
+
+- **Only use Lucide icons via `react-icons/lu`.**
+- Do not use other icon packs (Heroicons, Feather, Font Awesome, etc.).
+- Personal brand assets (logos/wordmarks) are exempt.
 
 ## 🖼️ UI Components
 
