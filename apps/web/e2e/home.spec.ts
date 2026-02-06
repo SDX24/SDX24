@@ -7,14 +7,13 @@ test("homepage displays Stefan Dorosh portfolio", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /Stefan Dorosh/i })).toBeVisible();
 
   // Check title is visible
-  await expect(page.getByText(/Full[-\s]Stack Web Developer/i)).toBeVisible();
+  await expect(page.getByText("Full-Stack Web Developer", { exact: true })).toBeVisible();
 
   // Check CTA buttons exist
   await expect(page.getByRole("link", { name: /View GitHub/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /LinkedIn/i })).toBeVisible();
 
-  // Check featured projects section
-  await expect(page.getByRole("heading", { name: /Featured Projects/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Tandem/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: /InsurFlow/i })).toBeVisible();
+  // Check status badges
+  await expect(page.getByText(/Open to fall 2026 internships/i)).toBeVisible();
+  await expect(page.getByText(/Vancouver, BC/i)).toBeVisible();
 });

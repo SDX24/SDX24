@@ -10,6 +10,7 @@ Active UI primitives:
 - `MainTealCard` (`apps/web/src/components/ui/main-teal-card.tsx`)
 - `ProjectCardCompact` (`apps/web/src/components/ui/project-card-compact.tsx`)
 - `ProjectCardExpanded` (`apps/web/src/components/ui/project-card-expanded.tsx`)
+- `HeroFlipCard` (`apps/web/src/components/hero-flip-card.tsx`)
 
 No other card components are supported; prior legacy/face card variants were removed.
 
@@ -128,6 +129,23 @@ No other card components are supported; prior legacy/face card variants were rem
 - Expanded card uses lower tilt/hover values for easier interaction.
 - Keep achievements concise (3-5 short items).
 - Expanded card should be interactive only while visible.
+
+## HeroFlipCard
+
+**Purpose**: Landing hero card that scrolls diagonally, flips, and settles into a compact project card.
+
+**Responsibilities**:
+
+- Drive scroll-linked translation and flip timing
+- Disable interactivity and glare during flip for stability
+- Re-enable compact card interactivity after settle
+- Keep front/back faces size-aligned for seamless flip
+
+**Usage rules**:
+
+- Use only as a client-side island on the landing page
+- Keep the front card as the hero photo variant
+- Back face must render `ProjectCardCompact`
 
 ## Hover Interaction Pattern
 

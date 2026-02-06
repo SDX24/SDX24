@@ -220,6 +220,10 @@ docs(context): update tech-stack with new packages
 - Each route: < 100KB additional
 - Monitor with Vercel Analytics
 
+### Image Optimization
+
+- Next.js `images.qualities` must include any used `quality` values
+
 ## 🔄 Deployment Pipeline
 
 ### Preview Deployments

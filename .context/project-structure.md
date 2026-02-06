@@ -59,6 +59,7 @@ SDX24/
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
 │       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
+│       │   │   ├── hero-flip-card.tsx # Landing hero scroll + flip card
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
