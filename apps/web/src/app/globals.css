@@ -4,23 +4,28 @@
 
 @layer base {
   @font-face {
-    font-family: 'Space Grotesk';
-    src: url('/fonts/SpaceGrotesk-Regular.woff2') format('woff2');
+    font-family: "Space Grotesk";
+    src: url("/fonts/SpaceGrotesk-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
 
   @font-face {
-    font-family: 'Space Grotesk';
-    src: url('/fonts/SpaceGrotesk-Bold.woff2') format('woff2');
+    font-family: "Space Grotesk";
+    src: url("/fonts/SpaceGrotesk-Bold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
   }
 
   * {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      "Space Grotesk",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
   }
 
   /* Prevent white background on overscroll */
@@ -28,5 +33,31 @@
   body {
     background-color: #000000;
     overscroll-behavior: none;
+  }
+}
+
+@layer utilities {
+  .bg-grid-dot {
+    background-image:
+      linear-gradient(to right, rgba(0, 169, 145, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 169, 145, 0.1) 1px, transparent 1px),
+      radial-gradient(rgba(242, 197, 124, 0.42) 1px, transparent 1px);
+    background-size:
+      88px 88px,
+      88px 88px,
+      18px 18px;
+    background-position: center;
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.2) 78%,
+      transparent 95%
+    );
+    mask-image: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.2) 78%,
+      transparent 95%
+    );
   }
 }

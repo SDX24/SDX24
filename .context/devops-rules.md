@@ -27,6 +27,9 @@
 - ✅ **TypeScript compilation** - No type errors allowed
 - ✅ **Conventional Commits** - Commit messages must follow format
 - ✅ **Context documentation** - Enforced by commit-msg hook for required commit types
+- ✅ **Context updates by staged files** - Pre-commit blocks if structure/deps/DevOps changes lack matching `.context/` updates
+- ✅ **Components context updates** - New components in `apps/web/src/components/` require `.context/components.md`
+- ✅ **Context index updates** - New `.context/*.md` files require `.context/README.md` update
 
 #### Optimization Advisory (Non-Blocking):
 

@@ -70,6 +70,8 @@ This directory contains essential context files that AI assistants **MUST** read
 - Change file structure → Update `project-structure.md`
 - Modify CI/CD → Update `devops-rules.md`
 - Add new DevOps rules → Update `devops-rules.md`
+- Add new component files → Update `components.md`
+- Add new `.context/*.md` files → Update `.context/README.md`
 
 **Pre-commit hooks will BLOCK if context is missing!**
 
@@ -83,6 +85,8 @@ This directory contains essential context files that AI assistants **MUST** read
 - ❌ `feat:` commits without context updates
 - ❌ `chore(deps):` commits without tech-stack updates
 - ❌ `ci:` commits without devops-rules updates
+- ❌ New components without `.context/components.md`
+- ❌ New `.context/*.md` without `.context/README.md`
 
 ### This Context is Committed
 
@@ -170,6 +174,8 @@ git commit -m "chore(deps): add framer-motion for animations"
 - Did I add files/routes? → Update `project-structure.md`
 - Did I add packages? → Update `tech-stack.md`
 - Did I change CI/CD? → Update `devops-rules.md`
+- Did I add component files? → Update `components.md`
+- Did I add a new context file? → Update `.context/README.md`
 - If YES to any → Stage those context files!
 
 **Hooks will catch missing context and block the commit.**

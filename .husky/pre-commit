@@ -12,6 +12,85 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Context update enforcement based on staged files
+STAGED_STATUS=$(git diff --cached --name-status)
+STAGED_FILES=$(echo "$STAGED_STATUS" | awk '{print $2}' | tr '\n' ' ')
+
+needs_project_structure=false
+needs_tech_stack=false
+needs_devops=false
+needs_components_context=false
+needs_context_readme=false
+
+# Project structure changes (add/rename/delete in key directories)
+if echo "$STAGED_STATUS" | grep -E '^(A|D|R|C)' >/dev/null 2>&1; then
+  if echo "$STAGED_STATUS" | grep -E '^(A|D|R|C).*\s(apps/web/src/(app|components|lib|utils|types)|apps/web/public|packages/)' >/dev/null 2>&1; then
+    needs_project_structure=true
+  fi
+fi
+
+# Component additions require components context update
+if echo "$STAGED_STATUS" | grep -E '^(A|R|C).*\sapps/web/src/components/.*\.tsx$' >/dev/null 2>&1; then
+  needs_components_context=true
+fi
+
+# Dependency changes (package.json or bun.lock)
+if echo "$STAGED_FILES" | grep -E '(^|\s)(apps/web/)?package\.json(\s|$)|(^|\s)packages/.*/package\.json(\s|$)|(^|\s)package\.json(\s|$)|(^|\s)bun\.lock(\s|$)' >/dev/null 2>&1; then
+  needs_tech_stack=true
+fi
+
+# DevOps/CI changes
+if echo "$STAGED_FILES" | grep -E '(^|\s)(\.github/workflows/|\.husky/|scripts/|turbo\.json|eslint\.config\.cjs|lint-staged\.config\.js|commitlint\.config\.js|knip\.config\.ts|playwright\.config\.ts|apps/web/vercel\.json)(\s|$)' >/dev/null 2>&1; then
+  needs_devops=true
+fi
+
+# New .context markdown files require README update
+if echo "$STAGED_STATUS" | grep -E '^(A|R|C).*\s\.context/.*\.md$' | grep -v -E '\.context/README\.md$' >/dev/null 2>&1; then
+  needs_context_readme=true
+fi
+
+context_staged=$(git diff --cached --name-only | grep '^\.context/' || true)
+
+if [ "$needs_project_structure" = true ]; then
+  if ! echo "$context_staged" | grep -q '^\.context/project-structure\.md$'; then
+    echo "❌ Context update required: .context/project-structure.md"
+    echo "Reason: project structure changed in staged files."
+    exit 1
+  fi
+fi
+
+if [ "$needs_tech_stack" = true ]; then
+  if ! echo "$context_staged" | grep -q '^\.context/tech-stack\.md$'; then
+    echo "❌ Context update required: .context/tech-stack.md"
+    echo "Reason: dependency change detected in staged files."
+    exit 1
+  fi
+fi
+
+if [ "$needs_devops" = true ]; then
+  if ! echo "$context_staged" | grep -q '^\.context/devops-rules\.md$'; then
+    echo "❌ Context update required: .context/devops-rules.md"
+    echo "Reason: DevOps/CI/config changes detected in staged files."
+    exit 1
+  fi
+fi
+
+if [ "$needs_components_context" = true ]; then
+  if ! echo "$context_staged" | grep -q '^\.context/components\.md$'; then
+    echo "❌ Context update required: .context/components.md"
+    echo "Reason: new component added under apps/web/src/components/."
+    exit 1
+  fi
+fi
+
+if [ "$needs_context_readme" = true ]; then
+  if ! echo "$context_staged" | grep -q '^\.context/README\.md$'; then
+    echo "❌ Context update required: .context/README.md"
+    echo "Reason: new .context markdown file added/renamed."
+    exit 1
+  fi
+fi
+
 # Non-blocking optimization advisory on staged files
 bash scripts/optimization-advisory.sh || true
 

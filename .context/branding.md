@@ -198,6 +198,11 @@ Maintain minimum clear space around logo equal to the height of the hourglass el
 - Sharp, clean edges
 - Contemporary design patterns
 
+### 5. Background Treatment
+
+- Use the grid + dot background on the landing hero for texture
+- Keep opacity subtle; avoid heavy motion or high-contrast patterns
+
 ## 🧩 Iconography
 
 - **Only use Lucide icons via `react-icons/lu`.**

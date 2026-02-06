@@ -7,10 +7,9 @@ const heroDescription =
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-black via-gray-900 to-brand-teal-dark px-4 text-white">
-      <div className="pointer-events-none absolute left-1/2 top-[-240px] h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-brand-teal-light/20 blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-[-220px] right-[-120px] h-[420px] w-[420px] rounded-full bg-brand-apricot/20 blur-[160px]" />
-      <div className="container relative z-10 flex max-w-6xl flex-col items-center justify-center gap-10 py-16 lg:py-24">
+    <main className="relative min-h-screen overflow-hidden bg-black text-white">
+      <div className="pointer-events-none absolute inset-0 bg-grid-dot opacity-60" />
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 px-4 py-16 lg:py-24">
         <section className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
           <div className="space-y-8 text-center lg:text-left">
             <div className="inline-flex items-center gap-4 rounded-full border border-brand-teal-light/30 bg-white/5 px-4 py-2">
