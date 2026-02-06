@@ -327,7 +327,7 @@ export const CometCard = React.memo(
             transformStyle: "preserve-3d",
             willChange: isInteractive ? "transform" : undefined,
           }}
-          className="relative"
+          className="relative overflow-hidden rounded-[28px]"
         >
           <motion.div
             className={cn(

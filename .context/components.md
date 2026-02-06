@@ -25,6 +25,7 @@ No other card components are supported; prior legacy/face card variants were rem
 - Optional flip between front/back content
 - Composition-safe transforms for external layout/motion
 - Reduced-motion compliance and touch disablement
+- Clip scaled surface to rounded corners (prevents border bleed)
 
 **Key props**:
 
