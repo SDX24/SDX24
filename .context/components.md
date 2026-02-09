@@ -11,8 +11,9 @@ Active UI primitives:
 - `ProjectCardCompact` (`apps/web/src/components/ui/project-card-compact.tsx`)
 - `ProjectCardExpanded` (`apps/web/src/components/ui/project-card-expanded.tsx`)
 - `HeroPhotoCard` (`apps/web/src/components/cards/hero-photo-card.tsx`)
+- `HeroBackHoverCard` (`apps/web/src/components/cards/hero-back-hover-card.tsx`)
 
-Only the `cards/hero-photo-card.tsx` hero card is supported outside the UI primitives.
+Only the hero card components in `components/cards/` are supported outside the UI primitives.
 
 ## CometCard
 
@@ -146,6 +147,21 @@ Only the `cards/hero-photo-card.tsx` hero card is supported outside the UI primi
 - Use only as a client-side island on the landing page
 - Keep the front card as the hero photo variant
 - Back face must render `ProjectCardCompact`
+
+## HeroBackHoverCard
+
+**Purpose**: Compact + expanded project card hover pair used on the hero back face.
+
+**Responsibilities**:
+
+- Render compact project card with hover-activated expanded overlay
+- Manage pointer-events handoff and delayed close behavior
+- Keep expanded card anchored to the compact card origin
+
+**Usage rules**:
+
+- Use only inside hero back faces (not general grids)
+- Expanded card is interactive only while visible
 
 ## Hover Interaction Pattern
 

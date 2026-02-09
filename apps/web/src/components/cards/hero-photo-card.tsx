@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { MainTealCard } from "../ui/main-teal-card";
 import { ProjectCardCompact } from "../ui/project-card-compact";
+import { HeroBackHoverCard } from "./hero-back-hover-card";
 
 type HeroPhotoCardProps = {
   className?: string;
@@ -25,6 +26,17 @@ type HeroPhotoCardProps = {
     stack: string[];
     logoSrc: string;
     wordmarkSrc?: string;
+    status?: string;
+    links?: Array<{ label: string; href: string }>;
+    achievements?: string[];
+    coverSrc?: string;
+    brand?: {
+      primary: string;
+      primaryLight: string;
+      secondary: string;
+      analogous: string;
+    };
+    expandedDescription?: string;
   };
 };
 
@@ -44,6 +56,21 @@ export const HeroPhotoCard = ({
     stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
     logoSrc: "/logos/tandem/tandem-logo.svg",
     wordmarkSrc: "/logos/tandem/wordmark.svg",
+    status: "Live",
+    links: [
+      { label: "Blog", href: "https://tandem-blog.vercel.app" },
+      { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
+    ],
+    achievements: ["Trust", "Balance", "Support"],
+    coverSrc: "/logos/tandem/cover.png",
+    brand: {
+      primary: "#3373CC",
+      primaryLight: "#91B3E3",
+      secondary: "#92F189",
+      analogous: "#68D5FF",
+    },
+    expandedDescription:
+      "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
   },
 }: HeroPhotoCardProps) => (
   <HeroPhotoCardInner
@@ -284,15 +311,20 @@ const HeroPhotoCardInner = ({
               transform: "rotate3d(1, 1, 0, 180deg)",
             }}
           >
-            <ProjectCardCompact
-              className="max-w-[380px]"
+            <HeroBackHoverCard
               title={project.title}
               slogan={project.slogan}
               description={project.description}
               stack={project.stack}
               logoSrc={project.logoSrc}
               wordmarkSrc={project.wordmarkSrc}
-              interactive={isLanded}
+              status={project.status}
+              links={project.links}
+              achievements={project.achievements}
+              coverSrc={project.coverSrc}
+              brand={project.brand}
+              expandedDescription={project.expandedDescription}
+              interactive={isLanded && showBack}
             />
           </div>
           <div className="invisible">

@@ -59,6 +59,7 @@ SDX24/
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
 │       │   │   ├── cards/     # Hero card variants
+│       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
 │       │   │   └── index.ts   # Barrel export
@@ -166,6 +167,7 @@ apps/web/src/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
 │   ├── cards/            # Hero card variants
+│   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │   ├── ui/               # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
 │   └── index.ts         # Barrel export for easy imports

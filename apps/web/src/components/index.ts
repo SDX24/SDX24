@@ -9,6 +9,7 @@
 // export { Button } from "./ui/button"
 // export { Card } from "./ui/card"
 
+export { HeroBackHoverCard } from "./cards/hero-back-hover-card";
 export { HeroPhotoCard } from "./cards/hero-photo-card";
 export { CometCard } from "./ui/comet-card";
 export { MainTealCard } from "./ui/main-teal-card";
