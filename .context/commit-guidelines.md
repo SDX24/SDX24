@@ -168,7 +168,8 @@ The hooks run:
 
 1. **Lint-staged** - Format and lint changed files
 2. **Type check** - Verify TypeScript compiles
-3. **Safety checks** - TODO/FIXME context, debugger, hardcoded localhost, large files
+3. **Optimization advisory** - Non-blocking staged-file hints for bundles, media, React patterns, and Next.js usage
+4. **Safety checks** - TODO/FIXME context, debugger, hardcoded localhost, large files
 
 **Commit-msg (`/.husky/commit-msg`)**
 

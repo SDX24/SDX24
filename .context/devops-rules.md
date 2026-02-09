@@ -27,6 +27,15 @@
 - ✅ **TypeScript compilation** - No type errors allowed
 - ✅ **Conventional Commits** - Commit messages must follow format
 - ✅ **Context documentation** - Enforced by commit-msg hook for required commit types
+- ✅ **Context updates by staged files** - Pre-commit blocks if structure/deps/DevOps changes lack matching `.context/` updates
+- ✅ **Components context updates** - New components in `apps/web/src/components/` require `.context/components.md`
+- ✅ **Context index updates** - New `.context/*.md` files require `.context/README.md` update
+
+#### Optimization Advisory (Non-Blocking):
+
+- ⚠️ **Staged-file optimization hints** - Runs a soft advisory scan for bundles, media, React patterns, and Next.js usage
+- ⚠️ **No behavior changes** - Advisory only, does not modify code or block commits
+- ⚠️ **Script** - `scripts/optimization-advisory.sh`
 
 #### Safety Checks (Blocking):
 
@@ -210,6 +219,10 @@ docs(context): update tech-stack with new packages
 - Initial JS: < 200KB gzipped
 - Each route: < 100KB additional
 - Monitor with Vercel Analytics
+
+### Image Optimization
+
+- Next.js `images.qualities` must include any used `quality` values
 
 ## 🔄 Deployment Pipeline
 
