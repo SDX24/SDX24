@@ -97,6 +97,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 - **ESLint** `9.x` - JavaScript/TypeScript linter
   - `eslint-config-next` - Next.js rules
   - TypeScript integration
+  - App lint script uses `eslint .` (not `next lint`)
 
 ### Formatting
 
