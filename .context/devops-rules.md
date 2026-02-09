@@ -224,6 +224,12 @@ docs(context): update tech-stack with new packages
 
 - Next.js `images.qualities` must include any used `quality` values
 
+### Motion & Animation Performance
+
+- Animate only `transform` and `opacity` for scroll effects
+- Avoid layout/paint-heavy properties (`top`, `left`, `width`, `height`, `filter`, `box-shadow`)
+- Respect `prefers-reduced-motion` with non-scrubbed, fade-only fallbacks
+
 ## 🔄 Deployment Pipeline
 
 ### Preview Deployments

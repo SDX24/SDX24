@@ -131,12 +131,12 @@ apps/web/pages/
 
 #### 2. **Next.js App Router (16.x in app)**
 
-- App uses Next.js `16.1.4`
+- App uses Next.js `16.1.6`
 - Using modern `/app` directory
 - React 19 with Server Components
 - TypeScript strict mode
 
-**Note**: Root `package.json` includes `next@^16.1.4`; keep root/app versions aligned.
+**Note**: Root `package.json` includes `next@^16.1.6`; keep root/app versions aligned.
 
 #### 3. **Quality Gates**
 

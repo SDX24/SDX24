@@ -58,11 +58,13 @@ SDX24/
 │       │   │   ├── not-found.tsx # 404 page
 │       │   │   └── globals.css # Global styles + fonts
 │       │   ├── components/    # Reusable UI components
+│       │   │   ├── cards/     # Hero card variants
+│       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
-│       │   │   ├── hero-flip-card.tsx # Landing hero scroll + flip card
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
+│       │   │   ├── motion.ts  # GSAP plugin registry (ScrollTrigger, ScrollToPlugin)
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── utils/         # Helper functions
 │       │   │   └── index.ts   # Barrel export
@@ -163,6 +165,8 @@ apps/web/src/
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
+│   ├── cards/            # Hero card variants
+│   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │   ├── ui/               # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients

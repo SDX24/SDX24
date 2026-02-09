@@ -1,19 +1,9 @@
 import Image from "next/image";
 
-import { HeroFlipCard } from "@/components";
+import { HeroPhotoCard } from "@/components";
 
 const heroDescription =
   "BCIT Full-Stack Web Development diploma candidate shipping Tandem's real-time childcare scheduler, leading InsurFlow's AI InsurTech stack, and shaping W3rlds UI with dependable delivery.";
-
-const tandem = {
-  title: "Tandem",
-  slogan: "Bridging work and childcare",
-  description:
-    "Tandem helps parents in the trades balance work and childcare with AI scheduling, trusted care, and shared support.",
-  stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
-  logoSrc: "/logos/tandem/tandem-logo.svg",
-  wordmarkSrc: "/logos/tandem/wordmark.svg",
-};
 
 export default function Home() {
   return (
@@ -21,7 +11,7 @@ export default function Home() {
       <div className="pointer-events-none fixed inset-0 bg-grid-dot opacity-60" />
       <div className="relative z-10">
         <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-16 lg:py-24">
-          <div className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
+          <div className="grid w-full items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
             <div className="space-y-8 text-center lg:text-left" data-hero-left>
               <div className="inline-flex items-center gap-4 rounded-full border border-brand-teal-light/30 bg-white/5 px-4 py-2">
                 <Image
@@ -85,14 +75,11 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="flex w-full flex-col items-center gap-6 lg:items-end">
-              <HeroFlipCard
-                imageSrc="/images/profile.jpg"
-                imageAlt="Stefan Dorosh profile"
-                name="Stefan Dorosh"
-                role="Full-stack web developer"
-                project={tandem}
-              />
+            <div className="grid gap-10 lg:gap-12">
+              <div className="hidden lg:block" aria-hidden="true" />
+              <div className="flex w-full flex-col items-center gap-6 lg:items-end">
+                <HeroPhotoCard contentClassName="p-4" />
+              </div>
             </div>
           </div>
         </section>

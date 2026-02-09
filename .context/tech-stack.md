@@ -47,7 +47,17 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Animation
 
-- **Motion** `12.30.0` - Animation library for interactive UI
+- **GSAP** `3.14.2` - Scroll-driven timelines and advanced motion control
+  - **ScrollTrigger** - Scroll-linked timelines and pinning
+  - **ScrollToPlugin** - Programmatic smooth scrolling for anchor jumps
+- **Framer Motion (Motion for React)** `12.33.0` - React animation and interaction library
+
+### Animation Architecture (Required)
+
+- GSAP owns scroll-linked animation (timelines, pinning, parallax, section transitions)
+- Framer Motion owns interaction/state animation (hover, tap, menu)
+- No element is animated by both libraries
+- Register GSAP plugins globally: ScrollTrigger, ScrollToPlugin
 
 ## 🏗️ Monorepo & Build Tools
 
@@ -208,7 +218,8 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 {
   "@t3-oss/env-nextjs": "^0.9.2",
   "clsx": "^2.1.1",
-  "motion": "^12.30.0",
+  "framer-motion": "^12.33.0",
+  "gsap": "^3.14.2",
   "next": "^16.1.6",
   "react": "^19.0.0",
   "react-dom": "^19.0.0",

@@ -10,9 +10,9 @@ Active UI primitives:
 - `MainTealCard` (`apps/web/src/components/ui/main-teal-card.tsx`)
 - `ProjectCardCompact` (`apps/web/src/components/ui/project-card-compact.tsx`)
 - `ProjectCardExpanded` (`apps/web/src/components/ui/project-card-expanded.tsx`)
-- `HeroFlipCard` (`apps/web/src/components/hero-flip-card.tsx`)
+- `HeroPhotoCard` (`apps/web/src/components/cards/hero-photo-card.tsx`)
 
-No other card components are supported; prior legacy/face card variants were removed.
+Only the `cards/hero-photo-card.tsx` hero card is supported outside the UI primitives.
 
 ## CometCard
 
@@ -79,7 +79,7 @@ No other card components are supported; prior legacy/face card variants were rem
 
 - Use for production-facing cards unless a custom `CometCard` variant is necessary.
 - Size via `className` (e.g. `max-w-[360px]`) and `contentClassName` for padding.
-- Use `containerMotionProps` for page movement, and `flipProgress` for scroll flips.
+- Use GSAP on a wrapper for page movement, and drive `flipProgress` with GSAP for scroll flips.
 
 ## ProjectCardCompact
 
@@ -130,9 +130,9 @@ No other card components are supported; prior legacy/face card variants were rem
 - Keep achievements concise (3-5 short items).
 - Expanded card should be interactive only while visible.
 
-## HeroFlipCard
+## HeroPhotoCard
 
-**Purpose**: Landing hero card that scrolls diagonally, flips, and settles into a compact project card.
+**Purpose**: Landing hero card that scrolls diagonally with GSAP, flips, and settles into a compact project card.
 
 **Responsibilities**:
 
@@ -156,17 +156,38 @@ No other card components are supported; prior legacy/face card variants were rem
 
 ## Movement + Flip + Tilt + Glare (Expected Behavior)
 
-- **Movement**: external motion (position/scale/rotate) lives on `containerMotionProps` only.
+- **Movement**: external motion (position/scale/rotate) lives on a GSAP-driven wrapper only.
 - **Tilt**: remains independent from layout motion.
 - **Flip**: applies to the full card surface (border + background + glare + content).
 - **Glare**: tracks pointer within the card; no glare on touch or reduced motion.
-- **Scroll usage**: `useScroll` + `useTransform` should feed into `containerMotionProps.style` and `flipProgress`.
+- **Scroll usage**: GSAP owns scroll-linked motion; do not use Framer Motion for scroll.
+- **Interaction usage**: Framer Motion owns hover/tap/enter interactions only.
 
 ## Examples (Usage Patterns)
 
-1. **Move card on scroll**: attach `x/y` MotionValues to `containerMotionProps.style`.
-2. **Flip on scroll**: pass `flipProgress` MotionValue (0-1) to `CometCard` or `MainTealCard`.
+1. **Move card on scroll**: use GSAP + ScrollTrigger on a wrapper element.
+2. **Flip on scroll**: drive flip progress with GSAP or apply `rotate3d` directly on a flip wrapper.
 3. **Content types**: cards support image-only, image+text, and text-only layouts without special wrappers.
+
+## GSAP Plugin Guidance
+
+- **ScrollTrigger**: default for scroll-linked motion and pinning
+- **ScrollToPlugin**: use for anchor/CTA smooth scrolling
+
+## Animation Ownership (Strict)
+
+- GSAP owns all scroll-linked animations
+- Framer Motion owns interaction/state animations only
+- No element may be animated by both libraries
+- If ownership is unclear, default to GSAP
+
+## Performance & Motion Rules
+
+- Allowed: `transform`, `opacity`
+- Avoid: `top`, `left`, `width`, `height`, `filter`, `box-shadow`
+- Use restrained easing (no bouncy/cartoon motion)
+- Cap high-impact moments to 2 max (hero + one section)
+- Always respect `prefers-reduced-motion`
 
 ---
 
