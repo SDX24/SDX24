@@ -48,6 +48,8 @@ export const HeroBackHoverCard = ({
   expandedDescription,
   interactive = false,
 }: HeroBackHoverCardProps) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const pointerRef = useRef<{ x: number; y: number } | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
 
@@ -72,8 +74,28 @@ export const HeroBackHoverCard = ({
 
   useEffect(() => () => clearCloseTimer(), []);
   useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+    };
+    window.addEventListener("pointermove", handlePointerMove);
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
+  useEffect(() => {
     if (!interactive) {
       setIsExpanded(false);
+      return;
+    }
+
+    const rect = wrapperRef.current?.getBoundingClientRect();
+    const pointer = pointerRef.current;
+    if (!rect || !pointer) return;
+    if (
+      pointer.x >= rect.left &&
+      pointer.x <= rect.right &&
+      pointer.y >= rect.top &&
+      pointer.y <= rect.bottom
+    ) {
+      openExpanded();
     }
   }, [interactive]);
 
@@ -92,7 +114,7 @@ export const HeroBackHoverCard = ({
   const resolvedDescription = expandedDescription ?? description;
 
   return (
-    <div className="relative">
+    <div ref={wrapperRef} className="relative">
       <div
         className={
           isExpanded

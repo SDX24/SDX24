@@ -121,8 +121,6 @@ SDX24/
 
 - `/` - Landing page with portfolio, projects, and contact information
 - `/test` - Tandem app embed (iframe) using `NEXT_PUBLIC_TANDEM_URL`
-- `/test1` - CometCard motion lab (scroll movement + flip + content variations)
-- `/test2` - Project card lab (Tandem compact + expanded variants)
 - `not-found.tsx` - Custom 404 page
 
 #### Adding New Pages
@@ -133,10 +131,6 @@ apps/web/src/app/
 ├── not-found.tsx         → Custom 404 page
 ├── test/
 │   └── page.tsx          → /test (Tandem app iframe embed via NEXT_PUBLIC_TANDEM_URL)
-├── test1/
-│   └── page.tsx          → /test1 (CometCard motion lab: scroll movement + flip + content)
-├── test2/
-│   └── page.tsx          → /test2 (Project card lab: Tandem compact + expanded)
 ├── about/
 │   └── page.tsx          → /about (Not yet created)
 └── projects/
@@ -158,10 +152,6 @@ apps/web/src/
 │   ├── globals.css      # Global styles
 │   ├── test/
 │   │   └── page.tsx     # /test (Tandem app embed)
-│   ├── test1/
-│   │   └── page.tsx     # /test1 (CometCard motion lab)
-│   ├── test2/
-│   │   └── page.tsx     # /test2 (Project card lab: Tandem compact + expanded)
 │   └── api/             # API routes
 │       └── health/
 │           └── route.ts # GET /api/health
