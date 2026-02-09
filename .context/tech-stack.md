@@ -12,7 +12,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ### Frontend Framework
 
-- **Next.js** `16.1.4` - React framework
+- **Next.js** `16.1.6` - React framework
   - App Router (RSC)
   - Server-side rendering
   - Static generation
@@ -209,7 +209,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
   "@t3-oss/env-nextjs": "^0.9.2",
   "clsx": "^2.1.1",
   "motion": "^12.30.0",
-  "next": "^16.1.4",
+  "next": "^16.1.6",
   "react": "^19.0.0",
   "react-dom": "^19.0.0",
   "tailwind-merge": "^3.4.0",
@@ -227,7 +227,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
   "@types/react-dom": "^19",
   "autoprefixer": "^10.0.1",
   "eslint": "^9.0.0",
-  "eslint-config-next": "^16.1.4",
+  "eslint-config-next": "^16.1.6",
   "postcss": "^8",
   "tailwindcss": "^3.3.0",
   "typescript": "^5"
@@ -253,7 +253,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 ```json
 {
-  "next": "^16.1.4"
+  "next": "^16.1.6"
 }
 ```
 

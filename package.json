@@ -31,6 +31,6 @@
   },
   "packageManager": "bun@1.0.25",
   "dependencies": {
-    "next": "^16.1.4"
+    "next": "^16.1.6"
   }
 }
