@@ -44,6 +44,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 - **clsx** `2.1.1` - Conditional className utility
 - **tailwind-merge** `3.4.0` - Tailwind class merging
+- **lucide-react** `0.563.0` - Icon library (UI accents)
 
 ### Animation
 

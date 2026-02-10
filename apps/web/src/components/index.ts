@@ -15,3 +15,5 @@ export { CometCard } from "./ui/comet-card";
 export { MainTealCard } from "./ui/main-teal-card";
 export { ProjectCardCompact } from "./ui/project-card-compact";
 export { ProjectCardExpanded } from "./ui/project-card-expanded";
+export { HandEmbed } from "./ui/hand-embed";
+export { ScrollToTopOnLoad } from "./scroll-to-top-on-load";

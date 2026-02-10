@@ -51,6 +51,7 @@ export const HeroBackHoverCard = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pointerRef = useRef<{ x: number; y: number } | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
 
   const clearCloseTimer = () => {
@@ -65,11 +66,21 @@ export const HeroBackHoverCard = ({
     setIsExpanded(true);
   };
 
-  const scheduleClose = () => {
+  const scheduleClose = (delay = 80) => {
     clearCloseTimer();
     closeTimerRef.current = window.setTimeout(() => {
       setIsExpanded(false);
-    }, 80);
+    }, delay);
+  };
+
+  const holdOpen = () => {
+    clearCloseTimer();
+    setIsHolding(true);
+  };
+
+  const releaseHold = () => {
+    setIsHolding(false);
+    scheduleClose(520);
   };
 
   useEffect(() => () => clearCloseTimer(), []);
@@ -122,7 +133,7 @@ export const HeroBackHoverCard = ({
             : "pointer-events-auto opacity-100 transition-opacity duration-200"
         }
         onPointerEnter={interactive ? openExpanded : undefined}
-        onPointerLeave={interactive ? scheduleClose : undefined}
+        onPointerLeave={interactive && !isHolding ? () => scheduleClose() : undefined}
       >
         <ProjectCardCompact
           className="max-w-[380px]"
@@ -142,7 +153,7 @@ export const HeroBackHoverCard = ({
             : "pointer-events-none absolute left-0 top-0 z-20 w-[720px] origin-top-left scale-[0.5] opacity-0 transition duration-300"
         }
         onPointerEnter={isExpanded ? openExpanded : undefined}
-        onPointerLeave={isExpanded ? scheduleClose : undefined}
+        onPointerLeave={isExpanded && !isHolding ? () => scheduleClose() : undefined}
       >
         <ProjectCardExpanded
           className="max-w-none"
@@ -157,6 +168,13 @@ export const HeroBackHoverCard = ({
           wordmarkSrc={wordmarkSrc}
           coverSrc={resolvedCover}
           brand={resolvedBrand}
+          onHoldStart={holdOpen}
+          onHoldEnd={releaseHold}
+          onDragRelease={() => {
+            setIsHolding(false);
+            scheduleClose(520);
+          }}
+          showCue={isExpanded}
         />
       </div>
     </div>

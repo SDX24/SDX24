@@ -62,6 +62,8 @@ SDX24/
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
+│       │   │   │   └── hand-embed.tsx # Right-edge drag cue
+│       │   │   ├── scroll-to-top-on-load.tsx # Force refreshes to start at top
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
 │       │   │   ├── utils.ts   # cn() className utility
@@ -160,6 +162,8 @@ apps/web/src/
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │   ├── ui/               # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
+│   │   └── hand-embed.tsx # Right-edge drag cue
+│   ├── scroll-to-top-on-load.tsx # Force refreshes to start at top
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients
 │   ├── utils.ts         # cn() for className merging
