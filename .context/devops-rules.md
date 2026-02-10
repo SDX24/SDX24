@@ -130,7 +130,6 @@ bun add -d <package>     # Development
 - **Required** for all user-facing features
 - Must test happy path + error states
 - **Currently run locally** (CI step is disabled in `/.github/workflows/ci.yml`)
-- Use commit message flags (`[e2e: ✅]`, `[skip-e2e]`) to manage reminders
 
 ### Unit Tests (Bun Test)
 
@@ -160,7 +159,7 @@ bun add -d <package>     # Development
 1. Run `bun type-check` - No errors
 2. Run `bun lint` - No errors
 3. Run `bun format` - Auto-formats
-4. Run `bun test:e2e` when UI/route changes or reminder triggers
+4. Run `bun test:e2e` when UI/route changes
 5. Update context if feature added
 
 ### Commit Message Format

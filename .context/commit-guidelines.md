@@ -320,35 +320,6 @@ git commit -m "docs(context): update project structure
 - Clarified testing structure"
 ```
 
-## 🧪 E2E Testing Reminders
-
-### Automated Reminder System
-
-**Purpose**: Ensure E2E tests run periodically without blocking commits.
-
-**How it works**:
-
-- Pre-commit hook tracks commits since last E2E test run
-- Every **5 commits**, you'll see a reminder (non-blocking)
-- Add `[e2e: ✅]` to commit message to reset counter
-- Add `[skip-e2e]` to postpone reminder
-
-### Commit Message Flags
-
-```bash
-# When you run E2E tests locally
-feat: add new feature [e2e: ✅ tested locally]
-# Counter resets to 0
-
-# When changes don't affect UI
-fix: update config [skip-e2e]
-# Counter doesn't increment
-
-# When UI changed but not ready for E2E
-feat: add contact form [e2e: ⏭️ will test after validation]
-# Counter resets, acknowledged
-```
-
 ### When to Run E2E Tests
 
 ✅ **Should run E2E**:
