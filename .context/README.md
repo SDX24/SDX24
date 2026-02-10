@@ -56,10 +56,12 @@ This directory contains essential context files that AI assistants **MUST** read
 
 1. ✅ Read relevant `.context/` files
 2. ✅ Make your changes
-3. ✅ **Ask: "Does this require context update?"**
-4. ✅ If YES → Update context files
-5. ✅ Stage context changes with your code
-6. ✅ Commit (hooks will enforce this)
+3. ✅ **Provide a quick summary of changes with examples** (var names, line changes, function names)
+   - Example: "Renamed `isReady` → `showElements`, consolidated 3 useEffects → 1, removed `lineOffset` prop"
+4. ✅ **Ask: "Does this require context update?"**
+5. ✅ If YES → Update context files
+6. ✅ Stage context changes with your code
+7. ✅ Commit (hooks will enforce this)
 
 ### When Context Update is Required
 

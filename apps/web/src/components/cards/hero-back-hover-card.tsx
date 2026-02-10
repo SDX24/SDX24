@@ -24,7 +24,6 @@ type HeroBackHoverCardProps = {
   stack: string[];
   logoSrc: string;
   wordmarkSrc?: string;
-  status?: string;
   links?: ProjectLink[];
   achievements?: string[];
   coverSrc?: string;
@@ -40,7 +39,6 @@ export const HeroBackHoverCard = ({
   stack,
   logoSrc,
   wordmarkSrc,
-  status,
   links,
   achievements,
   coverSrc,
@@ -160,7 +158,6 @@ export const HeroBackHoverCard = ({
           title={title}
           slogan={slogan}
           description={resolvedDescription}
-          status={status}
           links={resolvedLinks}
           stack={[...stack, "Realtime", "Trusted Reviews"]}
           achievements={resolvedAchievements}

@@ -26,7 +26,6 @@ type HeroPhotoCardProps = {
     stack: string[];
     logoSrc: string;
     wordmarkSrc?: string;
-    status?: string;
     links?: Array<{ label: string; href: string }>;
     achievements?: string[];
     coverSrc?: string;
@@ -56,7 +55,6 @@ export const HeroPhotoCard = ({
     stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
     logoSrc: "/logos/tandem/tandem-logo.svg",
     wordmarkSrc: "/logos/tandem/wordmark.svg",
-    status: "Live",
     links: [
       { label: "Blog", href: "https://tandem-blog.vercel.app" },
       { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
@@ -318,7 +316,6 @@ const HeroPhotoCardInner = ({
               stack={project.stack}
               logoSrc={project.logoSrc}
               wordmarkSrc={project.wordmarkSrc}
-              status={project.status}
               links={project.links}
               achievements={project.achievements}
               coverSrc={project.coverSrc}

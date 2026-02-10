@@ -10,80 +10,65 @@ type HandEmbedProps = {
   visible: boolean;
   y: MotionValue<number>;
   bumpX: MotionValue<number>;
-  lineOffset?: number;
 };
 
-export const HandEmbed = ({ visible, y, bumpX, lineOffset = 0 }: HandEmbedProps) => {
+export const HandEmbed = ({ visible, y, bumpX }: HandEmbedProps) => {
   const [mounted, setMounted] = useState(false);
   const [cueLeftX, setCueLeftX] = useState(0);
-  const [lineReady, setLineReady] = useState(false);
-  const [hasPosition, setHasPosition] = useState(false);
+  const [showElements, setShowElements] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const updateCueX = () => {
-      const rightInset = 16;
-      const cueSize = 48;
-      setCueLeftX(window.innerWidth - rightInset - cueSize);
+      setCueLeftX(window.innerWidth - 64); // 16px right inset + 48px cue size
     };
-
     updateCueX();
     window.addEventListener("resize", updateCueX);
     return () => window.removeEventListener("resize", updateCueX);
   }, []);
 
   useEffect(() => {
-    if (!visible) {
-      setLineReady(false);
-      setHasPosition(false);
+    if (!visible || cueLeftX === 0) {
+      setShowElements(false);
       return;
     }
-    const updatePositionReady = () => {
-      const x = bumpX.get();
-      const yVal = y.get();
-      if (cueLeftX > 0 && x > 0 && yVal > 0) {
-        setHasPosition(true);
-      }
+
+    const checkPosition = () => {
+      const hasValidPosition = bumpX.get() > 0 && y.get() > 0;
+      setShowElements(hasValidPosition);
     };
 
-    updatePositionReady();
-    const unsubX = bumpX.on("change", updatePositionReady);
-    const unsubY = y.on("change", updatePositionReady);
+    // Subscribe to position changes
+    const unsubX = bumpX.on("change", checkPosition);
+    const unsubY = y.on("change", checkPosition);
+
+    // Initial check
+    checkPosition();
+
     return () => {
       unsubX();
       unsubY();
     };
   }, [visible, bumpX, y, cueLeftX]);
 
-  useEffect(() => {
-    if (!visible || !hasPosition) {
-      setLineReady(false);
-      return;
-    }
-    setLineReady(false);
-    const timeout = window.setTimeout(() => setLineReady(true), 1000);
-    return () => window.clearTimeout(timeout);
-  }, [visible, hasPosition]);
-
-  const cueYOffset = 0;
-  const lineYOffset = 0;
+  const CUE_SIZE = 48;
+  const LINE_HEIGHT = 2;
   const lineLeft = useMotionTemplate`${bumpX}px`;
-  const cueTop = useMotionTemplate`calc(${y}px + ${cueYOffset}px)`;
-  const lineTop = useMotionTemplate`calc(${y}px + ${lineYOffset}px + ${lineOffset}px)`;
+  const cueTop = useMotionTemplate`calc(${y}px - ${CUE_SIZE / 2}px)`;
+  const lineTop = useMotionTemplate`calc(${y}px - ${LINE_HEIGHT / 2}px)`;
   const lineWidth = useMotionTemplate`calc(${cueLeftX}px - ${bumpX}px)`;
 
-  if (!mounted || !visible || cueLeftX === 0 || !hasPosition) return null;
+  if (!mounted || !visible || !showElements) return null;
 
   return createPortal(
     <div className="pointer-events-none fixed inset-0 z-50">
       <motion.div
         className="absolute right-4"
         style={{ top: cueTop }}
-        animate={{ opacity: lineReady ? 0.4 : 0, scale: lineReady ? 1 : 0.98 }}
-        transition={{ duration: 1.6, ease: "easeOut" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showElements ? 0.4 : 0 }}
+        transition={{ duration: 0 }}
       >
         <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-black/50 shadow-[0_0_24px_rgba(104,213,255,0.2)]">
           <span className="absolute inset-0 rounded-full border border-brand-teal-light/30" />
@@ -103,8 +88,8 @@ export const HandEmbed = ({ visible, y, bumpX, lineOffset = 0 }: HandEmbedProps)
           backgroundSize: "12px 2px",
           animation: "hand-dash 1.2s linear infinite reverse",
         }}
-        animate={{ opacity: lineReady ? 0.5 : 0 }}
-        transition={{ duration: 1.6, ease: "easeOut" }}
+        animate={{ opacity: showElements ? 0.5 : 0 }}
+        transition={{ duration: 0 }}
       />
       <style>{`@keyframes hand-dash { from { background-position: 0 0; } to { background-position: -24px 0; } }`}</style>
     </div>,

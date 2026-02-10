@@ -281,6 +281,29 @@ Manual checks recommended:
 - [ ] No commented code
 - [ ] Documentation updated
 
+## 📝 Change Summary Requirements
+
+**After making code changes, always provide:**
+
+1. **Quick summary** with concrete examples:
+   - Variable/function renames: `isReady` → `showElements`
+   - File changes: "Modified 3 files: hand-embed.tsx, project-card-expanded.tsx, hero-photo-card.tsx"
+   - Architectural changes: "Consolidated 3 useEffects → 1, removed 2 event listeners"
+   - Added/removed code: "Removed `lineOffset` prop, added `CUE_SIZE` constant"
+
+2. **Benefits of changes:**
+   - Performance: "Reduced event listeners from 10 → 4"
+   - Maintainability: "Clearer state management, less duplication"
+   - Correctness: "Fixed alignment by offsetting cue Y by -24px"
+
+**Examples:**
+
+```
+✅ Good: "Renamed `hasPosition` → `showElements`, removed `lineReady` state,
+         consolidated position validation into single useEffect"
+❌ Bad: "Made some optimizations to the component"
+```
+
 ## 🆘 Emergency Procedures
 
 ### Hotfix Process

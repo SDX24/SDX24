@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
@@ -21,7 +21,6 @@ type ProjectCardExpandedProps = {
   title: string;
   slogan: string;
   description: string;
-  status?: string;
   links: ProjectLink[];
   stack: string[];
   achievements: string[];
@@ -45,7 +44,6 @@ export const ProjectCardExpanded = ({
   title,
   slogan,
   description,
-  status,
   links,
   stack,
   achievements,
@@ -97,51 +95,31 @@ export const ProjectCardExpanded = ({
     };
   }, []);
 
-  useLayoutEffect(() => {
-    const syncBump = () => {
-      const rect = bumpRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      bumpAbsX.set(rect.right);
-      bumpAbsY.set(rect.top + rect.height / 2);
-    };
-
-    syncBump();
-    const raf1 = window.requestAnimationFrame(syncBump);
-    const raf2 = window.requestAnimationFrame(syncBump);
-    return () => {
-      window.cancelAnimationFrame(raf1);
-      window.cancelAnimationFrame(raf2);
-    };
-  }, [bumpAbsX, bumpAbsY, showCue]);
-
+  // Continuous bump position sync using RAF loop
   useEffect(() => {
+    if (!showCue) {
+      bumpAbsX.set(0);
+      bumpAbsY.set(0);
+      return;
+    }
+
+    let rafId: number;
     const syncBump = () => {
       const rect = bumpRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      bumpAbsX.set(rect.right);
-      bumpAbsY.set(rect.top + rect.height / 2);
+      if (rect) {
+        bumpAbsX.set(rect.right);
+        bumpAbsY.set(rect.top + rect.height / 2);
+      }
+      rafId = requestAnimationFrame(syncBump);
     };
 
-    syncBump();
-    const unsubDragX = dragX.on("change", syncBump);
-    const unsubDragY = dragY.on("change", syncBump);
-    const unsubSpringX = springX.on("change", syncBump);
-    const unsubSpringY = springY.on("change", syncBump);
-    window.addEventListener("resize", syncBump);
-    window.addEventListener("scroll", syncBump, { passive: true });
-    const timeout = window.setTimeout(syncBump, 320);
-    const longTimeout = window.setTimeout(syncBump, 1100);
+    // Start RAF loop
+    rafId = requestAnimationFrame(syncBump);
+
     return () => {
-      unsubDragX();
-      unsubDragY();
-      unsubSpringX();
-      unsubSpringY();
-      window.removeEventListener("resize", syncBump);
-      window.removeEventListener("scroll", syncBump);
-      window.clearTimeout(timeout);
-      window.clearTimeout(longTimeout);
+      if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [dragX, dragY, springX, springY, bumpAbsX, bumpAbsY, showCue]);
+  }, [showCue, bumpAbsX, bumpAbsY]);
 
   return (
     <div ref={wrapperRef} className="relative w-full">
@@ -198,14 +176,6 @@ export const ProjectCardExpanded = ({
                     {slogan}
                   </p>
                 </div>
-                {status ? (
-                  <span
-                    className="ml-auto rounded-full border px-3 py-1 text-xs"
-                    style={{ borderColor: brand.primaryLight, color: brand.primaryLight }}
-                  >
-                    {status}
-                  </span>
-                ) : null}
               </div>
 
               <p className="text-base font-omnes leading-relaxed text-gray-200">{description}</p>
@@ -294,7 +264,7 @@ export const ProjectCardExpanded = ({
           <CircleChevronRight className="relative h-5 w-5 text-brand-teal-light" />
         </motion.div>
       </div>
-      <HandEmbed visible={showCue} y={bumpAbsY} bumpX={bumpAbsX} lineOffset={0} />
+      <HandEmbed visible={showCue} y={bumpAbsY} bumpX={bumpAbsX} />
     </div>
   );
 };
