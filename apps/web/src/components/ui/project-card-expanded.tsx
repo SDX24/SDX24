@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useDragControls, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { CircleChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -62,14 +62,34 @@ export const ProjectCardExpanded = ({
   const dragY = useMotionValue(0);
   const springX = useSpring(dragX, { stiffness: 220, damping: 18 });
   const springY = useSpring(dragY, { stiffness: 220, damping: 18 });
+  const dragControls = useDragControls();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const bumpRef = useRef<HTMLDivElement>(null);
   const bumpAbsX = useMotionValue(0);
   const bumpAbsY = useMotionValue(0);
   const [maxDragX, setMaxDragX] = useState(320);
+  const [isSnapped, setIsSnapped] = useState(false);
+  const [cueAbsX, setCueAbsX] = useState(0);
+  const [cueAbsY, setCueAbsY] = useState(0);
+  const isDraggingRef = useRef(false);
+  const isSnappedRef = useRef(false);
+  const snapTargetXRef = useRef<number | null>(null);
+  const snapTargetYRef = useRef<number | null>(null);
+  const pointerXRef = useRef<number>(0);
+  const pointerYRef = useRef<number>(0);
   const cardX = useTransform(springX, (value) => (value - baseLength) * 0.65);
   const cardY = useTransform(springY, (value) => value * 0.25);
   const cardRotate = useTransform(springY, (value) => value * 0.04);
+
+  // Reset snap state when showCue changes
+  useEffect(() => {
+    if (!showCue) {
+      isSnappedRef.current = false;
+      snapTargetXRef.current = null;
+      snapTargetYRef.current = null;
+      setIsSnapped(false);
+    }
+  }, [showCue]);
 
   useEffect(() => {
     const updateDragBounds = () => {
@@ -79,6 +99,12 @@ export const ProjectCardExpanded = ({
       const available = window.innerWidth - rect.left - bumpSize;
       const maxX = Math.max(baseLength + 120, available);
       setMaxDragX(maxX);
+
+      // Update cue absolute position
+      const cueX = window.innerWidth - 40; // 16px inset + 24px (half cue size)
+      const cueY = rect.top + rect.height / 2;
+      setCueAbsX(cueX);
+      setCueAbsY(cueY);
     };
 
     updateDragBounds();
@@ -94,6 +120,111 @@ export const ProjectCardExpanded = ({
       observer.disconnect();
     };
   }, []);
+
+  // Track pointer position and handle magnetic snap
+  useEffect(() => {
+    if (!showCue) {
+      // Reset snap state when cue is hidden
+      console.log("❌ Cue hidden, resetting snap");
+      setIsSnapped(false);
+      return;
+    }
+
+    console.log(
+      `🔄 Snap effect initialized: showCue=${showCue}, cueAbsX=${cueAbsX}, cueAbsY=${cueAbsY}, isSnapped=${isSnapped}`
+    );
+
+    // Delay snap detection to allow card expansion animation to complete
+    const initDelay = setTimeout(() => {
+      console.log("✅ Snap detection ready");
+    }, 350);
+
+    let rafId: number;
+    const loop = () => {
+      if (!isDraggingRef.current) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
+
+      const bumpRect = bumpRef.current?.getBoundingClientRect();
+      const wrapperRect = wrapperRef.current?.getBoundingClientRect();
+      if (!bumpRect || !wrapperRect) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
+
+      const originX = wrapperRect.right + baseLength;
+      const originY = wrapperRect.top + wrapperRect.height / 2;
+
+      // Calculate current cue Y position based on bump's Y position
+      const currentBumpY = bumpRect.top + bumpRect.height / 2;
+      const dynamicCueY = currentBumpY; // Cue follows bump vertically
+
+      // When snapped, calculate line length based on pointer position
+      // When not snapped, use actual bump position
+      let lineLength: number;
+      if (isSnappedRef.current) {
+        // Calculate distance from pointer to cue (for release detection)
+        const pointerToCueDistance = cueAbsX - pointerXRef.current;
+        lineLength = pointerToCueDistance;
+      } else {
+        lineLength = cueAbsX - bumpRect.right;
+      }
+
+      const SNAP_LINE_LENGTH = 30; // Snap when line is this short
+      const RELEASE_LINE_LENGTH = 120; // Release when line grows beyond this (dragged far away)
+      const RELEASE_PULLBACK = -150; // Release when pulled back past cue (negative = behind cue)
+
+      const targetDragX = cueAbsX - originX;
+      const targetDragY = dynamicCueY - originY;
+
+      // Debug logging (throttled)
+      if (Math.random() < 0.05) {
+        // Only log 5% of frames
+        console.log(
+          `[SNAP DEBUG] lineLength=${lineLength.toFixed(1)}, isSnapped=${isSnappedRef.current}, bumpY=${currentBumpY.toFixed(1)}, cueY=${dynamicCueY.toFixed(1)}, targetDragY=${targetDragY.toFixed(1)}`
+        );
+      }
+
+      if (lineLength < SNAP_LINE_LENGTH && lineLength > -30 && !isSnappedRef.current) {
+        console.log(
+          `🧲 SNAPPING! lineLength=${lineLength.toFixed(1)} (${lineLength > 0 ? "approaching" : "overshot"}), bumpY=${currentBumpY.toFixed(1)}, snap target=(${targetDragX.toFixed(1)}, ${targetDragY.toFixed(1)})`
+        );
+        // Use ref for synchronous check
+        isSnappedRef.current = true;
+        snapTargetXRef.current = targetDragX;
+        snapTargetYRef.current = targetDragY;
+        // Set position immediately
+        dragX.set(targetDragX);
+        dragY.set(targetDragY);
+        console.log(
+          `✅ Snap engaged, position locked at: (${targetDragX.toFixed(1)}, ${targetDragY.toFixed(1)})`
+        );
+        // Update state for UI
+        setIsSnapped(true);
+      } else if (
+        isSnappedRef.current &&
+        (lineLength > RELEASE_LINE_LENGTH || lineLength < RELEASE_PULLBACK)
+      ) {
+        console.log(
+          `🔓 RELEASING SNAP: lineLength=${lineLength.toFixed(1)}, reason=${lineLength > RELEASE_LINE_LENGTH ? "dragged far" : "pulled back past cue"}`
+        );
+        isSnappedRef.current = false;
+        snapTargetXRef.current = null;
+        snapTargetYRef.current = null;
+        setIsSnapped(false);
+      }
+
+      rafId = requestAnimationFrame(loop);
+    };
+
+    rafId = requestAnimationFrame(loop);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      clearTimeout(initDelay);
+    };
+  }, [showCue, cueAbsX, cueAbsY, isSnapped, dragX, dragY, baseLength]);
 
   // Continuous bump position sync using RAF loop
   useEffect(() => {
@@ -240,31 +371,95 @@ export const ProjectCardExpanded = ({
       <div className="absolute left-full top-1/2 z-30 -translate-y-1/2">
         <motion.div
           drag
+          dragControls={dragControls}
           dragConstraints={{ left: baseLength, right: maxDragX }}
           dragElastic={0.2}
           dragMomentum={false}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-black/60 shadow-[0_0_24px_rgba(104,213,255,0.25)]"
+          onDrag={(_, info) => {
+            // Track pointer position for release detection
+            pointerXRef.current = info.point.x;
+            pointerYRef.current = info.point.y;
+
+            // When snapped, override position to stay locked
+            if (
+              isSnappedRef.current &&
+              snapTargetXRef.current !== null &&
+              snapTargetYRef.current !== null
+            ) {
+              dragX.set(snapTargetXRef.current);
+              dragY.set(snapTargetYRef.current);
+              if (Math.random() < 0.1) {
+                console.log("🔒 Drag override - forcing snap position");
+              }
+            }
+          }}
+          className={cn(
+            "relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200",
+            isSnapped
+              ? "border-[#92F189]/60 bg-black/70 shadow-[0_0_32px_rgba(146,241,137,0.4)]"
+              : "border-white/15 bg-black/60 shadow-[0_0_24px_rgba(104,213,255,0.25)]"
+          )}
           style={{ x: dragX, y: dragY }}
           ref={bumpRef}
           onPointerEnter={onHoldStart}
-          onPointerDown={onHoldStart}
+          onPointerDown={() => {
+            console.log("🖱️ POINTER DOWN - Starting drag");
+            isDraggingRef.current = true;
+            onHoldStart?.();
+          }}
           onPointerUp={() => {
+            console.log("🖱️ POINTER UP - Ending drag");
+            isDraggingRef.current = false;
+            isSnappedRef.current = false;
+            snapTargetXRef.current = null;
+            snapTargetYRef.current = null;
+            setIsSnapped(false);
             dragX.set(baseLength);
             dragY.set(0);
             onHoldEnd?.();
           }}
           onDragEnd={() => {
+            console.log("🖱️ DRAG END");
+            isDraggingRef.current = false;
+            isSnappedRef.current = false;
+            snapTargetXRef.current = null;
+            snapTargetYRef.current = null;
+            setIsSnapped(false);
             dragX.set(baseLength);
             dragY.set(0);
             onDragRelease?.();
           }}
         >
-          <span className="absolute inset-0 rounded-full border border-brand-teal-light/40" />
-          <span className="absolute inset-0 rounded-full bg-brand-teal-light/20 opacity-70 animate-ping" />
-          <CircleChevronRight className="relative h-5 w-5 text-brand-teal-light" />
+          <span
+            className={cn(
+              "absolute inset-0 rounded-full border transition-colors duration-200",
+              isSnapped ? "border-[#92F189]/50" : "border-brand-teal-light/40"
+            )}
+          />
+          <motion.span
+            className="absolute inset-0 rounded-full bg-[#92F189]"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: isSnapped ? 1 : 0,
+              opacity: isSnapped ? 0.25 : 0,
+            }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+          <span
+            className={cn(
+              "absolute inset-0 rounded-full opacity-70 animate-ping transition-colors duration-200",
+              isSnapped ? "bg-[#92F189]/30" : "bg-brand-teal-light/20"
+            )}
+          />
+          <CircleChevronRight
+            className={cn(
+              "relative h-5 w-5 transition-colors duration-200",
+              isSnapped ? "text-[#92F189]" : "text-brand-teal-light"
+            )}
+          />
         </motion.div>
       </div>
-      <HandEmbed visible={showCue} y={bumpAbsY} bumpX={bumpAbsX} />
+      <HandEmbed visible={showCue} y={bumpAbsY} bumpX={bumpAbsX} isSnapped={isSnapped} />
     </div>
   );
 };

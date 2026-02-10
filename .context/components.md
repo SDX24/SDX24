@@ -109,14 +109,16 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ## ProjectCardExpanded
 
-**Purpose**: Hover-revealed expanded card with full project details and links.
+**Purpose**: Hover-revealed expanded card with full project details, interactive drag bump, and magnetic snap system.
 
 **Responsibilities**:
 
--- Provide longer description, expanded stack, achievements, and links
--- Show cover image container on the right
--- Use stronger project branding than compact card
--- Reduce motion for stability (lower tilt + hover scale)
+- Provide longer description, expanded stack, achievements, and links
+- Show cover image container on the right
+- Use stronger project branding than compact card
+- Reduce motion for stability (lower tilt + hover scale)
+- Handle draggable bump with magnetic snap to right-edge cue
+- Manage expanded state persistence during drag interactions
 
 **Key props**:
 
@@ -124,6 +126,17 @@ Only the hero card components in `components/cards/` are supported outside the U
 - `links`, `stack`, `achievements`
 - `logoSrc`, `wordmarkSrc`, `coverSrc`
 - `brand` (project palette for expanded card)
+- `onHoldStart`, `onHoldEnd`, `onDragRelease` (drag interaction callbacks)
+- `showCue` (enables right-edge cue and drag interactions)
+
+**Magnetic Snap System**:
+
+- **Snap trigger**: 30px approach distance or -30px overshoot (fast movement)
+- **Release trigger**: 120px drag away or -150px pullback past cue
+- **Y-axis following**: Cue position dynamically follows bump's vertical position
+- **Position override**: Uses `onDrag` callback to lock position when snapped
+- **Pointer tracking**: Separate pointer position tracking for accurate release detection
+- **Visual feedback**: Green color transitions and animated fill when snapped
 
 **Usage rules**:
 
@@ -132,6 +145,36 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Expanded card uses lower tilt/hover values for easier interaction.
 - Keep achievements concise (3-5 short items).
 - Expanded card should be interactive only while visible.
+
+## HandEmbed
+
+**Purpose**: Right-edge visual cue and line indicator for ProjectCardExpanded drag interactions, rendered as a portal overlay.
+
+**Responsibilities**:
+
+- Render fixed-position cue circle at right screen edge
+- Display animated dashed line connecting bump position to cue
+- Provide visual feedback for magnetic snap state (color transitions)
+- Handle portal-based rendering for proper z-index layering
+- Follow bump's Y position dynamically for accurate line placement
+
+**Key props**:
+
+- `visible` (controls overall visibility)
+- `y` (MotionValue tracking bump's Y position)
+- `bumpX` (MotionValue tracking bump's X position)
+- `isSnapped` (boolean for snap state visual feedback)
+
+**Visual Features**:
+
+- **Cue**: 48px circle with teal/green color transitions, animated glow effects
+- **Line**: Animated dashed line with moving pattern, opacity based on visibility
+- **Snap feedback**: Green fill animation (500ms) and enhanced glow when snapped
+
+**Usage rules**:
+
+- Only use with ProjectCardExpanded when `showCue={true}`
+- Portal renders to document.body for proper overlay positioning
 
 ## HeroPhotoCard
 
@@ -222,4 +265,4 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ---
 
-**Last Updated**: February 03, 2026
+**Last Updated**: February 09, 2026

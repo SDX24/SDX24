@@ -50,7 +50,9 @@ export const HeroBackHoverCard = ({
   const pointerRef = useRef<{ x: number; y: number } | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
+  const [justReleased, setJustReleased] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
+  const releaseTimerRef = useRef<number | null>(null);
 
   const clearCloseTimer = () => {
     if (closeTimerRef.current) {
@@ -59,8 +61,17 @@ export const HeroBackHoverCard = ({
     }
   };
 
+  const clearReleaseTimer = () => {
+    if (releaseTimerRef.current) {
+      window.clearTimeout(releaseTimerRef.current);
+      releaseTimerRef.current = null;
+    }
+  };
+
   const openExpanded = () => {
     clearCloseTimer();
+    clearReleaseTimer();
+    setJustReleased(false);
     setIsExpanded(true);
   };
 
@@ -78,10 +89,21 @@ export const HeroBackHoverCard = ({
 
   const releaseHold = () => {
     setIsHolding(false);
-    scheduleClose(520);
+    setJustReleased(true);
+    clearReleaseTimer();
+    releaseTimerRef.current = window.setTimeout(() => {
+      setJustReleased(false);
+      scheduleClose(80);
+    }, 1000);
   };
 
-  useEffect(() => () => clearCloseTimer(), []);
+  useEffect(
+    () => () => {
+      clearCloseTimer();
+      clearReleaseTimer();
+    },
+    []
+  );
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
       pointerRef.current = { x: event.clientX, y: event.clientY };
@@ -131,7 +153,9 @@ export const HeroBackHoverCard = ({
             : "pointer-events-auto opacity-100 transition-opacity duration-200"
         }
         onPointerEnter={interactive ? openExpanded : undefined}
-        onPointerLeave={interactive && !isHolding ? () => scheduleClose() : undefined}
+        onPointerLeave={
+          interactive && !isHolding && !justReleased ? () => scheduleClose() : undefined
+        }
       >
         <ProjectCardCompact
           className="max-w-[380px]"
@@ -151,7 +175,9 @@ export const HeroBackHoverCard = ({
             : "pointer-events-none absolute left-0 top-0 z-20 w-[720px] origin-top-left scale-[0.5] opacity-0 transition duration-300"
         }
         onPointerEnter={isExpanded ? openExpanded : undefined}
-        onPointerLeave={isExpanded && !isHolding ? () => scheduleClose() : undefined}
+        onPointerLeave={
+          isExpanded && !isHolding && !justReleased ? () => scheduleClose() : undefined
+        }
       >
         <ProjectCardExpanded
           className="max-w-none"
@@ -169,7 +195,12 @@ export const HeroBackHoverCard = ({
           onHoldEnd={releaseHold}
           onDragRelease={() => {
             setIsHolding(false);
-            scheduleClose(520);
+            setJustReleased(true);
+            clearReleaseTimer();
+            releaseTimerRef.current = window.setTimeout(() => {
+              setJustReleased(false);
+              scheduleClose(80);
+            }, 1000);
           }}
           showCue={isExpanded}
         />

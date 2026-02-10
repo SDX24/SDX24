@@ -10,9 +10,10 @@ type HandEmbedProps = {
   visible: boolean;
   y: MotionValue<number>;
   bumpX: MotionValue<number>;
+  isSnapped?: boolean;
 };
 
-export const HandEmbed = ({ visible, y, bumpX }: HandEmbedProps) => {
+export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedProps) => {
   const [mounted, setMounted] = useState(false);
   const [cueLeftX, setCueLeftX] = useState(0);
   const [showElements, setShowElements] = useState(false);
@@ -70,10 +71,37 @@ export const HandEmbed = ({ visible, y, bumpX }: HandEmbedProps) => {
         animate={{ opacity: showElements ? 0.4 : 0 }}
         transition={{ duration: 0 }}
       >
-        <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-black/50 shadow-[0_0_24px_rgba(104,213,255,0.2)]">
-          <span className="absolute inset-0 rounded-full border border-brand-teal-light/30" />
-          <span className="absolute inset-0 rounded-full bg-brand-teal-light/10 opacity-70 animate-ping" />
-          <CircleChevronRight className="relative h-5 w-5 text-brand-teal-light" />
+        <div
+          className={`relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200 ${
+            isSnapped
+              ? "border-[#92F189]/60 bg-black/60 shadow-[0_0_32px_rgba(146,241,137,0.35)]"
+              : "border-white/15 bg-black/50 shadow-[0_0_24px_rgba(104,213,255,0.2)]"
+          }`}
+        >
+          <span
+            className={`absolute inset-0 rounded-full border transition-colors duration-200 ${
+              isSnapped ? "border-[#92F189]/40" : "border-brand-teal-light/30"
+            }`}
+          />
+          <motion.span
+            className="absolute inset-0 rounded-full bg-[#92F189]"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: isSnapped ? 1 : 0,
+              opacity: isSnapped ? 0.25 : 0,
+            }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+          <span
+            className={`absolute inset-0 rounded-full opacity-70 animate-ping transition-colors duration-200 ${
+              isSnapped ? "bg-[#92F189]/20" : "bg-brand-teal-light/10"
+            }`}
+          />
+          <CircleChevronRight
+            className={`relative h-5 w-5 transition-colors duration-200 ${
+              isSnapped ? "text-[#92F189]" : "text-brand-teal-light"
+            }`}
+          />
         </div>
       </motion.div>
       <motion.div
