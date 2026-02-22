@@ -61,8 +61,12 @@ SDX24/
 │       │   │   ├── cards/     # Hero card variants
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
-│       │   │   ├── ui/        # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
-│       │   │   │   └── hand-embed.tsx # Right-edge drag cue
+│       │   │   ├── ui/        # UI primitives
+│       │   │   │   ├── comet-card.tsx # Core 3D card primitive
+│       │   │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
+│       │   │   │   ├── project-card-compact.tsx # Compact project preview card
+│       │   │   │   ├── project-card-expanded.tsx # Expanded card with magnetic drag cue
+│       │   │   │   └── hand-embed.tsx # Right-edge drag cue portal overlay
 │       │   │   ├── scroll-to-top-on-load.tsx # Force refreshes to start at top
 │       │   │   └── index.ts   # Barrel export
 │       │   ├── lib/           # Utilities and configurations
@@ -88,7 +92,8 @@ SDX24/
 │       ├── prettier.config.js # Prettier settings
 │       └── tsconfig.json      # Base TypeScript config
 ├── scripts/                     # Utility scripts
-│   └── dev-setup.sh           # Automated development setup
+│   ├── dev-setup.sh           # Automated development setup
+│   └── optimization-advisory.sh # Non-blocking staged-file optimization advisory
 ├── eslint.config.cjs           # ESLint flat config
 ├── .gitignore                   # Git ignore rules
 ├── commitlint.config.js        # Commit message rules
@@ -161,8 +166,12 @@ apps/web/src/
 │   ├── cards/            # Hero card variants
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
-│   ├── ui/               # UI primitives (CometCard, MainTealCard, ProjectCardCompact, ProjectCardExpanded)
-│   │   └── hand-embed.tsx # Right-edge drag cue
+│   ├── ui/               # UI primitives
+│   │   ├── comet-card.tsx # Core 3D card primitive
+│   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
+│   │   ├── project-card-compact.tsx # Compact project preview card
+│   │   ├── project-card-expanded.tsx # Expanded card with magnetic drag cue
+│   │   └── hand-embed.tsx # Right-edge drag cue portal overlay
 │   ├── scroll-to-top-on-load.tsx # Force refreshes to start at top
 │   └── index.ts         # Barrel export for easy imports
 ├── lib/                 # Utilities, configurations, API clients
@@ -229,8 +238,9 @@ Steps:
 3. Lint (ESLint)
 4. Type check (TypeScript)
 5. Build (Next.js)
-6. E2E tests (Playwright)
-7. Dead code check (Knip)
+6. Dead code check (Knip)
+
+> Note: Playwright E2E is currently run locally, not in CI.
 
 #### `security-scan.yml` - Security
 

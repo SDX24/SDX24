@@ -119,6 +119,9 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Reduce motion for stability (lower tilt + hover scale)
 - Handle draggable bump with magnetic snap to right-edge cue
 - Manage expanded state persistence during drag interactions
+- Trigger fly-away only when release happens while snapped
+- Start fly-away from the card's live transform (no snap-back to origin)
+- Coordinate split exit choreography (card exits left, cue/bump visuals exit right)
 
 **Key props**:
 
@@ -137,6 +140,8 @@ Only the hero card components in `components/cards/` are supported outside the U
 - **Position override**: Uses `onDrag` callback to lock position when snapped
 - **Pointer tracking**: Separate pointer position tracking for accurate release detection
 - **Visual feedback**: Green color transitions and animated fill when snapped
+- **Fly-away gate**: Fly-away runs only when pointer release occurs in snapped state
+- **Dynamic fly start**: Uses current spring-driven card transform as animation start
 
 **Usage rules**:
 
@@ -164,6 +169,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - `y` (MotionValue tracking bump's Y position)
 - `bumpX` (MotionValue tracking bump's X position)
 - `isSnapped` (boolean for snap state visual feedback)
+- `isFlyingAway` (boolean to animate cue + dashed line exiting right and fading out)
 
 **Visual Features**:
 
@@ -175,6 +181,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 - Only use with ProjectCardExpanded when `showCue={true}`
 - Portal renders to document.body for proper overlay positioning
+- During fly-away, cue and dashed line should move right and dissolve while preserving Y alignment
 
 ## HeroPhotoCard
 
@@ -186,6 +193,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Disable interactivity and glare during flip for stability
 - Re-enable compact card interactivity after settle
 - Keep front/back faces size-aligned for seamless flip
+- Emit a reset token when card transitions from back face to front face on reverse scroll
 
 **Usage rules**:
 
@@ -202,11 +210,13 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Render compact project card with hover-activated expanded overlay
 - Manage pointer-events handoff and delayed close behavior
 - Keep expanded card anchored to the compact card origin
+- Reset local hover/dismiss state when `resetToken` changes
 
 **Usage rules**:
 
 - Use only inside hero back faces (not general grids)
 - Expanded card is interactive only while visible
+- Treat `resetToken` as authoritative lifecycle reset after fly-away and reverse-scroll front re-entry
 
 ## ScrollToTopOnLoad
 
@@ -265,4 +275,4 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ---
 
-**Last Updated**: February 09, 2026
+**Last Updated**: February 21, 2026

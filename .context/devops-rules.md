@@ -154,6 +154,11 @@ bun add -d <package>     # Development
 
 ## 📝 Code Review Standards
 
+### Clarification First (Required)
+
+- If any requirement is ambiguous or uncertain, ask clarifying questions before implementation.
+- Do not guess behavior for UX/logic-sensitive flows when user intent is unclear.
+
 ### Before Committing
 
 1. Run `bun type-check` - No errors
