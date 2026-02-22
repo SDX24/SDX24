@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-import { type MotionValue, motion, useMotionTemplate } from "framer-motion";
+import {
+  type MotionValue,
+  animate,
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import { CircleChevronRight } from "lucide-react";
 import { createPortal } from "react-dom";
 
@@ -11,14 +18,33 @@ type HandEmbedProps = {
   y: MotionValue<number>;
   bumpX: MotionValue<number>;
   isSnapped?: boolean;
+  isFlyingAway?: boolean;
 };
 
-export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedProps) => {
+export const HandEmbed = ({
+  visible,
+  y,
+  bumpX,
+  isSnapped = false,
+  isFlyingAway = false,
+}: HandEmbedProps) => {
   const [mounted, setMounted] = useState(false);
   const [cueLeftX, setCueLeftX] = useState(0);
   const [showElements, setShowElements] = useState(false);
+  const fillProgress = useMotionValue(0);
+
+  const fillPercentage = useTransform(fillProgress, [0, 1], [0, 100]);
+  const radialGradient = useMotionTemplate`radial-gradient(circle at center, #92F189 ${fillPercentage}%, transparent ${fillPercentage}%)`;
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (isSnapped) {
+      animate(fillProgress, 1, { duration: 1.2, ease: "easeOut" });
+    } else {
+      animate(fillProgress, 0, { duration: 0.2 });
+    }
+  }, [isSnapped, fillProgress]);
 
   useEffect(() => {
     const updateCueX = () => {
@@ -68,8 +94,11 @@ export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedPro
         className="absolute right-4"
         style={{ top: cueTop }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: showElements ? 0.4 : 0 }}
-        transition={{ duration: 0 }}
+        animate={{
+          opacity: showElements ? (isFlyingAway ? 0 : 0.4) : 0,
+          x: isFlyingAway ? 96 : 0,
+        }}
+        transition={{ duration: isFlyingAway ? 0.55 : 0.1, ease: "easeInOut" }}
       >
         <div
           className={`relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200 ${
@@ -83,17 +112,10 @@ export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedPro
               isSnapped ? "border-[#92F189]/40" : "border-brand-teal-light/30"
             }`}
           />
-          <motion.span
-            className="absolute inset-0 rounded-full bg-[#92F189]"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{
-              scale: isSnapped ? 1 : 0,
-              opacity: isSnapped ? 0.25 : 0,
-            }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          />
           <span
-            className={`absolute inset-0 rounded-full opacity-70 animate-ping transition-colors duration-200 ${
+            className={`absolute inset-0 rounded-full ${
+              !isSnapped ? "opacity-70 animate-ping" : "opacity-0"
+            } transition-colors duration-200 ${
               isSnapped ? "bg-[#92F189]/20" : "bg-brand-teal-light/10"
             }`}
           />
@@ -101,6 +123,17 @@ export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedPro
             className={`relative h-5 w-5 transition-colors duration-200 ${
               isSnapped ? "text-[#92F189]" : "text-brand-teal-light"
             }`}
+          />
+          <motion.span
+            className="absolute inset-0 rounded-full z-20 pointer-events-none"
+            style={{
+              background: radialGradient,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: isSnapped ? 0.95 : 0,
+            }}
+            transition={{ duration: 0.2 }}
           />
         </div>
       </motion.div>
@@ -116,8 +149,11 @@ export const HandEmbed = ({ visible, y, bumpX, isSnapped = false }: HandEmbedPro
           backgroundSize: "12px 2px",
           animation: "hand-dash 1.2s linear infinite reverse",
         }}
-        animate={{ opacity: showElements ? 0.5 : 0 }}
-        transition={{ duration: 0 }}
+        animate={{
+          opacity: showElements ? (isFlyingAway ? 0 : 0.5) : 0,
+          x: isFlyingAway ? 120 : 0,
+        }}
+        transition={{ duration: isFlyingAway ? 0.45 : 0.1, ease: "easeInOut" }}
       />
       <style>{`@keyframes hand-dash { from { background-position: 0 0; } to { background-position: -24px 0; } }`}</style>
     </div>,

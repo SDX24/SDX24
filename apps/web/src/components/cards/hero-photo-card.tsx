@@ -126,11 +126,14 @@ const HeroPhotoCardInner = ({
   const [isFlipping, setIsFlipping] = useState(false);
   const [isLanded, setIsLanded] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [resetToken, setResetToken] = useState(0);
   const [targetPosition, setTargetPosition] = useState<{
     top: number;
     left: number;
     width: number;
   } | null>(null);
+  const frontResetArmedRef = useRef(false);
+  const hasShownBackRef = useRef(false);
 
   const updateTarget = useCallback(() => {
     const card = cardRef.current;
@@ -205,6 +208,17 @@ const HeroPhotoCardInner = ({
           const landed = progress >= 0.7;
           const flipping = flipProgress > 0.05 && flipProgress < 0.95;
           const back = flipProgress >= 0.5;
+
+          if (back) {
+            hasShownBackRef.current = true;
+          }
+
+          if (hasShownBackRef.current && !back && !frontResetArmedRef.current) {
+            frontResetArmedRef.current = true;
+            setResetToken((prev) => prev + 1);
+          } else if (back && frontResetArmedRef.current) {
+            frontResetArmedRef.current = false;
+          }
 
           const { x, y, arc } = travelRef.current;
           const translateX = x * moveProgress;
@@ -322,6 +336,7 @@ const HeroPhotoCardInner = ({
               brand={project.brand}
               expandedDescription={project.expandedDescription}
               interactive={isLanded && showBack}
+              resetToken={resetToken}
             />
           </div>
           <div className="invisible">

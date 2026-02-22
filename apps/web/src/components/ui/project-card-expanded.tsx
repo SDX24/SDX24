@@ -4,7 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 
-import { motion, useDragControls, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  animate,
+  motion,
+  useDragControls,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { CircleChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -37,6 +44,7 @@ type ProjectCardExpandedProps = {
   onHoldStart?: () => void;
   onHoldEnd?: () => void;
   onDragRelease?: () => void;
+  onCardDismiss?: () => void;
   showCue?: boolean;
 };
 
@@ -55,13 +63,20 @@ export const ProjectCardExpanded = ({
   onHoldStart,
   onHoldEnd,
   onDragRelease,
+  onCardDismiss,
   showCue = false,
 }: ProjectCardExpandedProps) => {
   const baseLength = 24;
   const dragX = useMotionValue(baseLength);
   const dragY = useMotionValue(0);
+  const bumpFlyX = useMotionValue(0);
+  const bumpFlyOpacity = useMotionValue(1);
   const springX = useSpring(dragX, { stiffness: 220, damping: 18 });
   const springY = useSpring(dragY, { stiffness: 220, damping: 18 });
+  const cardFlyX = useMotionValue(0);
+  const cardFlyY = useMotionValue(0);
+  const cardFlyRotate = useMotionValue(0);
+  const cardFlyOpacity = useMotionValue(1);
   const dragControls = useDragControls();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const bumpRef = useRef<HTMLDivElement>(null);
@@ -69,17 +84,74 @@ export const ProjectCardExpanded = ({
   const bumpAbsY = useMotionValue(0);
   const [maxDragX, setMaxDragX] = useState(320);
   const [isSnapped, setIsSnapped] = useState(false);
+  const [isFlyingAway, setIsFlyingAway] = useState(false);
   const [cueAbsX, setCueAbsX] = useState(0);
-  const [cueAbsY, setCueAbsY] = useState(0);
   const isDraggingRef = useRef(false);
+  const isFlyingAwayRef = useRef(false);
   const isSnappedRef = useRef(false);
   const snapTargetXRef = useRef<number | null>(null);
   const snapTargetYRef = useRef<number | null>(null);
   const pointerXRef = useRef<number>(0);
-  const pointerYRef = useRef<number>(0);
   const cardX = useTransform(springX, (value) => (value - baseLength) * 0.65);
   const cardY = useTransform(springY, (value) => value * 0.25);
   const cardRotate = useTransform(springY, (value) => value * 0.04);
+
+  const triggerFlyAway = () => {
+    if (isFlyingAwayRef.current) return;
+
+    const currentSpringX = springX.get();
+    const currentSpringY = springY.get();
+    const currentCardX = (currentSpringX - baseLength) * 0.65;
+    const currentCardY = currentSpringY * 0.25;
+    const currentCardRotate = currentSpringY * 0.04;
+
+    cardFlyX.set(currentCardX);
+    cardFlyY.set(currentCardY);
+    cardFlyRotate.set(currentCardRotate);
+
+    isFlyingAwayRef.current = true;
+    setIsFlyingAway(true);
+
+    const currentDragX = dragX.get();
+    bumpFlyX.set(currentDragX);
+
+    // Card flies left
+    animate(cardFlyX, currentCardX - 800, { duration: 0.8, ease: "easeInOut" });
+    animate(cardFlyY, currentCardY + (Math.random() * 200 - 100), {
+      duration: 0.8,
+      ease: "easeInOut",
+    });
+    animate(cardFlyRotate, 0, { duration: 0.6, ease: "easeOut" });
+    animate(cardFlyOpacity, 0, { duration: 0.6, delay: 0.2 }).then(() => {
+      setTimeout(() => {
+        onCardDismiss?.();
+      }, 100);
+    });
+
+    // Bump exits to the right
+    animate(bumpFlyX, currentDragX + 240, { duration: 0.55, ease: "easeInOut" });
+    animate(bumpFlyOpacity, 0, { duration: 0.45, ease: "easeOut" });
+  };
+
+  const handleRelease = () => {
+    const releasedWhileSnapped = isSnappedRef.current;
+
+    isDraggingRef.current = false;
+    isSnappedRef.current = false;
+    snapTargetXRef.current = null;
+    snapTargetYRef.current = null;
+    setIsSnapped(false);
+
+    if (releasedWhileSnapped) {
+      triggerFlyAway();
+      return;
+    }
+
+    if (!isFlyingAwayRef.current) {
+      dragX.set(baseLength);
+      dragY.set(0);
+    }
+  };
 
   // Reset snap state when showCue changes
   useEffect(() => {
@@ -87,9 +159,16 @@ export const ProjectCardExpanded = ({
       isSnappedRef.current = false;
       snapTargetXRef.current = null;
       snapTargetYRef.current = null;
+      isFlyingAwayRef.current = false;
+      setIsFlyingAway(false);
       setIsSnapped(false);
+      cardFlyX.set(0);
+      cardFlyY.set(0);
+      cardFlyRotate.set(0);
+      cardFlyOpacity.set(1);
+      bumpFlyOpacity.set(1);
     }
-  }, [showCue]);
+  }, [showCue, bumpFlyOpacity, cardFlyOpacity, cardFlyRotate, cardFlyX, cardFlyY]);
 
   useEffect(() => {
     const updateDragBounds = () => {
@@ -102,9 +181,7 @@ export const ProjectCardExpanded = ({
 
       // Update cue absolute position
       const cueX = window.innerWidth - 40; // 16px inset + 24px (half cue size)
-      const cueY = rect.top + rect.height / 2;
       setCueAbsX(cueX);
-      setCueAbsY(cueY);
     };
 
     updateDragBounds();
@@ -124,20 +201,9 @@ export const ProjectCardExpanded = ({
   // Track pointer position and handle magnetic snap
   useEffect(() => {
     if (!showCue) {
-      // Reset snap state when cue is hidden
-      console.log("❌ Cue hidden, resetting snap");
       setIsSnapped(false);
       return;
     }
-
-    console.log(
-      `🔄 Snap effect initialized: showCue=${showCue}, cueAbsX=${cueAbsX}, cueAbsY=${cueAbsY}, isSnapped=${isSnapped}`
-    );
-
-    // Delay snap detection to allow card expansion animation to complete
-    const initDelay = setTimeout(() => {
-      console.log("✅ Snap detection ready");
-    }, 350);
 
     let rafId: number;
     const loop = () => {
@@ -178,37 +244,17 @@ export const ProjectCardExpanded = ({
       const targetDragX = cueAbsX - originX;
       const targetDragY = dynamicCueY - originY;
 
-      // Debug logging (throttled)
-      if (Math.random() < 0.05) {
-        // Only log 5% of frames
-        console.log(
-          `[SNAP DEBUG] lineLength=${lineLength.toFixed(1)}, isSnapped=${isSnappedRef.current}, bumpY=${currentBumpY.toFixed(1)}, cueY=${dynamicCueY.toFixed(1)}, targetDragY=${targetDragY.toFixed(1)}`
-        );
-      }
-
       if (lineLength < SNAP_LINE_LENGTH && lineLength > -30 && !isSnappedRef.current) {
-        console.log(
-          `🧲 SNAPPING! lineLength=${lineLength.toFixed(1)} (${lineLength > 0 ? "approaching" : "overshot"}), bumpY=${currentBumpY.toFixed(1)}, snap target=(${targetDragX.toFixed(1)}, ${targetDragY.toFixed(1)})`
-        );
-        // Use ref for synchronous check
         isSnappedRef.current = true;
         snapTargetXRef.current = targetDragX;
         snapTargetYRef.current = targetDragY;
-        // Set position immediately
         dragX.set(targetDragX);
         dragY.set(targetDragY);
-        console.log(
-          `✅ Snap engaged, position locked at: (${targetDragX.toFixed(1)}, ${targetDragY.toFixed(1)})`
-        );
-        // Update state for UI
         setIsSnapped(true);
       } else if (
         isSnappedRef.current &&
         (lineLength > RELEASE_LINE_LENGTH || lineLength < RELEASE_PULLBACK)
       ) {
-        console.log(
-          `🔓 RELEASING SNAP: lineLength=${lineLength.toFixed(1)}, reason=${lineLength > RELEASE_LINE_LENGTH ? "dragged far" : "pulled back past cue"}`
-        );
         isSnappedRef.current = false;
         snapTargetXRef.current = null;
         snapTargetYRef.current = null;
@@ -222,9 +268,8 @@ export const ProjectCardExpanded = ({
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
-      clearTimeout(initDelay);
     };
-  }, [showCue, cueAbsX, cueAbsY, isSnapped, dragX, dragY, baseLength]);
+  }, [showCue, cueAbsX, isSnapped, dragX, dragY, baseLength]);
 
   // Continuous bump position sync using RAF loop
   useEffect(() => {
@@ -254,7 +299,14 @@ export const ProjectCardExpanded = ({
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      <motion.div style={{ x: cardX, y: cardY, rotateZ: cardRotate }}>
+      <motion.div
+        style={{
+          x: isFlyingAway ? cardFlyX : cardX,
+          y: isFlyingAway ? cardFlyY : cardY,
+          rotateZ: isFlyingAway ? cardFlyRotate : cardRotate,
+          opacity: cardFlyOpacity,
+        }}
+      >
         <CometCard
           className={cn("w-full", className)}
           surfaceClassName="border-white/15 bg-transparent"
@@ -378,7 +430,6 @@ export const ProjectCardExpanded = ({
           onDrag={(_, info) => {
             // Track pointer position for release detection
             pointerXRef.current = info.point.x;
-            pointerYRef.current = info.point.y;
 
             // When snapped, override position to stay locked
             if (
@@ -388,9 +439,6 @@ export const ProjectCardExpanded = ({
             ) {
               dragX.set(snapTargetXRef.current);
               dragY.set(snapTargetYRef.current);
-              if (Math.random() < 0.1) {
-                console.log("🔒 Drag override - forcing snap position");
-              }
             }
           }}
           className={cn(
@@ -399,34 +447,23 @@ export const ProjectCardExpanded = ({
               ? "border-[#92F189]/60 bg-black/70 shadow-[0_0_32px_rgba(146,241,137,0.4)]"
               : "border-white/15 bg-black/60 shadow-[0_0_24px_rgba(104,213,255,0.25)]"
           )}
-          style={{ x: dragX, y: dragY }}
+          style={{
+            x: isFlyingAway ? bumpFlyX : dragX,
+            y: dragY,
+            opacity: isFlyingAway ? bumpFlyOpacity : 1,
+          }}
           ref={bumpRef}
           onPointerEnter={onHoldStart}
           onPointerDown={() => {
-            console.log("🖱️ POINTER DOWN - Starting drag");
             isDraggingRef.current = true;
             onHoldStart?.();
           }}
           onPointerUp={() => {
-            console.log("🖱️ POINTER UP - Ending drag");
-            isDraggingRef.current = false;
-            isSnappedRef.current = false;
-            snapTargetXRef.current = null;
-            snapTargetYRef.current = null;
-            setIsSnapped(false);
-            dragX.set(baseLength);
-            dragY.set(0);
+            handleRelease();
             onHoldEnd?.();
           }}
           onDragEnd={() => {
-            console.log("🖱️ DRAG END");
-            isDraggingRef.current = false;
-            isSnappedRef.current = false;
-            snapTargetXRef.current = null;
-            snapTargetYRef.current = null;
-            setIsSnapped(false);
-            dragX.set(baseLength);
-            dragY.set(0);
+            handleRelease();
             onDragRelease?.();
           }}
         >
@@ -436,18 +473,10 @@ export const ProjectCardExpanded = ({
               isSnapped ? "border-[#92F189]/50" : "border-brand-teal-light/40"
             )}
           />
-          <motion.span
-            className="absolute inset-0 rounded-full bg-[#92F189]"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{
-              scale: isSnapped ? 1 : 0,
-              opacity: isSnapped ? 0.25 : 0,
-            }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          />
+
           <span
             className={cn(
-              "absolute inset-0 rounded-full opacity-70 animate-ping transition-colors duration-200",
+              "absolute inset-0 rounded-full opacity-70 transition-colors duration-200",
               isSnapped ? "bg-[#92F189]/30" : "bg-brand-teal-light/20"
             )}
           />
@@ -459,7 +488,13 @@ export const ProjectCardExpanded = ({
           />
         </motion.div>
       </div>
-      <HandEmbed visible={showCue} y={bumpAbsY} bumpX={bumpAbsX} isSnapped={isSnapped} />
+      <HandEmbed
+        visible={showCue}
+        y={bumpAbsY}
+        bumpX={bumpAbsX}
+        isSnapped={isSnapped}
+        isFlyingAway={isFlyingAway}
+      />
     </div>
   );
 };

@@ -30,6 +30,7 @@ type HeroBackHoverCardProps = {
   brand?: ProjectBrand;
   expandedDescription?: string;
   interactive?: boolean;
+  resetToken?: number;
 };
 
 export const HeroBackHoverCard = ({
@@ -45,12 +46,14 @@ export const HeroBackHoverCard = ({
   brand,
   expandedDescription,
   interactive = false,
+  resetToken = 0,
 }: HeroBackHoverCardProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pointerRef = useRef<{ x: number; y: number } | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [justReleased, setJustReleased] = useState(false);
+  const [isCardDismissed, setIsCardDismissed] = useState(false);
   const closeTimerRef = useRef<number | null>(null);
   const releaseTimerRef = useRef<number | null>(null);
 
@@ -96,6 +99,20 @@ export const HeroBackHoverCard = ({
       scheduleClose(80);
     }, 1000);
   };
+
+  const handleCardDismiss = () => {
+    setIsCardDismissed(true);
+    setIsExpanded(false);
+  };
+
+  useEffect(() => {
+    clearCloseTimer();
+    clearReleaseTimer();
+    setIsExpanded(false);
+    setIsHolding(false);
+    setJustReleased(false);
+    setIsCardDismissed(false);
+  }, [resetToken]);
 
   useEffect(
     () => () => {
@@ -143,6 +160,11 @@ export const HeroBackHoverCard = ({
   const resolvedAchievements = achievements ?? [];
   const resolvedCover = coverSrc ?? "/logos/tandem/cover.png";
   const resolvedDescription = expandedDescription ?? description;
+
+  // Don't render if card has been dismissed
+  if (isCardDismissed) {
+    return null;
+  }
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -193,6 +215,7 @@ export const HeroBackHoverCard = ({
           brand={resolvedBrand}
           onHoldStart={holdOpen}
           onHoldEnd={releaseHold}
+          onCardDismiss={handleCardDismiss}
           onDragRelease={() => {
             setIsHolding(false);
             setJustReleased(true);
