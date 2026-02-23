@@ -61,7 +61,8 @@ SDX24/
 │       │   │   ├── cards/     # Hero card variants
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
-│       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
+│       │   │   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
+│       │   │   │   └── projects-scroll-section.tsx # Projects heading + static project grid section
 │       │   │   ├── ui/        # UI primitives
 │       │   │   │   ├── comet-card.tsx # Core 3D card primitive
 │       │   │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
@@ -128,6 +129,7 @@ SDX24/
 **Current pages**:
 
 - `/` - Landing page with portfolio, projects, and contact information
+- `/` - Landing page with hero cycle followed by a static Projects section
 - `/test` - Hand-object catch scene sandbox using `NEXT_PUBLIC_TANDEM_URL`
 - `not-found.tsx` - Custom 404 page
 
@@ -167,7 +169,8 @@ apps/web/src/
 │   ├── cards/            # Hero card variants
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
-│   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
+│   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
+│   │   └── projects-scroll-section.tsx # Projects heading + static project grid section
 │   ├── ui/               # UI primitives
 │   │   ├── comet-card.tsx # Core 3D card primitive
 │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset

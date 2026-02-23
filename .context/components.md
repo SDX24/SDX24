@@ -14,6 +14,7 @@ Active UI primitives:
 - `HeroPhotoCard` (`apps/web/src/components/cards/hero-photo-card.tsx`)
 - `HeroBackHoverCard` (`apps/web/src/components/cards/hero-back-hover-card.tsx`)
 - `HeroCatchScene` (`apps/web/src/components/cards/hero-catch-scene.tsx`)
+- `ProjectsScrollSection` (`apps/web/src/components/cards/projects-scroll-section.tsx`)
 - `ScrollToTopOnLoad` (`apps/web/src/components/scroll-to-top-on-load.tsx`)
 
 Only the hero card components in `components/cards/` are supported outside the UI primitives.
@@ -201,6 +202,23 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Use only as a client-side island on the landing page
 - Keep the front card as the hero photo variant
 - Back face must render `ProjectCardCompact`
+
+## ProjectsScrollSection
+
+**Purpose**: Static Projects section that appears after additional scroll space following the hero.
+
+**Responsibilities**:
+
+- Render buffered spacing so Projects appears after additional scroll
+- Render a centered Projects heading with brand-apricot gradient text
+- Render a 3-column desktop grid with uniform compact-card footprints
+- Keep cards static (no transition transfer from hero)
+
+**Usage rules**:
+
+- Keep heading natural-scrolling (no heading pinning)
+- Keep mobile layout single-column with featured card first
+- Keep cards non-interactive in this section (`interactive={false}`)
 
 ## HeroBackHoverCard
 

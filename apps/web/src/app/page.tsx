@@ -1,16 +1,44 @@
 import Image from "next/image";
 
 import { HeroPhotoCard } from "@/components";
+import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
   "BCIT Full-Stack Web Development diploma candidate shipping Tandem's real-time childcare scheduler, leading InsurFlow's AI InsurTech stack, and shaping W3rlds UI with dependable delivery.";
+
+const featuredProject = {
+  title: "Tandem",
+  slogan: "Bridging work and childcare",
+  description:
+    "Tandem helps parents in the trades balance work and childcare with AI scheduling, trusted care, and shared support.",
+  stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
+  logoSrc: "/logos/tandem/tandem-logo.svg",
+  wordmarkSrc: "/logos/tandem/wordmark.svg",
+  links: [
+    { label: "Blog", href: "https://tandem-blog.vercel.app" },
+    { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
+  ],
+  achievements: ["Trust", "Balance", "Support"],
+  coverSrc: "/logos/tandem/cover.png",
+  brand: {
+    primary: "#3373CC",
+    primaryLight: "#91B3E3",
+    secondary: "#92F189",
+    analogous: "#68D5FF",
+  },
+  expandedDescription:
+    "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
+};
 
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-black text-white">
       <div className="pointer-events-none fixed inset-0 bg-grid-dot opacity-60" />
       <div className="relative z-10">
-        <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-16 lg:py-24">
+        <section
+          data-hero-sequence
+          className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-16 lg:py-24"
+        >
           <div className="grid w-full items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
             <div className="space-y-8 text-center lg:text-left" data-hero-left>
               <div className="inline-flex items-center gap-4 rounded-full border border-brand-teal-light/30 bg-white/5 px-4 py-2">
@@ -78,13 +106,24 @@ export default function Home() {
             <div className="grid gap-10 lg:gap-12">
               <div className="hidden lg:block" aria-hidden="true" />
               <div className="flex w-full flex-col items-center gap-6 lg:items-end">
-                <HeroPhotoCard contentClassName="p-4" />
+                <HeroPhotoCard contentClassName="p-4" project={featuredProject} />
               </div>
             </div>
           </div>
         </section>
 
-        <div className="min-h-[120vh]" aria-hidden="true" />
+        <ProjectsScrollSection
+          project={{
+            title: featuredProject.title,
+            slogan: featuredProject.slogan,
+            description: featuredProject.description,
+            stack: featuredProject.stack,
+            logoSrc: featuredProject.logoSrc,
+            wordmarkSrc: featuredProject.wordmarkSrc,
+          }}
+        />
+
+        <div className="min-h-[260vh]" aria-hidden="true" />
 
         <footer className="mx-auto w-full max-w-6xl px-4 pb-16 text-center text-sm text-gray-500">
           <p>© 2026 Stefan Dorosh (SDX24) • BCIT Full-Stack Web Development</p>

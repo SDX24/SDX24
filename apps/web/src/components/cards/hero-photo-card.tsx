@@ -126,6 +126,12 @@ const HeroPhotoCardInner = ({
   const [isFlipping, setIsFlipping] = useState(false);
   const [isLanded, setIsLanded] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [parkReleased, setParkReleased] = useState(false);
+  const [releasedPosition, setReleasedPosition] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
   const [resetToken, setResetToken] = useState(0);
   const [targetPosition, setTargetPosition] = useState<{
     top: number;
@@ -145,10 +151,9 @@ const HeroPhotoCardInner = ({
     const anchorRect =
       leftAnchor instanceof HTMLElement ? leftAnchor.getBoundingClientRect() : null;
     const targetLeft = anchorRect ? anchorRect.left : rightMargin;
-    const targetTopBase = anchorRect
+    const targetTop = anchorRect
       ? anchorRect.top + (anchorRect.height - rect.height) / 2
       : (window.innerHeight - rect.height) / 2;
-    const targetTop = targetTopBase;
 
     travelRef.current = {
       x: Math.round(targetLeft - rect.left),
@@ -184,6 +189,9 @@ const HeroPhotoCardInner = ({
       const setX = gsap.quickSetter(cardRef.current, "x", "px");
       const setY = gsap.quickSetter(cardRef.current, "y", "px");
       const flipElement = flipRef.current;
+      const heroSection =
+        (document.querySelector("[data-hero-sequence]") as HTMLElement | null) ??
+        document.documentElement;
 
       const updateState = (
         key: keyof typeof stateRef.current,
@@ -196,9 +204,9 @@ const HeroPhotoCardInner = ({
       };
 
       const trigger = ScrollTrigger.create({
-        trigger: document.documentElement,
+        trigger: heroSection,
         start: "top top",
-        end: "bottom bottom",
+        end: "bottom top",
         onUpdate: (self) => {
           const progress = self.progress;
           const moveProgress = clamp(progress / 0.7, 0, 1);
@@ -253,6 +261,36 @@ const HeroPhotoCardInner = ({
   }, [prefersReducedMotion]);
 
   useEffect(() => {
+    const projectsTitle = document.querySelector("[data-projects-title]");
+    if (!(projectsTitle instanceof HTMLElement)) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: projectsTitle,
+      start: "top bottom",
+      end: "top bottom",
+      onEnter: () => setParkReleased(true),
+      onLeaveBack: () => setParkReleased(false),
+    });
+
+    return () => {
+      trigger.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLanded || !parkReleased || !targetPosition) {
+      setReleasedPosition(null);
+      return;
+    }
+
+    setReleasedPosition({
+      top: Math.round(window.scrollY + targetPosition.top),
+      left: targetPosition.left,
+      width: targetPosition.width,
+    });
+  }, [isLanded, parkReleased, targetPosition]);
+
+  useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotion = () => setPrefersReducedMotion(mediaQuery.matches);
     updateMotion();
@@ -264,17 +302,30 @@ const HeroPhotoCardInner = ({
     return () => mediaQuery.removeListener(updateMotion);
   }, []);
 
-  const shouldPin = isLanded && targetPosition;
+  const shouldPin = isLanded && targetPosition && !parkReleased;
+  const shouldAnchorToDocument = isLanded && parkReleased && releasedPosition;
   const disableMotion = isMoving || isFlipping;
 
   return (
     <div
       ref={cardRef}
       style={{
-        position: shouldPin ? "fixed" : undefined,
-        top: shouldPin ? targetPosition?.top : undefined,
-        left: shouldPin ? targetPosition?.left : undefined,
-        width: shouldPin ? targetPosition?.width : undefined,
+        position: shouldPin ? "fixed" : shouldAnchorToDocument ? "absolute" : undefined,
+        top: shouldPin
+          ? targetPosition?.top
+          : shouldAnchorToDocument
+            ? releasedPosition?.top
+            : undefined,
+        left: shouldPin
+          ? targetPosition?.left
+          : shouldAnchorToDocument
+            ? releasedPosition?.left
+            : undefined,
+        width: shouldPin
+          ? targetPosition?.width
+          : shouldAnchorToDocument
+            ? releasedPosition?.width
+            : undefined,
       }}
       className={cn(
         "w-full min-w-[300px] max-w-[380px] will-change-transform",
