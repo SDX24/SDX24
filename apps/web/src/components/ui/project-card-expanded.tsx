@@ -46,6 +46,8 @@ type ProjectCardExpandedProps = {
   onDragRelease?: () => void;
   onCardDismiss?: () => void;
   showCue?: boolean;
+  showDragCue?: boolean;
+  interactive?: boolean;
 };
 
 export const ProjectCardExpanded = ({
@@ -65,6 +67,8 @@ export const ProjectCardExpanded = ({
   onDragRelease,
   onCardDismiss,
   showCue = false,
+  showDragCue = true,
+  interactive = true,
 }: ProjectCardExpandedProps) => {
   const baseLength = 24;
   const dragX = useMotionValue(baseLength);
@@ -320,6 +324,7 @@ export const ProjectCardExpanded = ({
           glareClassName="mix-blend-screen"
           glareColor="rgba(104, 213, 255, 0.25)"
           glareMidColor="rgba(145, 179, 227, 0.2)"
+          interactive={interactive}
         >
           <div
             className="pointer-events-none absolute inset-0"
@@ -420,81 +425,83 @@ export const ProjectCardExpanded = ({
           </div>
         </CometCard>
       </motion.div>
-      <div className="absolute left-full top-1/2 z-30 -translate-y-1/2">
-        <motion.div
-          drag
-          dragControls={dragControls}
-          dragConstraints={{ left: baseLength, right: maxDragX }}
-          dragElastic={0.2}
-          dragMomentum={false}
-          onDrag={(_, info) => {
-            // Track pointer position for release detection
-            pointerXRef.current = info.point.x;
+      {showDragCue ? (
+        <>
+          <div className="absolute left-full top-1/2 z-30 -translate-y-1/2">
+            <motion.div
+              drag
+              dragControls={dragControls}
+              dragConstraints={{ left: baseLength, right: maxDragX }}
+              dragElastic={0.2}
+              dragMomentum={false}
+              onDrag={(_, info) => {
+                pointerXRef.current = info.point.x;
 
-            // When snapped, override position to stay locked
-            if (
-              isSnappedRef.current &&
-              snapTargetXRef.current !== null &&
-              snapTargetYRef.current !== null
-            ) {
-              dragX.set(snapTargetXRef.current);
-              dragY.set(snapTargetYRef.current);
-            }
-          }}
-          className={cn(
-            "relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200",
-            isSnapped
-              ? "border-[#92F189]/60 bg-black/70 shadow-[0_0_32px_rgba(146,241,137,0.4)]"
-              : "border-white/15 bg-black/60 shadow-[0_0_24px_rgba(104,213,255,0.25)]"
-          )}
-          style={{
-            x: isFlyingAway ? bumpFlyX : dragX,
-            y: dragY,
-            opacity: isFlyingAway ? bumpFlyOpacity : 1,
-          }}
-          ref={bumpRef}
-          onPointerEnter={onHoldStart}
-          onPointerDown={() => {
-            isDraggingRef.current = true;
-            onHoldStart?.();
-          }}
-          onPointerUp={() => {
-            handleRelease();
-            onHoldEnd?.();
-          }}
-          onDragEnd={() => {
-            handleRelease();
-            onDragRelease?.();
-          }}
-        >
-          <span
-            className={cn(
-              "absolute inset-0 rounded-full border transition-colors duration-200",
-              isSnapped ? "border-[#92F189]/50" : "border-brand-teal-light/40"
-            )}
-          />
+                if (
+                  isSnappedRef.current &&
+                  snapTargetXRef.current !== null &&
+                  snapTargetYRef.current !== null
+                ) {
+                  dragX.set(snapTargetXRef.current);
+                  dragY.set(snapTargetYRef.current);
+                }
+              }}
+              className={cn(
+                "relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200",
+                isSnapped
+                  ? "border-[#92F189]/60 bg-black/70 shadow-[0_0_32px_rgba(146,241,137,0.4)]"
+                  : "border-white/15 bg-black/60 shadow-[0_0_24px_rgba(104,213,255,0.25)]"
+              )}
+              style={{
+                x: isFlyingAway ? bumpFlyX : dragX,
+                y: dragY,
+                opacity: isFlyingAway ? bumpFlyOpacity : 1,
+              }}
+              ref={bumpRef}
+              onPointerEnter={onHoldStart}
+              onPointerDown={() => {
+                isDraggingRef.current = true;
+                onHoldStart?.();
+              }}
+              onPointerUp={() => {
+                handleRelease();
+                onHoldEnd?.();
+              }}
+              onDragEnd={() => {
+                handleRelease();
+                onDragRelease?.();
+              }}
+            >
+              <span
+                className={cn(
+                  "absolute inset-0 rounded-full border transition-colors duration-200",
+                  isSnapped ? "border-[#92F189]/50" : "border-brand-teal-light/40"
+                )}
+              />
 
-          <span
-            className={cn(
-              "absolute inset-0 rounded-full opacity-70 transition-colors duration-200",
-              isSnapped ? "bg-[#92F189]/30" : "bg-brand-teal-light/20"
-            )}
+              <span
+                className={cn(
+                  "absolute inset-0 rounded-full opacity-70 transition-colors duration-200",
+                  isSnapped ? "bg-[#92F189]/30" : "bg-brand-teal-light/20"
+                )}
+              />
+              <CircleChevronRight
+                className={cn(
+                  "relative h-5 w-5 transition-colors duration-200",
+                  isSnapped ? "text-[#92F189]" : "text-brand-teal-light"
+                )}
+              />
+            </motion.div>
+          </div>
+          <HandEmbed
+            visible={showCue}
+            y={bumpAbsY}
+            bumpX={bumpAbsX}
+            isSnapped={isSnapped}
+            isFlyingAway={isFlyingAway}
           />
-          <CircleChevronRight
-            className={cn(
-              "relative h-5 w-5 transition-colors duration-200",
-              isSnapped ? "text-[#92F189]" : "text-brand-teal-light"
-            )}
-          />
-        </motion.div>
-      </div>
-      <HandEmbed
-        visible={showCue}
-        y={bumpAbsY}
-        bumpX={bumpAbsX}
-        isSnapped={isSnapped}
-        isFlyingAway={isFlyingAway}
-      />
+        </>
+      ) : null}
     </div>
   );
 };

@@ -51,8 +51,8 @@ SDX24/
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── api/       # API routes
 │       │   │   │   └── health/ # Health check endpoint
-│       │   │   ├── test/      # Test page - Tandem app iframe embed
-│       │   │   │   └── page.tsx # Phone-shaped iframe display (402x874)
+│       │   │   ├── test/      # Test page - hand-object catch scene sandbox
+│       │   │   │   └── page.tsx # Experimental hand+phone+card bundle preview
 │       │   │   ├── layout.tsx # Root layout
 │       │   │   ├── page.tsx   # Landing page
 │       │   │   ├── not-found.tsx # 404 page
@@ -60,6 +60,7 @@ SDX24/
 │       │   ├── components/    # Reusable UI components
 │       │   │   ├── cards/     # Hero card variants
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
+│       │   │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │       │   │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │       │   │   ├── ui/        # UI primitives
 │       │   │   │   ├── comet-card.tsx # Core 3D card primitive
@@ -127,7 +128,7 @@ SDX24/
 **Current pages**:
 
 - `/` - Landing page with portfolio, projects, and contact information
-- `/test` - Tandem app embed (iframe) using `NEXT_PUBLIC_TANDEM_URL`
+- `/test` - Hand-object catch scene sandbox using `NEXT_PUBLIC_TANDEM_URL`
 - `not-found.tsx` - Custom 404 page
 
 #### Adding New Pages
@@ -158,13 +159,14 @@ apps/web/src/
 │   ├── not-found.tsx    # Custom 404 page
 │   ├── globals.css      # Global styles
 │   ├── test/
-│   │   └── page.tsx     # /test (Tandem app embed)
+│   │   └── page.tsx     # /test (Hand-object catch scene sandbox)
 │   └── api/             # API routes
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
 │   ├── cards/            # Hero card variants
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
+│   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │   │   └── hero-photo-card.tsx # Landing hero scroll + flip card
 │   ├── ui/               # UI primitives
 │   │   ├── comet-card.tsx # Core 3D card primitive

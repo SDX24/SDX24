@@ -13,6 +13,7 @@ Active UI primitives:
 - `HandEmbed` (`apps/web/src/components/ui/hand-embed.tsx`)
 - `HeroPhotoCard` (`apps/web/src/components/cards/hero-photo-card.tsx`)
 - `HeroBackHoverCard` (`apps/web/src/components/cards/hero-back-hover-card.tsx`)
+- `HeroCatchScene` (`apps/web/src/components/cards/hero-catch-scene.tsx`)
 - `ScrollToTopOnLoad` (`apps/web/src/components/scroll-to-top-on-load.tsx`)
 
 Only the hero card components in `components/cards/` are supported outside the UI primitives.
@@ -216,6 +217,22 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 - Use only inside hero back faces (not general grids)
 - Expanded card is interactive only while visible
+
+## HeroCatchScene
+
+**Purpose**: Experimental hand-object bundle used in `/test` route to iterate on hand + phone + adjacent project card composition.
+
+**Responsibilities**:
+
+- Render mirrored hand image behind the phone shell
+- Render phone shell with Tandem iframe using the exact `402:874` ratio
+- Render adjacent expanded project card as a visual companion panel
+- Lock page scrolling while pointer is interacting with frame region
+
+**Usage rules**:
+
+- Use as sandbox/preview on `/test` route while iterating on composition
+- Keep separate from production hero sequence unless explicitly promoted
 - Treat `resetToken` as authoritative lifecycle reset after fly-away and reverse-scroll front re-entry
 
 ## ScrollToTopOnLoad

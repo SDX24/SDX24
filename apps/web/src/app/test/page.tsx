@@ -1,29 +1,48 @@
 import Link from "next/link";
 
+import { HeroCatchScene } from "@/components/cards/hero-catch-scene";
+
 export default function TestPage() {
   const tandemUrl = process.env.NEXT_PUBLIC_TANDEM_URL || "";
   const iframeUrl = tandemUrl;
+  const project = {
+    title: "Tandem",
+    slogan: "Bridging work and childcare",
+    description:
+      "Tandem helps parents in the trades balance work and childcare with AI scheduling, trusted care, and shared support.",
+    stack: ["AI Scheduling", "Nanny Booking", "Care Sharing"],
+    logoSrc: "/logos/tandem/tandem-logo.svg",
+    wordmarkSrc: "/logos/tandem/wordmark.svg",
+    links: [
+      { label: "Blog", href: "https://tandem-blog.vercel.app" },
+      { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
+    ],
+    achievements: ["Trust", "Balance", "Support"],
+    coverSrc: "/logos/tandem/cover.png",
+    brand: {
+      primary: "#3373CC",
+      primaryLight: "#91B3E3",
+      secondary: "#92F189",
+      analogous: "#68D5FF",
+    },
+    expandedDescription:
+      "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
+  };
 
   return (
     <main className="min-h-screen bg-gray-900 p-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="mb-8 text-center text-4xl font-bold text-white">Tandem App Embed</h1>
-        <p className="mb-8 text-center text-gray-400">Full Tandem app with guest sign-in option</p>
+        <h1 className="mb-8 text-center text-4xl font-bold text-white">Tandem Hand Objects Test</h1>
+        <p className="mb-8 text-center text-gray-400">
+          Experimental catch-scene bundle copied from hero work
+        </p>
 
-        {/* Phone-shaped Iframe Container */}
-        <div className="mx-auto flex justify-center">
-          <div
-            className="overflow-hidden rounded-[2.5rem] border-[14px] border-gray-800 bg-gray-800 shadow-2xl"
-            style={{ width: "402px", height: "874px" }}
-          >
-            <iframe
-              src={iframeUrl}
-              className="h-full w-full"
-              title="Tandem App"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-            />
-          </div>
+        <div className="relative min-h-[1600px]">
+          <HeroCatchScene
+            className="absolute left-0 top-[120px]"
+            iframeUrl={iframeUrl}
+            project={project}
+          />
         </div>
 
         {/* Navigation */}
