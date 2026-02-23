@@ -180,7 +180,7 @@ export const HeroBackHoverCard = ({
         }
       >
         <ProjectCardCompact
-          className="max-w-[380px]"
+          className="max-w-[360px]"
           title={title}
           slogan={slogan}
           description={description}

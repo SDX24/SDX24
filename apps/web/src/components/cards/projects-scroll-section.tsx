@@ -16,6 +16,9 @@ type ProjectsScrollSectionProps = {
 };
 
 export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) => {
+  const projectsCardClassName = "w-[380px]";
+  const projectsCardContentClassName = "h-[320px]";
+
   const insurFlowProject: ProjectData = {
     title: "InsurFlow",
     slogan: "AI-powered advisor workflow platform",
@@ -44,9 +47,10 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
           Projects
         </span>
       </h2>
-      <div className="grid justify-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid justify-items-center gap-14 md:grid-cols-2 xl:grid-cols-3">
         <ProjectCardCompact
-          className="w-[380px]"
+          className={projectsCardClassName}
+          contentClassName={projectsCardContentClassName}
           title={project.title}
           slogan={project.slogan}
           description={project.description}
@@ -56,7 +60,8 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
           interactive={false}
         />
         <ProjectCardCompact
-          className="w-[380px]"
+          className={projectsCardClassName}
+          contentClassName={projectsCardContentClassName}
           title={insurFlowProject.title}
           slogan={insurFlowProject.slogan}
           description={insurFlowProject.description}
@@ -65,7 +70,8 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
           interactive={false}
         />
         <ProjectCardCompact
-          className="w-[380px]"
+          className={projectsCardClassName}
+          contentClassName={projectsCardContentClassName}
           title={adultProject.title}
           slogan={adultProject.slogan}
           description={adultProject.description}

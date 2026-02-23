@@ -14,6 +14,7 @@ type ProjectCardCompactProps = {
   logoSrc: string;
   wordmarkSrc?: string;
   className?: string;
+  contentClassName?: string;
   interactive?: boolean;
 };
 
@@ -25,12 +26,13 @@ export const ProjectCardCompact = ({
   logoSrc,
   wordmarkSrc,
   className,
+  contentClassName,
   interactive = false,
 }: ProjectCardCompactProps) => (
   <CometCard
     className={cn("w-full", className)}
     surfaceClassName="border-white/15 bg-white/5"
-    contentClassName="space-y-4 p-5 min-h-[320px]"
+    contentClassName={cn("space-y-4 p-5 min-h-[320px]", contentClassName)}
     glareOpacity={0.2}
     glareClassName="mix-blend-screen"
     glareColor="rgba(104, 213, 255, 0.35)"

@@ -107,6 +107,8 @@ const computeFlipAngle = (progress: number) => {
   return mapRange(progress, 0.85, 1, -140, -180);
 };
 
+const PINNED_LAND_OFFSET_Y = 163;
+
 const HeroPhotoCardInner = ({
   className,
   contentClassName,
@@ -151,9 +153,10 @@ const HeroPhotoCardInner = ({
     const anchorRect =
       leftAnchor instanceof HTMLElement ? leftAnchor.getBoundingClientRect() : null;
     const targetLeft = anchorRect ? anchorRect.left : rightMargin;
-    const targetTop = anchorRect
-      ? anchorRect.top + (anchorRect.height - rect.height) / 2
-      : (window.innerHeight - rect.height) / 2;
+    const targetTop =
+      (anchorRect
+        ? anchorRect.top + (anchorRect.height - rect.height) / 2
+        : (window.innerHeight - rect.height) / 2) - 160;
 
     travelRef.current = {
       x: Math.round(targetLeft - rect.left),
@@ -284,7 +287,7 @@ const HeroPhotoCardInner = ({
     }
 
     setReleasedPosition({
-      top: Math.round(window.scrollY + targetPosition.top),
+      top: Math.round(window.scrollY + targetPosition.top + PINNED_LAND_OFFSET_Y),
       left: targetPosition.left,
       width: targetPosition.width,
     });
@@ -312,7 +315,9 @@ const HeroPhotoCardInner = ({
       style={{
         position: shouldPin ? "fixed" : shouldAnchorToDocument ? "absolute" : undefined,
         top: shouldPin
-          ? targetPosition?.top
+          ? targetPosition
+            ? targetPosition.top + PINNED_LAND_OFFSET_Y
+            : undefined
           : shouldAnchorToDocument
             ? releasedPosition?.top
             : undefined,
@@ -328,7 +333,7 @@ const HeroPhotoCardInner = ({
             : undefined,
       }}
       className={cn(
-        "w-full min-w-[300px] max-w-[380px] will-change-transform",
+        "w-full min-w-[280px] max-w-[360px] will-change-transform",
         disableMotion ? "pointer-events-none" : undefined,
         className
       )}
@@ -344,7 +349,7 @@ const HeroPhotoCardInner = ({
             style={{ backfaceVisibility: "hidden" }}
           >
             <MainTealCard
-              className="max-w-[380px]"
+              className="max-w-[360px]"
               contentClassName={contentClassName}
               interactive={!disableMotion}
             >
@@ -392,7 +397,7 @@ const HeroPhotoCardInner = ({
           </div>
           <div className="invisible">
             <ProjectCardCompact
-              className="max-w-[380px]"
+              className="max-w-[360px]"
               title={project.title}
               slogan={project.slogan}
               description={project.description}
