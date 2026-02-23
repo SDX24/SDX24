@@ -62,7 +62,7 @@ SDX24/
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │       │   │   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
-│       │   │   │   └── projects-scroll-section.tsx # Projects heading + static project grid section
+│       │   │   │   └── projects-scroll-section.tsx # Projects heading + static Tandem/InsurFlow/Adult grid
 │       │   │   ├── ui/        # UI primitives
 │       │   │   │   ├── comet-card.tsx # Core 3D card primitive
 │       │   │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
@@ -128,8 +128,7 @@ SDX24/
 **Routing**: File-based routing in `src/app/`
 **Current pages**:
 
-- `/` - Landing page with portfolio, projects, and contact information
-- `/` - Landing page with hero cycle followed by a static Projects section
+- `/` - Landing page with hero cycle, static Projects section, and extended trailing scroll space before footer
 - `/test` - Hand-object catch scene sandbox using `NEXT_PUBLIC_TANDEM_URL`
 - `not-found.tsx` - Custom 404 page
 
@@ -170,7 +169,7 @@ apps/web/src/
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
-│   │   └── projects-scroll-section.tsx # Projects heading + static project grid section
+│   │   └── projects-scroll-section.tsx # Projects heading + static Tandem/InsurFlow/Adult grid
 │   ├── ui/               # UI primitives
 │   │   ├── comet-card.tsx # Core 3D card primitive
 │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset

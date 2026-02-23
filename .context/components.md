@@ -192,9 +192,13 @@ Only the hero card components in `components/cards/` are supported outside the U
 **Responsibilities**:
 
 - Drive scroll-linked translation and flip timing
+- Scope scroll progress to hero section (`[data-hero-sequence]`) so hero timing is independent from total page length
 - Disable interactivity and glare during flip for stability
 - Re-enable compact card interactivity after settle
 - Keep front/back faces size-aligned for seamless flip
+- Land compact card at middle-left hero anchor while in landed state
+- Keep landed card pinned (`position: fixed`) until Projects title enters viewport
+- Convert landed card to document-anchored position (`position: absolute`) at release so it scrolls away naturally
 - Emit a reset token when card transitions from back face to front face on reverse scroll
 
 **Usage rules**:
@@ -202,6 +206,8 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Use only as a client-side island on the landing page
 - Keep the front card as the hero photo variant
 - Back face must render `ProjectCardCompact`
+- Requires `[data-hero-left]` anchor for left-axis landing alignment
+- Requires `[data-projects-title]` anchor to release pinning before Projects content
 
 ## ProjectsScrollSection
 
@@ -212,6 +218,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Render buffered spacing so Projects appears after additional scroll
 - Render a centered Projects heading with brand-apricot gradient text
 - Render a 3-column desktop grid with uniform compact-card footprints
+- Populate cards with Tandem (featured), InsurFlow, and Adult content
 - Keep cards static (no transition transfer from hero)
 
 **Usage rules**:
@@ -310,4 +317,4 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ---
 
-**Last Updated**: February 21, 2026
+**Last Updated**: February 23, 2026
