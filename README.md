@@ -1,4 +1,4 @@
-# Hi there, I'm SDX24 👋
+# Hi there, I'm Stefan 👋
 
 ### 🚀 About Me
 
@@ -8,7 +8,7 @@ Full stack web developer passionate about building modern web applications with 
 
 This repository serves as my GitHub profile and contains my portfolio website.
 
-🌐 **Live Site**: [sdx24.vercel.app](https://sdx24.vercel.app)
+🌐 **Live Site**: [stefandorosh.com](https://stefandorosh.com)
 
 **Tech Stack:**
 
@@ -18,7 +18,3 @@ This repository serves as my GitHub profile and contains my portfolio website.
 - 🛡️ **TypeScript** - Strict type safety
 - 🧪 **Playwright** - End-to-end testing
 - 🔒 **Automated DevOps** - Pre-commit hooks, CI/CD, security scanning
-
----
-
-⭐️ From [SDX24](https://github.com/sdx24)
