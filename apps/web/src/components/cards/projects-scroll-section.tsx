@@ -33,10 +33,7 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
       "Greenfield InsurTech SaaS for life insurance advisors, replacing legacy spreadsheet workflows with a scalable product experience.",
     stack: ["Next.js", "TypeScript", "CI/CD"],
     logoSrc: "/logos/insurflow/insurflow-logo_no_bg.png",
-    links: [
-      { label: "Live", href: "https://insurflow.biz" },
-      { label: "Repo", href: "https://github.com/Vero-Ventures/insurflow" },
-    ],
+    links: [{ label: "Live", href: "https://insurflow.biz" }],
     achievements: ["Scalability", "Security", "Standards"],
     expandedDescription:
       "Built as a greenfield InsurTech platform for life insurance advisors, InsurFlow modernizes financial modeling workflows while enforcing production engineering standards across linting, formatting, commits, and CI checks.",

@@ -39,14 +39,14 @@ export const ProjectCardCompact = ({
   <CometCard
     className={cn("w-full", className)}
     surfaceClassName="border-white/15 bg-white/5"
-    contentClassName={cn("space-y-4 p-5 min-h-[320px]", contentClassName)}
+    contentClassName={cn("flex flex-col p-5 min-h-[320px]", contentClassName)}
     glareOpacity={0.2}
     glareClassName="mix-blend-screen"
     glareColor="rgba(104, 213, 255, 0.35)"
     glareMidColor="rgba(145, 179, 227, 0.25)"
     interactive={interactive}
   >
-    <div className="space-y-4 text-gray-100">
+    <div className="flex flex-col gap-4 text-gray-100 flex-1">
       <div className="flex items-center gap-4">
         <div className="relative h-12 w-12 overflow-hidden rounded-2xl bg-white/10">
           <Image
@@ -87,7 +87,7 @@ export const ProjectCardCompact = ({
       </div>
 
       {links && links.length > 0 && (
-        <div className="flex flex-wrap gap-2 pt-1">
+        <div className="flex flex-wrap gap-2 pt-1 mt-auto">
           {links.map((link) => (
             <a
               key={link.label}
