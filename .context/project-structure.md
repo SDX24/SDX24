@@ -43,10 +43,14 @@ SDX24/
 │       │       │   ├── logo-expanded-inverse.svg
 │       │       │   ├── logo-bw.svg
 │       │       │   └── logo-bw-inverse.svg
-│       │       └── tandem/
-│       │           ├── cover.png
-│       │           ├── tandem-logo.svg
-│       │           └── wordmark.svg
+│       │       ├── tandem/
+│       │       │   ├── cover.png
+│       │       │   ├── tandem-logo.svg
+│       │       │   └── wordmark.svg
+│       │       ├── insurflow/
+│       │       │   └── insurflow-logo_no_bg.png
+│       │       └── adult/
+│       │           └── adult-logo-color.svg
 │       ├── src/               # Source code
 │       │   ├── app/           # Next.js App Router
 │       │   │   ├── api/       # API routes

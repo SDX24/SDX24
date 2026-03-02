@@ -4,7 +4,7 @@ import { HeroPhotoCard } from "@/components";
 import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
-  "BCIT Full-Stack Web Development diploma candidate shipping Tandem's real-time childcare scheduler, leading InsurFlow's AI InsurTech stack, and shaping W3rlds UI with dependable delivery.";
+  "BCIT Full-Stack Web Development diploma candidate building Tandem's real-time childcare scheduler and InsurFlow's AI-powered InsurTech platform, with UI/UX internship experience at W3rlds.";
 
 const featuredProject = {
   title: "Tandem",
@@ -15,7 +15,7 @@ const featuredProject = {
   logoSrc: "/logos/tandem/tandem-logo.svg",
   wordmarkSrc: "/logos/tandem/wordmark.svg",
   links: [
-    { label: "Blog", href: "https://tandem-blog.vercel.app" },
+    { label: "Live", href: "https://tandem-blog.vercel.app" },
     { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
   ],
   achievements: ["Trust", "Balance", "Support"],
@@ -96,7 +96,7 @@ export default function Home() {
               <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400 lg:justify-start">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   <span className="h-2 w-2 rounded-full bg-brand-coral" />
-                  Open to fall 2026 internships
+                  <span>Open to fall 2026 internships</span>
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   Vancouver, BC
@@ -120,6 +120,11 @@ export default function Home() {
             stack: featuredProject.stack,
             logoSrc: featuredProject.logoSrc,
             wordmarkSrc: featuredProject.wordmarkSrc,
+            links: featuredProject.links,
+            achievements: featuredProject.achievements,
+            coverSrc: featuredProject.coverSrc,
+            brand: featuredProject.brand,
+            expandedDescription: featuredProject.expandedDescription,
           }}
         />
 

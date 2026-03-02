@@ -31,6 +31,7 @@ type HeroBackHoverCardProps = {
   expandedDescription?: string;
   interactive?: boolean;
   resetToken?: number;
+  onCardDismiss?: () => void;
 };
 
 export const HeroBackHoverCard = ({
@@ -47,6 +48,7 @@ export const HeroBackHoverCard = ({
   expandedDescription,
   interactive = false,
   resetToken = 0,
+  onCardDismiss,
 }: HeroBackHoverCardProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pointerRef = useRef<{ x: number; y: number } | null>(null);
@@ -103,6 +105,7 @@ export const HeroBackHoverCard = ({
   const handleCardDismiss = () => {
     setIsCardDismissed(true);
     setIsExpanded(false);
+    onCardDismiss?.();
   };
 
   useEffect(() => {

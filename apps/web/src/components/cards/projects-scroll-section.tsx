@@ -1,6 +1,6 @@
 "use client";
 
-import { ProjectCardCompact } from "../ui/project-card-compact";
+import { HeroBackHoverCard } from "./hero-back-hover-card";
 
 type ProjectData = {
   title: string;
@@ -9,6 +9,16 @@ type ProjectData = {
   stack: string[];
   logoSrc: string;
   wordmarkSrc?: string;
+  links?: Array<{ label: string; href: string }>;
+  achievements?: string[];
+  coverSrc?: string;
+  brand?: {
+    primary: string;
+    primaryLight: string;
+    secondary: string;
+    analogous: string;
+  };
+  expandedDescription?: string;
 };
 
 type ProjectsScrollSectionProps = {
@@ -16,16 +26,20 @@ type ProjectsScrollSectionProps = {
 };
 
 export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) => {
-  const projectsCardClassName = "w-[380px]";
-  const projectsCardContentClassName = "h-[320px]";
-
   const insurFlowProject: ProjectData = {
     title: "InsurFlow",
     slogan: "AI-powered advisor workflow platform",
     description:
-      "Greenfield InsurTech SaaS replacing legacy spreadsheet modeling with a scalable, product-grade web workflow.",
+      "Greenfield InsurTech SaaS for life insurance advisors, replacing legacy spreadsheet workflows with a scalable product experience.",
     stack: ["Next.js", "TypeScript", "CI/CD"],
     logoSrc: "/logos/sdx24/logo-main-inverse.svg",
+    links: [
+      { label: "Live", href: "https://insurflow.biz" },
+      { label: "Repo", href: "https://github.com/Vero-Ventures/insurflow" },
+    ],
+    achievements: ["Scalability", "Security", "Standards"],
+    expandedDescription:
+      "Built as a greenfield InsurTech platform for life insurance advisors, InsurFlow modernizes financial modeling workflows while enforcing production engineering standards across linting, formatting, commits, and CI checks.",
   };
 
   const adultProject: ProjectData = {
@@ -35,7 +49,13 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
       "Web-based guide with region-specific paths for budgeting, taxes, renting, and career prep, designed for clarity and accessibility.",
     stack: ["Next.js", "Dynamic Routing", "Accessibility"],
     logoSrc: "/logos/sdx24/logo-main-inverse.svg",
+    links: [{ label: "Live", href: "https://design2-rust.vercel.app" }],
+    achievements: ["Clarity", "Accessibility", "Practicality"],
+    expandedDescription:
+      "Adult is a practical web guide that helps young adults navigate core life tasks with clear regional guidance, accessible UI patterns, and focused educational flows.",
   };
+
+  const projects = [project, insurFlowProject, adultProject];
 
   return (
     <section className="mx-auto w-full max-w-6xl px-4 pb-24 pt-[140vh]">
@@ -48,37 +68,23 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
         </span>
       </h2>
       <div className="grid justify-items-center gap-14 md:grid-cols-2 xl:grid-cols-3">
-        <ProjectCardCompact
-          className={projectsCardClassName}
-          contentClassName={projectsCardContentClassName}
-          title={project.title}
-          slogan={project.slogan}
-          description={project.description}
-          stack={project.stack}
-          logoSrc={project.logoSrc}
-          wordmarkSrc={project.wordmarkSrc}
-          interactive={false}
-        />
-        <ProjectCardCompact
-          className={projectsCardClassName}
-          contentClassName={projectsCardContentClassName}
-          title={insurFlowProject.title}
-          slogan={insurFlowProject.slogan}
-          description={insurFlowProject.description}
-          stack={insurFlowProject.stack}
-          logoSrc={insurFlowProject.logoSrc}
-          interactive={false}
-        />
-        <ProjectCardCompact
-          className={projectsCardClassName}
-          contentClassName={projectsCardContentClassName}
-          title={adultProject.title}
-          slogan={adultProject.slogan}
-          description={adultProject.description}
-          stack={adultProject.stack}
-          logoSrc={adultProject.logoSrc}
-          interactive={false}
-        />
+        {projects.map((projectCard) => (
+          <HeroBackHoverCard
+            key={projectCard.title}
+            title={projectCard.title}
+            slogan={projectCard.slogan}
+            description={projectCard.description}
+            stack={projectCard.stack}
+            logoSrc={projectCard.logoSrc}
+            wordmarkSrc={projectCard.wordmarkSrc}
+            links={projectCard.links}
+            achievements={projectCard.achievements}
+            coverSrc={projectCard.coverSrc}
+            brand={projectCard.brand}
+            expandedDescription={projectCard.expandedDescription}
+            interactive={false}
+          />
+        ))}
       </div>
     </section>
   );
