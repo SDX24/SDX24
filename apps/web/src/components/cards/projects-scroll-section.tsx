@@ -32,7 +32,7 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
     description:
       "Greenfield InsurTech SaaS for life insurance advisors, replacing legacy spreadsheet workflows with a scalable product experience.",
     stack: ["Next.js", "TypeScript", "CI/CD"],
-    logoSrc: "/logos/sdx24/logo-main-inverse.svg",
+    logoSrc: "/logos/insurflow/insurflow-logo_no_bg.png",
     links: [
       { label: "Live", href: "https://insurflow.biz" },
       { label: "Repo", href: "https://github.com/Vero-Ventures/insurflow" },
@@ -48,7 +48,7 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
     description:
       "Web-based guide with region-specific paths for budgeting, taxes, renting, and career prep, designed for clarity and accessibility.",
     stack: ["Next.js", "Dynamic Routing", "Accessibility"],
-    logoSrc: "/logos/sdx24/logo-main-inverse.svg",
+    logoSrc: "/logos/adult/adult-logo-color.svg",
     links: [{ label: "Live", href: "https://design2-rust.vercel.app" }],
     achievements: ["Clarity", "Accessibility", "Practicality"],
     expandedDescription:

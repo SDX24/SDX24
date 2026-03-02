@@ -6,6 +6,11 @@ import { cn } from "@/lib/utils";
 
 import { CometCard } from "./comet-card";
 
+type ProjectLink = {
+  label: string;
+  href: string;
+};
+
 type ProjectCardCompactProps = {
   title: string;
   slogan: string;
@@ -13,6 +18,7 @@ type ProjectCardCompactProps = {
   stack: string[];
   logoSrc: string;
   wordmarkSrc?: string;
+  links?: ProjectLink[];
   className?: string;
   contentClassName?: string;
   interactive?: boolean;
@@ -25,6 +31,7 @@ export const ProjectCardCompact = ({
   stack,
   logoSrc,
   wordmarkSrc,
+  links,
   className,
   contentClassName,
   interactive = false,
@@ -78,6 +85,22 @@ export const ProjectCardCompact = ({
           </span>
         ))}
       </div>
+
+      {links && links.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-1">
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-brand-teal-light/40 bg-brand-teal-light/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-teal-light transition hover:bg-brand-teal-light/20"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   </CometCard>
 );

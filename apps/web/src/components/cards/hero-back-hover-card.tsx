@@ -190,6 +190,7 @@ export const HeroBackHoverCard = ({
           stack={stack}
           logoSrc={logoSrc}
           wordmarkSrc={wordmarkSrc}
+          links={resolvedLinks}
           interactive={interactive}
         />
       </div>
