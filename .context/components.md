@@ -88,12 +88,13 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ## ProjectCardCompact
 
-**Purpose**: Summary project card used in grids and lists. No links; compact content only.
+**Purpose**: Summary project card used in grids and lists. Optionally renders action links at the bottom.
 
 **Responsibilities**:
 
 - Render logo + wordmark
 - Show slogan, short description, and short stack list
+- Optionally render Live/action links pinned to card bottom
 - Acts as hover trigger for expanded card
 - Serve as hover trigger for expanded card
 
@@ -102,10 +103,11 @@ Only the hero card components in `components/cards/` are supported outside the U
 - `title`, `slogan`, `description`
 - `stack`
 - `logoSrc`, `wordmarkSrc`
+- `links` (optional — array of `{ label, href }` rendered at card bottom)
 
 **Usage rules**:
 
-- Do not include links inside the compact card.
+- Links are opt-in; omit in hero context, include in projects grid via `showLinksOnCompact`.
 - Keep stack to 3-5 items for readability.
 - Compact cards default to `interactive={false}` to avoid wasted hover motion.
 
@@ -218,7 +220,8 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Render buffered spacing so Projects appears after additional scroll
 - Render a centered Projects heading with brand-apricot gradient text
 - Render a 3-column desktop grid with uniform compact-card footprints
-- Populate cards with Tandem (featured), InsurFlow, and Adult content
+- Populate cards with Tandem (featured), InsurFlow, and Adult content using `HeroBackHoverCard` with `showLinksOnCompact`
+- Show only Live links on each card (no Repo links in this section)
 - Keep cards static (no transition transfer from hero)
 
 **Usage rules**:
@@ -226,6 +229,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Keep heading natural-scrolling (no heading pinning)
 - Keep mobile layout single-column with featured card first
 - Keep cards non-interactive in this section (`interactive={false}`)
+- Pass `showLinksOnCompact` to surface Live links on compact cards
 
 ## HeroBackHoverCard
 
@@ -237,11 +241,17 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Manage pointer-events handoff and delayed close behavior
 - Keep expanded card anchored to the compact card origin
 - Reset local hover/dismiss state when `resetToken` changes
+- Optionally surface links on the compact card via `showLinksOnCompact`
+
+**Key props**:
+
+- `showLinksOnCompact` (default `false`) — pass `true` in projects grid to show Live links on compact card; omit on hero back face
 
 **Usage rules**:
 
-- Use only inside hero back faces (not general grids)
+- Use only inside hero back faces or projects grid
 - Expanded card is interactive only while visible
+- Do not pass `showLinksOnCompact` on hero back face
 
 ## HeroCatchScene
 

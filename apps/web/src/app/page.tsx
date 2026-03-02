@@ -101,6 +101,10 @@ export default function Home() {
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   Vancouver, BC
                 </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-amber-300">
+                  <span className="h-2 w-2 rounded-full bg-amber-400" />
+                  Portfolio WIP
+                </span>
               </div>
             </div>
             <div className="grid gap-10 lg:gap-12">
@@ -120,7 +124,7 @@ export default function Home() {
             stack: featuredProject.stack,
             logoSrc: featuredProject.logoSrc,
             wordmarkSrc: featuredProject.wordmarkSrc,
-            links: featuredProject.links,
+            links: [{ label: "Live", href: "https://tandem-blog.vercel.app" }],
             achievements: featuredProject.achievements,
             coverSrc: featuredProject.coverSrc,
             brand: featuredProject.brand,
