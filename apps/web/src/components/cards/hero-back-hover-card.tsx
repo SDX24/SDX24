@@ -30,6 +30,7 @@ type HeroBackHoverCardProps = {
   brand?: ProjectBrand;
   expandedDescription?: string;
   interactive?: boolean;
+  showLinksOnCompact?: boolean;
   resetToken?: number;
   onCardDismiss?: () => void;
 };
@@ -47,6 +48,7 @@ export const HeroBackHoverCard = ({
   brand,
   expandedDescription,
   interactive = false,
+  showLinksOnCompact = false,
   resetToken = 0,
   onCardDismiss,
 }: HeroBackHoverCardProps) => {
@@ -190,7 +192,7 @@ export const HeroBackHoverCard = ({
           stack={stack}
           logoSrc={logoSrc}
           wordmarkSrc={wordmarkSrc}
-          links={resolvedLinks}
+          links={showLinksOnCompact ? resolvedLinks : undefined}
           interactive={interactive}
         />
       </div>

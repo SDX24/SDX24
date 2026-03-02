@@ -80,6 +80,7 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
             brand={projectCard.brand}
             expandedDescription={projectCard.expandedDescription}
             interactive={false}
+            showLinksOnCompact
           />
         ))}
       </div>
