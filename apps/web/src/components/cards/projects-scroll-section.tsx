@@ -11,15 +11,20 @@ const FEATURED_FOCUS_TITLE = "InsurFlow";
 export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) => {
   const insurFlowProject: ProjectData = {
     title: "InsurFlow",
-    slogan: "AI-powered advisor workflow platform",
+    slogan: "A simpler way to apply for term life insurance",
     description:
-      "Greenfield InsurTech SaaS for life insurance advisors, replacing legacy spreadsheet workflows with a scalable product experience.",
-    stack: ["Next.js", "TypeScript", "CI/CD"],
+      "Consumer-first D2C broker flow for Canadian term life insurance with guided intake, clear non-binding estimates, and in-app submission tracking.",
+    stack: ["Next.js 16", "TypeScript", "PostgreSQL", "Better Auth", "CI/CD"],
     logoSrc: "/logos/insurflow/insurflow-logo_no_bg.png",
     links: [{ label: "Live", href: "https://insurflow.biz" }],
-    achievements: ["Scalability", "Security", "Standards"],
+    achievements: [
+      "5-minute Intake",
+      "Clear Estimates",
+      "Status Tracking",
+      "Canada-first Guidance",
+    ],
     expandedDescription:
-      "Built as a greenfield InsurTech platform for life insurance advisors, InsurFlow modernizes financial modeling workflows while enforcing production engineering standards across linting, formatting, commits, and CI checks.",
+      "InsurFlow is now a Canadian consumer-first D2C broker experience for term life insurance. Users move from a short eligibility intake to a clear non-binding estimate, then continue through one guided submission flow with transparent status updates. The product keeps recommendation context understandable while preserving production engineering standards across architecture, security, and CI.",
   };
 
   const adultProject: ProjectData = {

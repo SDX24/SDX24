@@ -28,6 +28,13 @@ test("InsurFlow opens fullscreen after sustained hover", async ({ page }) => {
   await focusCard.hover();
 
   await expect(fullscreenLayer).toBeVisible({ timeout: 6000 });
+  await expect(fullscreenLayer).toHaveAttribute("data-focus-glass", "medium");
+  await expect(fullscreenLayer).toHaveClass(/backdrop-blur-md/);
+  await expect(fullscreenLayer).toHaveCSS("background-color", /rgba\(2,\s*6,\s*23,\s*0\.34\)/);
+  await expect(page.locator('[data-focus-dots="insurflow"]')).toBeVisible();
+  await page.waitForTimeout(260);
+  await expect(fullscreenLayer).toHaveCount(1);
+  await expect(fullscreenLayer).toBeVisible();
   await expect(page.locator('[data-focus-back="insurflow"]')).toBeVisible();
 });
 
@@ -36,15 +43,17 @@ test("InsurFlow priming cancels when hover ends early", async ({ page }) => {
 
   const focusCard = page.locator('[data-focus-card="insurflow"]');
   const fullscreenLayer = page.locator('[data-focus-fullscreen="insurflow"]');
+  const primingOverlay = page.locator('[data-focus-priming-overlay="insurflow"]');
 
   await focusCard.scrollIntoViewIfNeeded();
   await focusCard.hover();
+  await expect(primingOverlay).toBeVisible();
   await page.waitForTimeout(750);
   await page.mouse.move(10, 10);
-  await page.waitForTimeout(2600);
+  await page.waitForTimeout(2400);
 
   await expect(fullscreenLayer).toHaveCount(0);
-  await expect(page.locator('[data-focus-priming-overlay="insurflow"]')).toHaveCount(0);
+  await expect(primingOverlay).toHaveCount(0);
 });
 
 test("InsurFlow closes back to card from fullscreen", async ({ page }) => {

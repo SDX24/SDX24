@@ -31,6 +31,9 @@ type HeroBackHoverCardProps = {
   expandedDescription?: string;
   interactive?: boolean;
   showLinksOnCompact?: boolean;
+  compactLogoContainerClassName?: string;
+  compactLogoImageClassName?: string;
+  compactLogoPixelSize?: number;
   resetToken?: number;
   onCardDismiss?: () => void;
 };
@@ -49,6 +52,9 @@ export const HeroBackHoverCard = ({
   expandedDescription,
   interactive = false,
   showLinksOnCompact = false,
+  compactLogoContainerClassName,
+  compactLogoImageClassName,
+  compactLogoPixelSize,
   resetToken = 0,
   onCardDismiss,
 }: HeroBackHoverCardProps) => {
@@ -194,6 +200,9 @@ export const HeroBackHoverCard = ({
           wordmarkSrc={wordmarkSrc}
           links={showLinksOnCompact ? resolvedLinks : undefined}
           interactive={interactive}
+          logoContainerClassName={compactLogoContainerClassName}
+          logoImageClassName={compactLogoImageClassName}
+          logoPixelSize={compactLogoPixelSize}
         />
       </div>
       <div

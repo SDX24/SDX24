@@ -105,6 +105,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - `stack`
 - `logoSrc`, `wordmarkSrc`
 - `links` (optional — array of `{ label, href }` rendered at card bottom)
+- `logoContainerClassName`, `logoImageClassName`, `logoPixelSize` (optional compact-logo sizing overrides)
 
 **Usage rules**:
 
@@ -248,6 +249,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 **Key props**:
 
 - `showLinksOnCompact` (default `false`) — pass `true` in projects grid to show Live links on compact card; omit on hero back face
+- `compactLogoContainerClassName`, `compactLogoImageClassName`, `compactLogoPixelSize` (optional passthrough compact-logo sizing controls)
 
 **Usage rules**:
 
@@ -264,10 +266,13 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Wrap `HeroBackHoverCard` and preserve compact visual footprint
 - Optionally render featured decoration (wiggle, glow, outline, "Hover" badge)
 - Manage interaction phases: `idle` → `priming` → `open`
-- Run center-out priming fill countdown (`openDelayMs`, default `2200ms`)
+- Run center-out priming fill countdown (`openDelayMs`, default `1800ms`) with linear expansion timing
+- Animate priming blob with scale and opacity timing tuned to finish just before fullscreen open (`scale ~0.9x`, `opacity ~0.85x` of delay)
+- Use warm SDX24 fill palette for priming (`Apricot Cream` + `Sandy Clay` + dark neutral), avoiding teal/coral fill blends
 - Cancel priming on early hover leave (desktop); commit once countdown finishes
-- Open fullscreen on same route with shared-layout morph and corner alignment
-- Render minimal fullscreen v1 content (top-left `<` back button + project text)
+- Open fullscreen on same route with shared-layout morph while keeping fullscreen transition geometry rectangular; use a lightweight transition veil to soften artifacts
+- Render semi-transparent medium-glass fullscreen surface so the dotted background remains visible
+- Render fullscreen content with top-left `<` back button, project logo, and expanded InsurFlow technical portfolio detail blocks
 - Lock body scroll while fullscreen is open and restore on close
 - Expose deterministic `data-*` selectors for E2E (`data-focus-card`, `data-focus-priming-overlay`, `data-focus-fullscreen`, `data-focus-back`)
 
@@ -277,6 +282,7 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Enable fullscreen via `featured` + `enableFullscreen` props
 - Keep non-featured cards in normal compact flow
 - Use hover to start priming on fine pointers; use tap to start priming on touch devices
+- For InsurFlow focus treatment, compact logo is intentionally larger than default card logo sizing
 
 ## HeroCatchScene
 

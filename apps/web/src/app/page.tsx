@@ -96,7 +96,7 @@ export default function Home() {
               <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400 lg:justify-start">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   <span className="h-2 w-2 rounded-full bg-brand-coral" />
-                  <span>Open to fall 2026 internships</span>
+                  <span>Open to work from May 2026</span>
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   Vancouver, BC

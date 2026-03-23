@@ -22,6 +22,9 @@ type ProjectCardCompactProps = {
   className?: string;
   contentClassName?: string;
   interactive?: boolean;
+  logoContainerClassName?: string;
+  logoImageClassName?: string;
+  logoPixelSize?: number;
 };
 
 export const ProjectCardCompact = ({
@@ -35,6 +38,9 @@ export const ProjectCardCompact = ({
   className,
   contentClassName,
   interactive = false,
+  logoContainerClassName,
+  logoImageClassName,
+  logoPixelSize = 48,
 }: ProjectCardCompactProps) => (
   <CometCard
     className={cn("w-full", className)}
@@ -48,13 +54,18 @@ export const ProjectCardCompact = ({
   >
     <div className="flex flex-col gap-4 text-gray-100 flex-1">
       <div className="flex items-center gap-4">
-        <div className="relative h-12 w-12 overflow-hidden rounded-2xl bg-white/10">
+        <div
+          className={cn(
+            "relative h-12 w-12 overflow-hidden rounded-2xl bg-white/10",
+            logoContainerClassName
+          )}
+        >
           <Image
             src={logoSrc}
             alt={`${title} logo`}
             fill
-            className="object-contain p-2"
-            sizes="48px"
+            className={cn("object-contain p-2", logoImageClassName)}
+            sizes={`${logoPixelSize}px`}
           />
         </div>
         <div>
