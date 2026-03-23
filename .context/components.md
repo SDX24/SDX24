@@ -14,6 +14,7 @@ Active UI primitives:
 - `HeroPhotoCard` (`apps/web/src/components/cards/hero-photo-card.tsx`)
 - `HeroBackHoverCard` (`apps/web/src/components/cards/hero-back-hover-card.tsx`)
 - `HeroCatchScene` (`apps/web/src/components/cards/hero-catch-scene.tsx`)
+- `ProjectFocusCard` (`apps/web/src/components/cards/project-focus-card.tsx`)
 - `ProjectsScrollSection` (`apps/web/src/components/cards/projects-scroll-section.tsx`)
 - `ScrollToTopOnLoad` (`apps/web/src/components/scroll-to-top-on-load.tsx`)
 
@@ -213,23 +214,24 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ## ProjectsScrollSection
 
-**Purpose**: Static Projects section that appears after additional scroll space following the hero.
+**Purpose**: Projects section that renders the card grid and delegates per-card focus/fullscreen behavior.
 
 **Responsibilities**:
 
 - Render buffered spacing so Projects appears after additional scroll
 - Render a centered Projects heading with brand-apricot gradient text
 - Render a 3-column desktop grid with uniform compact-card footprints
-- Populate cards with Tandem (featured), InsurFlow, and Adult content using `HeroBackHoverCard` with `showLinksOnCompact`
+- Populate cards with Tandem, InsurFlow, and Adult content using `ProjectFocusCard`
+- Select the fullscreen-enabled featured card by a single title constant (`InsurFlow`)
 - Show only Live links on each card (no Repo links in this section)
-- Keep cards static (no transition transfer from hero)
+- Keep non-featured cards static (no fullscreen transition)
 
 **Usage rules**:
 
 - Keep heading natural-scrolling (no heading pinning)
 - Keep mobile layout single-column with featured card first
-- Keep cards non-interactive in this section (`interactive={false}`)
-- Pass `showLinksOnCompact` to surface Live links on compact cards
+- Pass `showCompactLinks` to surface Live links on compact cards
+- Keep fullscreen interaction enabled only for the featured card
 
 ## HeroBackHoverCard
 
@@ -252,6 +254,29 @@ Only the hero card components in `components/cards/` are supported outside the U
 - Use only inside hero back faces or projects grid
 - Expanded card is interactive only while visible
 - Do not pass `showLinksOnCompact` on hero back face
+
+## ProjectFocusCard
+
+**Purpose**: Reusable project-card wrapper that can highlight a card and promote it into same-route fullscreen via a countdown morph.
+
+**Responsibilities**:
+
+- Wrap `HeroBackHoverCard` and preserve compact visual footprint
+- Optionally render featured decoration (wiggle, glow, outline, "Hover" badge)
+- Manage interaction phases: `idle` → `priming` → `open`
+- Run center-out priming fill countdown (`openDelayMs`, default `2200ms`)
+- Cancel priming on early hover leave (desktop); commit once countdown finishes
+- Open fullscreen on same route with shared-layout morph and corner alignment
+- Render minimal fullscreen v1 content (top-left `<` back button + project text)
+- Lock body scroll while fullscreen is open and restore on close
+- Expose deterministic `data-*` selectors for E2E (`data-focus-card`, `data-focus-priming-overlay`, `data-focus-fullscreen`, `data-focus-back`)
+
+**Usage rules**:
+
+- Use for projects-grid cards that may need reusable focus behavior
+- Enable fullscreen via `featured` + `enableFullscreen` props
+- Keep non-featured cards in normal compact flow
+- Use hover to start priming on fine pointers; use tap to start priming on touch devices
 
 ## HeroCatchScene
 
@@ -327,4 +352,4 @@ Only the hero card components in `components/cards/` are supported outside the U
 
 ---
 
-**Last Updated**: February 23, 2026
+**Last Updated**: March 23, 2026

@@ -1,29 +1,12 @@
 "use client";
 
-import { HeroBackHoverCard } from "./hero-back-hover-card";
-
-type ProjectData = {
-  title: string;
-  slogan: string;
-  description: string;
-  stack: string[];
-  logoSrc: string;
-  wordmarkSrc?: string;
-  links?: Array<{ label: string; href: string }>;
-  achievements?: string[];
-  coverSrc?: string;
-  brand?: {
-    primary: string;
-    primaryLight: string;
-    secondary: string;
-    analogous: string;
-  };
-  expandedDescription?: string;
-};
+import { type ProjectData, ProjectFocusCard } from "./project-focus-card";
 
 type ProjectsScrollSectionProps = {
   project: ProjectData;
 };
+
+const FEATURED_FOCUS_TITLE = "InsurFlow";
 
 export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) => {
   const insurFlowProject: ProjectData = {
@@ -65,24 +48,19 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
         </span>
       </h2>
       <div className="grid justify-items-center gap-14 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((projectCard) => (
-          <HeroBackHoverCard
-            key={projectCard.title}
-            title={projectCard.title}
-            slogan={projectCard.slogan}
-            description={projectCard.description}
-            stack={projectCard.stack}
-            logoSrc={projectCard.logoSrc}
-            wordmarkSrc={projectCard.wordmarkSrc}
-            links={projectCard.links}
-            achievements={projectCard.achievements}
-            coverSrc={projectCard.coverSrc}
-            brand={projectCard.brand}
-            expandedDescription={projectCard.expandedDescription}
-            interactive={false}
-            showLinksOnCompact
-          />
-        ))}
+        {projects.map((projectCard) => {
+          const isFeaturedFocus = projectCard.title === FEATURED_FOCUS_TITLE;
+
+          return (
+            <ProjectFocusCard
+              key={projectCard.title}
+              project={projectCard}
+              featured={isFeaturedFocus}
+              enableFullscreen={isFeaturedFocus}
+              showCompactLinks
+            />
+          );
+        })}
       </div>
     </section>
   );

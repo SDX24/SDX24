@@ -10,6 +10,7 @@
 // export { Card } from "./ui/card"
 
 export { HeroBackHoverCard } from "./cards/hero-back-hover-card";
+export { ProjectFocusCard } from "./cards/project-focus-card";
 export { HeroPhotoCard } from "./cards/hero-photo-card";
 export { CometCard } from "./ui/comet-card";
 export { MainTealCard } from "./ui/main-teal-card";

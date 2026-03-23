@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { MainTealCard } from "../ui/main-teal-card";
 import { ProjectCardCompact } from "../ui/project-card-compact";
 import { HeroBackHoverCard } from "./hero-back-hover-card";
-import { HeroCatchScene } from "./hero-catch-scene";
 
 type HeroPhotoCardProps = {
   className?: string;
@@ -136,7 +135,6 @@ const HeroPhotoCardInner = ({
     width: number;
   } | null>(null);
   const [resetToken, setResetToken] = useState(0);
-  const [showCatchScene, setShowCatchScene] = useState(false);
   const [targetPosition, setTargetPosition] = useState<{
     top: number;
     left: number;
@@ -296,16 +294,6 @@ const HeroPhotoCardInner = ({
   }, [isLanded, parkReleased, targetPosition]);
 
   useEffect(() => {
-    setShowCatchScene(false);
-  }, [resetToken]);
-
-  useEffect(() => {
-    if (!isLanded) {
-      setShowCatchScene(false);
-    }
-  }, [isLanded]);
-
-  useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotion = () => setPrefersReducedMotion(mediaQuery.matches);
     updateMotion();
@@ -320,9 +308,6 @@ const HeroPhotoCardInner = ({
   const shouldPin = isLanded && targetPosition && !parkReleased;
   const shouldAnchorToDocument = isLanded && parkReleased && releasedPosition;
   const disableMotion = isMoving || isFlipping;
-  const tandemUrl = process.env.NEXT_PUBLIC_TANDEM_URL || "";
-  const catchSceneTop = (targetPosition?.top ?? 120) + PINNED_LAND_OFFSET_Y - 120;
-  const catchSceneLeft = (targetPosition?.left ?? 0) - 320;
 
   return (
     <div
@@ -408,7 +393,6 @@ const HeroPhotoCardInner = ({
               expandedDescription={project.expandedDescription}
               interactive={isLanded && showBack}
               resetToken={resetToken}
-              onCardDismiss={() => setShowCatchScene(true)}
             />
           </div>
           <div className="invisible">
@@ -425,15 +409,6 @@ const HeroPhotoCardInner = ({
           </div>
         </div>
       </div>
-
-      {showCatchScene && isLanded ? (
-        <div
-          className="pointer-events-auto fixed z-40"
-          style={{ top: catchSceneTop, left: catchSceneLeft }}
-        >
-          <HeroCatchScene iframeUrl={tandemUrl} project={project} />
-        </div>
-      ) : null}
     </div>
   );
 };

@@ -66,7 +66,8 @@ SDX24/
 │       │   │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │       │   │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │       │   │   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
-│       │   │   │   └── projects-scroll-section.tsx # Projects heading + static Tandem/InsurFlow/Adult grid
+│       │   │   │   ├── project-focus-card.tsx # Reusable featured card wrapper with countdown-to-fullscreen morph
+│       │   │   │   └── projects-scroll-section.tsx # Projects heading + Tandem/InsurFlow/Adult grid using ProjectFocusCard
 │       │   │   ├── ui/        # UI primitives
 │       │   │   │   ├── comet-card.tsx # Core 3D card primitive
 │       │   │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
@@ -173,7 +174,8 @@ apps/web/src/
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
 │   │   ├── hero-photo-card.tsx # Landing hero scroll + flip card
-│   │   └── projects-scroll-section.tsx # Projects heading + static Tandem/InsurFlow/Adult grid
+│   │   ├── project-focus-card.tsx # Reusable featured card wrapper with countdown-to-fullscreen morph
+│   │   └── projects-scroll-section.tsx # Projects heading + Tandem/InsurFlow/Adult grid using ProjectFocusCard
 │   ├── ui/               # UI primitives
 │   │   ├── comet-card.tsx # Core 3D card primitive
 │   │   ├── main-teal-card.tsx # Teal-styled CometCard preset
