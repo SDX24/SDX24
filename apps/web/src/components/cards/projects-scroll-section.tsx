@@ -35,7 +35,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
     logoSrc: "/logos/rudi/favicon.png",
     compactLogoContainerClassName:
       "h-16 w-16 rounded-full border border-white/25 bg-white/10 p-1.5 shadow-[0_0_16px_rgba(59,130,246,0.2)]",
-    compactLogoImageClassName: "rounded-full object-cover",
+    compactLogoImageClassName: "rounded-full object-contain p-1.5 scale-75",
     rationaleBadgeClassName:
       "border-blue-300/65 bg-[linear-gradient(130deg,rgba(51,115,204,0.9),rgba(104,213,255,0.68))]",
     rationalePanelClassName:
@@ -109,7 +109,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
   };
 
   const expressDocsProject: ProjectWithRationale = {
-    title: "Express Documentation",
+    title: "Express Docs",
     slogan: "Developer education with structured examples",
     description:
       "A documentation site that explains Express fundamentals with concise examples, guided sections, and practical reference links.",

@@ -70,7 +70,7 @@ export const ProjectCardCompact = ({
             onRationaleToggle();
           }}
           className={cn(
-            "absolute right-0 top-0 z-20 h-14 w-24 [clip-path:polygon(22%_0,100%_0,100%_100%,0_100%)] rounded-bl-[1.2rem] border px-3 text-right text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_18px_rgba(239,111,108,0.28)] transition hover:brightness-110",
+            "absolute right-0 -top-1 z-20 flex h-7 w-24 items-center justify-end [clip-path:polygon(22%_0,100%_0,100%_100%,0_100%)] rounded-bl-[1rem] border pr-2 text-right text-[9px] font-bold uppercase leading-none tracking-[0.13em] text-white shadow-[0_0_18px_rgba(239,111,108,0.28)] transition hover:brightness-110",
             isRationaleOpen
               ? "border-brand-coral/70 bg-[linear-gradient(130deg,rgba(239,111,108,0.9),rgba(127,182,133,0.72))]"
               : (rationaleBadgeClassName ??

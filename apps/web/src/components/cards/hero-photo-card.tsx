@@ -29,7 +29,6 @@ type HeroPhotoCardProps = {
     wordmarkSrc?: string;
     links?: Array<{ label: string; href: string }>;
     achievements?: string[];
-    caseStudyBadge?: string;
     coverSrc?: string;
     brand?: {
       primary: string;
@@ -64,7 +63,6 @@ export const HeroPhotoCard = ({
       { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
     ],
     achievements: ["Trust", "Balance", "Support"],
-    caseStudyBadge: "Case Study",
     coverSrc: "/logos/tandem/cover.png",
     brand: {
       primary: "#3373CC",
@@ -354,11 +352,6 @@ const HeroPhotoCardInner = ({
         className
       )}
     >
-      {project.caseStudyBadge ? (
-        <div className="pointer-events-none absolute -right-[180px] top-1/2 z-30 -translate-y-1/2 rounded-[1.5rem] border border-brand-apricot/70 bg-[linear-gradient(120deg,rgba(242,197,124,0.3),rgba(221,174,126,0.2))] px-12 py-5 text-lg font-bold uppercase tracking-[0.18em] text-brand-apricot shadow-[0_0_36px_rgba(242,197,124,0.3)]">
-          {project.caseStudyBadge}
-        </div>
-      ) : null}
       <div style={{ perspective: "1200px" }}>
         <div ref={flipRef} className="relative" style={{ transformStyle: "preserve-3d" }}>
           <div

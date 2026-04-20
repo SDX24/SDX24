@@ -418,7 +418,7 @@ export default function Home() {
                   href="https://gitlab.com/SDX24"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-lg bg-brand-teal-medium px-8 py-3 font-bold text-white transition-colors hover:bg-brand-teal-dark"
+                  className="rounded-lg bg-brand-teal-light px-8 py-3 font-bold text-white transition-colors hover:bg-brand-teal"
                 >
                   View GitLab
                 </a>
@@ -432,7 +432,7 @@ export default function Home() {
                 </a>
                 <a
                   href="mailto:stefandorosh24@gmail.com"
-                  className="rounded-lg border-2 border-gray-500 px-8 py-3 font-bold text-gray-300 transition-colors hover:border-gray-400 hover:text-gray-200"
+                  className="rounded-lg border-2 border-brand-teal-light px-8 py-3 font-bold text-brand-clay transition-colors hover:bg-brand-teal-light/10"
                 >
                   Contact
                 </a>
