@@ -68,6 +68,8 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-overview-screen",
         },
       ],
+      resourceLabel: "Open Context Asset",
+      gradientVariant: "sky",
     },
     {
       title: "Role and Scope",
@@ -89,6 +91,8 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-profile-evidence",
         },
       ],
+      resourceLabel: "Open Scope Asset",
+      gradientVariant: "teal",
     },
     {
       title: "Challenge Breakdown",
@@ -119,6 +123,8 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-guest-privacy-flow",
         },
       ],
+      resourceLabel: "Open Challenge Resource",
+      gradientVariant: "amber",
     },
     {
       title: "Solution Strategy and Implementation",
@@ -149,6 +155,8 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-system-map",
         },
       ],
+      resourceLabel: "Open Solution Resource",
+      gradientVariant: "mint",
     },
     {
       title: "Process Evidence and Iteration",
@@ -187,6 +195,8 @@ const caseStudyProject = {
           placeholder: true,
         },
       ],
+      resourceLabel: "Open Process Resource",
+      gradientVariant: "slate",
     },
     {
       title: "Outcomes and Delivery Impact",
@@ -208,6 +218,8 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-before-after-flow",
         },
       ],
+      resourceLabel: "Open Outcomes Resource",
+      gradientVariant: "teal",
     },
   ],
   caseStudyOutcomes: [
@@ -218,32 +230,58 @@ const caseStudyProject = {
   ],
   caseStudyTeamCredits: [
     {
+      name: "Developer Placeholder 01",
+      role: "Backend / Integration",
+      team: "Development",
+      linkedin: "https://placeholder.example/linkedin-developer-01",
+      placeholder: true,
+    },
+    {
+      name: "Developer Placeholder 02",
+      role: "Frontend / Realtime",
+      team: "Development",
+      linkedin: "https://placeholder.example/linkedin-developer-02",
+      placeholder: true,
+    },
+    {
+      name: "Developer Placeholder 03",
+      role: "Full-Stack",
+      team: "Development",
+      linkedin: "https://placeholder.example/linkedin-developer-03",
+      placeholder: true,
+    },
+    {
       name: "Design Team Member 01",
       role: "UI/UX Designer",
+      team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-01",
       placeholder: true,
     },
     {
       name: "Design Team Member 02",
       role: "UI/UX Designer",
+      team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-02",
       placeholder: true,
     },
     {
       name: "Design Team Member 03",
       role: "UI/UX Designer",
+      team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-03",
       placeholder: true,
     },
     {
       name: "Design Team Member 04",
       role: "UI/UX Designer",
+      team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-04",
       placeholder: true,
     },
     {
       name: "Design Team Member 05",
       role: "UI/UX Designer",
+      team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-05",
       placeholder: true,
     },
