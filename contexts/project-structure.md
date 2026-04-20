@@ -148,6 +148,13 @@ SDX24/
 - `/test` - Hand-object catch scene sandbox using `NEXT_PUBLIC_TANDEM_URL`
 - `not-found.tsx` - Custom 404 page
 
+#### Tandem Case-Study Asset Note
+
+- Tandem case-study evidence now includes expanded hi-fi captures distributed by section:
+  - `challenge/`: monthly schedule and pending-work states
+  - `solution/`: upload flow, new-month state, nanny-availability state, single-message confirmation state
+  - `outcomes/`: childcare edit success state
+
 #### Adding New Pages
 
 ```

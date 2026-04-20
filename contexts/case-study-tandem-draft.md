@@ -84,7 +84,13 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 - Tech stack is collapsible with matched chip styling in collapsed and expanded states.
 - Live interaction preview uses a simplified embedded frame focused on direct in-page interaction visibility.
 - Section assets use real screenshots per section; Figma embeds are limited to Process section only.
+- Process section now uses one public Figma embed plus one exported hi-fi screenshot to avoid private-access blockers.
 - Process-section Figma embeds are cropped to hide left-side selector UI.
+- Context copy and visual labels now reference a single primary persona.
+- Added new hi-fi evidence screens and mapped them by section to reduce repeated screenshot usage:
+  - Challenge: monthly schedule board, pending work state
+  - Solution: upload schedule flow, new monthly state, nanny available state, single-message confirmation state
+  - Outcomes: childcare edit success month state
 - Placeholder previews are click-only with section-scoped expansion and reduced-bounce transitions.
 - Team credits show avatar images from `apps/web/public/case-study/members/`.
 
@@ -93,4 +99,4 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 - Competitive analysis statement included in context section:
   - "Competitive analysis revealed that while scheduling tools and childcare platforms exist, none effectively support shared childcare coordination between multiple families."
 - References include public sources for shiftwork/childcare context plus Tandem product links.
-- Process section retains Figma embed evidence (mid-fi flow + hi-fi screens).
+- Process section retains mixed evidence (public mid-fi Figma flow + exported hi-fi screen).

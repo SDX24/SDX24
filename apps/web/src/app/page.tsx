@@ -65,7 +65,7 @@ const caseStudyProject = {
       paragraphs: [
         "Tandem was created for parents in the trades who often deal with early starts, overtime, and sudden schedule changes. Competitive analysis revealed that while scheduling tools and childcare platforms exist, none effectively support shared childcare coordination between multiple families.",
         "Most existing products solve only one side of the problem. Calendar tools handle dates but not shared care responsibility, and childcare tools help with provider search but not ongoing schedule coordination. Tandem was designed to combine both in one mobile-first flow so families can plan, share, and adjust in the same place.",
-        "Persona research reinforced this direction by documenting recurring stress points in shift-based households, including sudden schedule changes, fragmented communication channels, and limited time to evaluate childcare options.",
+        "Primary persona research reinforced this direction by documenting recurring stress points in shift-based households, including sudden schedule changes, fragmented communication channels, and limited time to evaluate childcare options.",
       ],
       highlights: [
         "Primary user need: fast childcare planning around variable work schedules.",
@@ -105,12 +105,12 @@ const caseStudyProject = {
           imageAlt: "Tandem mobile screen with schedule cards and controls",
         },
         {
-          title: "Primary user personas",
+          title: "Primary user persona",
           caption:
-            "Research personas used to define goals, behavior patterns, and childcare pain points for shift-based families.",
-          src: "/case-study/tandem/context/tandem-user-personas.png",
+            "Primary persona profile used to define goals, behavior patterns, and childcare pain points for shift-based families.",
+          src: "/case-study/tandem/context/tandem-user-persona.png",
           imageAlt:
-            "Two Tandem user personas showing behavior, goals, frustrations, scenarios, and key tasks.",
+            "Primary Tandem user persona showing behavior, goals, frustrations, scenarios, and key tasks.",
         },
       ],
       gradientVariant: "sky",
@@ -142,6 +142,7 @@ const caseStudyProject = {
       paragraphs: [
         "A core challenge was making one experience work clearly on both mobile and desktop without changing how key flows behave. Early layouts created uneven hierarchy across screens, so users needed more visual guidance to understand current status and next actions.",
         "Existing tools also failed to solve shared childcare coordination in one place. Families had to switch between calendars, messaging apps, and service platforms, which made responsibility and availability harder to track during schedule changes.",
+        "Hi-fi scheduling passes exposed concrete friction points in monthly planning: unclear pending-work states, repetitive month switching, and weak visual feedback when users added or adjusted work blocks.",
       ],
       highlights: [
         "Problem: mobile and desktop hierarchy drifted -> Decision: switched to relative layout stacking -> Result: clearer cross-device readability.",
@@ -163,6 +164,20 @@ const caseStudyProject = {
           src: "/case-study/tandem/challenge/tandem-responsive-mobile.png",
           imageAlt: "Tandem mobile layout used for scheduling and sharing context",
         },
+        {
+          title: "Hi-fi monthly scheduling board",
+          caption:
+            "High-fidelity monthly planning surface used to validate day density, readability, and action hierarchy before implementation tuning.",
+          src: "/case-study/tandem/challenge/tandem-hifi-monthly-schedule.png",
+          imageAlt: "Tandem high-fidelity monthly scheduling board view",
+        },
+        {
+          title: "Hi-fi pending work state",
+          caption:
+            "Pending-work state used during design QA to ensure in-progress schedule edits remained visible and understandable.",
+          src: "/case-study/tandem/challenge/tandem-hifi-add-work-pending.png",
+          imageAlt: "Tandem high-fidelity pending work scheduling state",
+        },
       ],
       gradientVariant: "amber",
     },
@@ -172,6 +187,7 @@ const caseStudyProject = {
         "The solution combined scheduling and childcare coordination into one system so parents did not need multiple apps to manage the same task. The nanny-sharing feature was structured as one continuous journey: request, review, join, and schedule visibility.",
         "Flow states were designed to keep responsibility clear at each step. Parents can see open requests, member status, and shared availability without leaving the core schedule context.",
         "Features were separated into stable modules so updates to one part of the flow did not break other interactions. This kept the experience consistent while the sharing logic expanded.",
+        "Hi-fi implementation evidence now includes upload, month-switching, availability, and single-message states to confirm that each interaction path stayed coherent from entry to confirmation.",
       ],
       highlights: [
         "Competitive gap solved: scheduling and childcare coordination now happen in one place.",
@@ -208,6 +224,34 @@ const caseStudyProject = {
           src: "/case-study/tandem/solution/tandem-nanny-group-join.png",
           imageAlt: "Tandem group join and shared schedule state",
         },
+        {
+          title: "Schedule upload flow (hi-fi)",
+          caption:
+            "Upload pathway used to transfer schedule inputs into the monthly planning experience with clear progression feedback.",
+          src: "/case-study/tandem/solution/tandem-hifi-upload-schedule.png",
+          imageAlt: "Tandem high-fidelity upload schedule flow",
+        },
+        {
+          title: "New monthly schedule state (hi-fi)",
+          caption:
+            "Hi-fi month-creation view used to validate faster transition between planning cycles and cleaner initial setup.",
+          src: "/case-study/tandem/solution/tandem-hifi-new-monthly.png",
+          imageAlt: "Tandem high-fidelity new monthly schedule state",
+        },
+        {
+          title: "Nanny availability state (hi-fi)",
+          caption:
+            "Availability-focused state proving that care status remains visible during shared scheduling decisions.",
+          src: "/case-study/tandem/solution/tandem-hifi-nanny-available.png",
+          imageAlt: "Tandem high-fidelity nanny availability state",
+        },
+        {
+          title: "Single-message confirmation state (hi-fi)",
+          caption:
+            "Targeted messaging state used to keep confirmations concise and reduce ambiguity during coordination handoff.",
+          src: "/case-study/tandem/solution/tandem-hifi-apply-single-message.png",
+          imageAlt: "Tandem high-fidelity single message confirmation state",
+        },
       ],
       gradientVariant: "mint",
     },
@@ -215,7 +259,7 @@ const caseStudyProject = {
       title: "Process Evidence and Iteration",
       paragraphs: [
         "The team worked in weekly cycles with design and development review checkpoints. Each iteration focused on making key tasks easier to understand under time pressure.",
-        "Persona artifacts were used as a standing reference during planning and implementation reviews, helping prioritize which scheduling and sharing decisions had the highest impact on parent coordination workflows.",
+        "The primary persona artifact was used as a standing reference during planning and implementation reviews, helping prioritize which scheduling and sharing decisions had the highest impact on parent coordination workflows.",
         "When users struggled to read schedule state quickly, card hierarchy was updated to make status and action order clearer. This reduced scanning effort across both desktop and mobile screens.",
         "When the sharing path felt fragmented, the flow was consolidated into one request-to-join sequence. This gave users a cleaner path from discovery to shared schedule participation.",
       ],
@@ -226,17 +270,18 @@ const caseStudyProject = {
       ],
       assets: [
         {
-          title: "Figma user flow",
+          title: "Mid-fi component flow",
           caption:
-            "Final approved user-flow board used to align navigation and interaction sequence.",
+            "Left preview shows the mid-fi component-file pass used to map structure and expose weak interaction points before refinement.",
           figmaEmbedUrl:
-            "https://embed.figma.com/design/iTXfQJ6RyLxkGQFTo1kA4i/Tandem-Mid-fi?node-id=2042-349&embed-host=share&hide-ui=1",
+            "https://www.figma.com/design/iTXfQJ6RyLxkGQFTo1kA4i/Tandem-Mid-fi?node-id=2042-349",
         },
         {
-          title: "Figma high-fidelity screens",
-          caption: "Final high-fidelity screen set used as implementation and QA reference.",
+          title: "Hi-fi component flow",
+          caption:
+            "Right preview shows the hi-fi component-file pass that documents the improved path from rough, confusing states to clearer production-ready behavior.",
           figmaEmbedUrl:
-            "https://embed.figma.com/design/98OrmiJpKUOwDCuckMRcah/Tandem-High-fi?node-id=7483-13237&embed-host=share&hide-ui=1",
+            "https://www.figma.com/design/98OrmiJpKUOwDCuckMRcah/Tandem-High-fi?node-id=7483-13237",
         },
       ],
       gradientVariant: "slate",
@@ -246,6 +291,7 @@ const caseStudyProject = {
       paragraphs: [
         "The final experience reduced the main scheduling path from approximately 6 to 7 interactions down to 3 to 4 focused actions for common planning tasks. This made fast updates easier during time-sensitive schedule changes.",
         "Availability and group status became easier to interpret after shared states were consolidated into one visible flow. The final system also removed repeated switching between external calendar and chat tools for core coordination steps.",
+        "Final hi-fi validation screens confirmed that monthly childcare edits and scheduling confirmations were readable at a glance, helping preserve confidence during rapid plan changes.",
       ],
       highlights: [
         "Reduced core scheduling flow from ~6-7 steps to ~3-4 actions for common tasks.",
@@ -273,6 +319,13 @@ const caseStudyProject = {
             "Polished shared coordination state showing availability and responsibility visibility.",
           src: "/case-study/tandem/outcomes/tandem-outcome-sharing.png",
           imageAlt: "Final Tandem sharing outcome screen",
+        },
+        {
+          title: "Final childcare edit success state (hi-fi)",
+          caption:
+            "Completed monthly childcare edit state showing explicit success feedback after user updates were saved.",
+          src: "/case-study/tandem/outcomes/tandem-hifi-childcare-edit-success.png",
+          imageAlt: "Tandem high-fidelity monthly childcare edit success state",
         },
       ],
       gradientVariant: "teal",

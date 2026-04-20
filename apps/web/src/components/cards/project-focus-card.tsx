@@ -257,10 +257,30 @@ const CaseStudyPlaceholderAsset = ({
   const isContextSection = /context|problem/i.test(sectionTitle);
   const hasFigmaEmbed = Boolean(asset.figmaEmbedUrl);
   const hasImageAsset = Boolean(asset.src);
+  const [resolvedAspectRatio, setResolvedAspectRatio] = useState<number>(16 / 9);
+  const [imageNaturalSize, setImageNaturalSize] = useState<{ width: number; height: number }>({
+    width: 1600,
+    height: 900,
+  });
+  const collapsedMaxHeight = 360;
+  const expandedMaxHeight = 560;
+  const activeMaxHeight = isExpanded ? expandedMaxHeight : collapsedMaxHeight;
+  const maxHeightByImage = Math.min(activeMaxHeight, imageNaturalSize.height);
+  const widthByHeight = Math.round(maxHeightByImage * resolvedAspectRatio);
+  const maxWidthByImage = Math.min(widthByHeight, imageNaturalSize.width);
   const figmaEmbedSrc = asset.figmaEmbedUrl
-    ? asset.figmaEmbedUrl.includes("hide-ui=1")
-      ? asset.figmaEmbedUrl
-      : `${asset.figmaEmbedUrl}${asset.figmaEmbedUrl.includes("?") ? "&" : "?"}hide-ui=1`
+    ? (() => {
+        const rawUrl = asset.figmaEmbedUrl.trim();
+
+        // Use the stable Figma embed gateway when given a share/design URL.
+        if (!rawUrl.includes("embed.figma.com") && rawUrl.includes("figma.com/")) {
+          return `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(rawUrl)}`;
+        }
+
+        return rawUrl.includes("hide-ui=1")
+          ? rawUrl
+          : `${rawUrl}${rawUrl.includes("?") ? "&" : "?"}hide-ui=1`;
+      })()
     : undefined;
 
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
@@ -284,10 +304,14 @@ const CaseStudyPlaceholderAsset = ({
     >
       <div
         className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${
-          isExpanded
-            ? "min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] border-brand-apricot/45 bg-black/35"
-            : `${isContextSection ? "min-h-[260px] sm:min-h-[300px]" : "min-h-[210px] sm:min-h-[240px]"} border-dashed border-white/20 bg-black/25`
-        }`}
+          hasImageAsset
+            ? isExpanded
+              ? "border-dashed border-brand-apricot/45 bg-black/25"
+              : "border-dashed border-white/20 bg-black/25"
+            : isExpanded
+              ? "min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] border-brand-apricot/45 bg-black/35"
+              : `${isContextSection ? "min-h-[260px] sm:min-h-[300px]" : "min-h-[210px] sm:min-h-[240px]"} border-dashed border-white/20 bg-black/25`
+        } ${hasImageAsset ? "mx-auto w-fit" : ""}`}
       >
         {hasFigmaEmbed ? (
           <div className="relative overflow-hidden rounded-xl border border-white/15 bg-black/30">
@@ -301,9 +325,11 @@ const CaseStudyPlaceholderAsset = ({
           </div>
         ) : hasImageAsset ? (
           <div
-            className={`w-full overflow-hidden rounded-xl border border-white/15 bg-black/30 ${
-              isExpanded ? "h-[700px]" : "h-[480px]"
-            }`}
+            className="mx-auto overflow-hidden rounded-xl border border-white/15 bg-black/30"
+            style={{
+              aspectRatio: resolvedAspectRatio,
+              width: `min(100%, ${maxWidthByImage}px)`,
+            }}
           >
             <Image
               src={asset.src ?? ""}
@@ -312,6 +338,15 @@ const CaseStudyPlaceholderAsset = ({
               height={900}
               className="h-full w-full object-contain"
               loading="lazy"
+              onLoadingComplete={(image) => {
+                if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+                  setImageNaturalSize({
+                    width: image.naturalWidth,
+                    height: image.naturalHeight,
+                  });
+                  setResolvedAspectRatio(image.naturalWidth / image.naturalHeight);
+                }
+              }}
             />
           </div>
         ) : (
@@ -481,11 +516,11 @@ const CaseStudyLongForm = ({
                         ))}
                       </div>
                     </div>
-                    <div className="mt-1 flex justify-between text-sm font-semibold tracking-[0.08em] text-gray-300">
-                      <span>4</span>
-                      <span>8</span>
-                      <span>12</span>
-                      <span>16</span>
+                    <div className="mt-1 flex justify-between px-[2px] text-sm font-semibold tracking-[0.08em] text-gray-300">
+                      <span className="inline-flex w-3.5 justify-center">4</span>
+                      <span className="inline-flex w-3.5 justify-center">8</span>
+                      <span className="inline-flex w-3.5 justify-center">12</span>
+                      <span className="inline-flex w-3.5 justify-center">16</span>
                     </div>
                   </div>
                 </div>
