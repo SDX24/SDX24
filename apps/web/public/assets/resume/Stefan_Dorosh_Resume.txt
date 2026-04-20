@@ -1,0 +1,55 @@
+Stefan Dorosh
+Full Stack Web Developer
+stefandorosh24@gmail.com | 604-977-1604
+stefandorosh.com | github.com/SDX24 | linkedin.com/in/stefan-dorosh
+
+SKILLS
+Languages & Frameworks:
+HTML, CSS / Tailwind, JavaScript, TypeScript, React, Next.js, Node.js, PHP, C#, .NET, MongoDB, MySQL, PostgreSQL
+
+Tools & Platforms:
+Git, GitHub, VS Code, Figma, Photoshop, Vercel, Render, Jira, Trello, Slack, Linux, Framer, MySQL Workbench
+
+Libraries & Technologies:
+Express, Clerk, Prisma, REST APIs, CI/CD, Cloud Services, S3 Buckets, Authentication, DevOps basics
+
+Soft Skills:
+Agile workflow, UI/UX design, SEO, Accessibility, E-commerce systems, Networking fundamentals, Team collaboration, Communication
+
+EDUCATION
+Diploma, Full-Stack Web Development
+Sep 2024 - May 2026
+British Columbia Institute of Technology (BCIT)
+
+International Baccalaureate Diploma Programme
+2021 - May 2024
+Canggu Community School
+
+PROJECTS
+Tandem - Lead Developer
+Mobile web app helping parents in trades manage childcare scheduling
+https://tandem-blog.vercel.app
+- Led development of core application architecture.
+- Implemented real-time synchronized user sessions and live messaging.
+- Collaborated with teammates using Agile workflow.
+- Solved complex synchronization issues between users and schedules.
+
+InsurFlow - Full Stack Developer
+AI-powered InsurTech SaaS platform for life insurance advisors (greenfield project)
+https://github.com/Vero-Ventures/insurflow
+- Building a modern financial modeling platform to replace legacy spreadsheet workflows.
+- Established DevOps guardrails and engineering standards: linting, formatting, commit rules, and CI checks.
+- Working within an industry-style environment focused on scalability, security, and product-quality practices.
+
+EXPERIENCE
+W3rlds - UI/UX Web Designer Intern
+Remote | Aug 2024
+- Designed layouts in Figma and Framer.
+- Improved usability based on user feedback.
+- Contributed to SEO optimization and layout structure.
+
+Platform 7 Coffee - Barista
+Vancouver, BC | Jul 2025 - Present
+- Provide fast, friendly customer service.
+- Handle POS and multitask efficiently.
+- Communicate clearly with customers and team.

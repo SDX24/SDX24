@@ -1,6 +1,13 @@
 module.exports = [
   {
-    ignores: ["apps/web/next-env.d.ts"],
+    ignores: [
+      "apps/web/next-env.d.ts",
+      "apps/web/.next/**",
+      "**/.next/**",
+      "**/.turbo/**",
+      "**/dist/**",
+      "**/coverage/**",
+    ],
   },
   require("@next/eslint-plugin-next").configs["core-web-vitals"],
   {
