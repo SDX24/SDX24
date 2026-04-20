@@ -2,7 +2,6 @@
 
 import {
   type KeyboardEvent as ReactKeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -16,10 +15,14 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-m
 import { createPortal } from "react-dom";
 import {
   LuArrowLeft,
+  LuChevronDown,
+  LuChevronUp,
   LuExternalLink,
   LuLayoutTemplate,
+  LuPencilRuler,
   LuScrollText,
   LuSmartphone,
+  LuUser,
 } from "react-icons/lu";
 
 import { HeroBackHoverCard } from "./hero-back-hover-card";
@@ -44,8 +47,6 @@ type CaseStudySection = {
   highlights?: string[];
   assets?: CaseStudyAsset[];
   citations?: CaseStudyCitation[];
-  resourceHref?: string;
-  resourceLabel?: string;
   gradientVariant?: "sky" | "mint" | "teal" | "slate" | "amber";
 };
 
@@ -62,7 +63,6 @@ type CaseStudyPreview = {
   summary: string;
   iframeUrl: string;
   liveUrl: string;
-  sandboxHref?: string;
 };
 
 export type ProjectData = {
@@ -85,6 +85,7 @@ export type ProjectData = {
   caseStudyHeading?: string;
   caseStudySummary?: string;
   caseStudyRole?: string;
+  caseStudyRoleResponsibilities?: string[];
   caseStudyDraft?: string[];
   caseStudyTimeline?: string;
   caseStudyTeam?: string;
@@ -155,13 +156,6 @@ const getCaseStudySectionIcon = (title: string) => {
     return LuSmartphone;
   }
   return LuScrollText;
-};
-
-const isNestedInteractiveTarget = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement)) return false;
-  return Boolean(
-    target.closest("a,button,iframe,input,textarea,select,[data-stop-card-click='true']")
-  );
 };
 
 const GRADIENT_VARIANT_ORDER: Array<keyof typeof CASE_STUDY_GRADIENTS> = [
@@ -238,6 +232,65 @@ const FullscreenHeader = ({
   </div>
 );
 
+const CaseStudyPlaceholderAsset = ({
+  asset,
+  sectionTitle,
+  isExpanded,
+  onToggle,
+}: {
+  asset: CaseStudyAsset;
+  sectionTitle: string;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) => {
+  const isContextSection = /context|problem/i.test(sectionTitle);
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    onToggle();
+  };
+
+  return (
+    <motion.button
+      layout
+      type="button"
+      onClick={onToggle}
+      onKeyDown={handleKeyDown}
+      whileTap={{ scale: 0.996 }}
+      className={`group w-full cursor-pointer space-y-3 rounded-2xl border bg-black/20 p-4 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-apricot/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+        isExpanded
+          ? "border-brand-apricot/55 shadow-[0_16px_30px_rgba(242,197,124,0.16)]"
+          : "border-white/10"
+      }`}
+      aria-label={`Toggle placeholder preview for ${asset.title}`}
+      aria-pressed={isExpanded}
+    >
+      <div
+        className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${
+          isExpanded
+            ? "min-h-[520px] sm:min-h-[620px] border-brand-apricot/45 bg-black/35"
+            : `${isContextSection ? "min-h-[260px] sm:min-h-[300px]" : "min-h-[210px] sm:min-h-[240px]"} border-dashed border-white/20 bg-black/25`
+        }`}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_10%,rgba(51,115,204,0.28),transparent_44%),radial-gradient(circle_at_84%_4%,rgba(242,197,124,0.18),transparent_38%),linear-gradient(170deg,rgba(255,255,255,0.08),rgba(255,255,255,0))]" />
+        <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/45 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-clay">
+          {isExpanded ? "Preview Zoomed" : "Preview"}
+        </div>
+        <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
+          <LuLayoutTemplate className="h-6 w-6 text-brand-apricot" aria-hidden="true" />
+          <p className="text-sm font-semibold text-gray-100">
+            {asset.placeholder ? "Placeholder visual" : "Visual preview"}
+          </p>
+          <p className="text-xs text-gray-300">{asset.title}</p>
+        </div>
+      </div>
+      <p className="text-sm font-semibold text-white">{asset.title}</p>
+      <p className="text-sm leading-relaxed text-gray-300">{asset.caption}</p>
+    </motion.button>
+  );
+};
+
 const CaseStudyLongForm = ({
   project,
   cardId,
@@ -256,8 +309,13 @@ const CaseStudyLongForm = ({
   const caseStudyHeading = project.caseStudyHeading ?? `${project.title} Case Study`;
   const caseStudySummary = project.caseStudySummary ?? fullscreenDescription;
   const caseStudyStack = project.caseStudyStack ?? project.stack;
+  const caseStudyRoleResponsibilities = project.caseStudyRoleResponsibilities ?? [];
   const hasCaseStudyLinks = Boolean(project.links?.length);
   const caseStudyPreview = project.caseStudyPreview;
+  const [isStackExpanded, setIsStackExpanded] = useState(false);
+  const [expandedAssetBySection, setExpandedAssetBySection] = useState<
+    Record<string, string | null>
+  >({});
   const [activeSection, setActiveSection] = useState(caseStudySections[0]?.title ?? "Case Study");
   const isTandemCaseStudy = cardId === TANDEM_FOCUS_ID;
   const hasOutcomeNarrativeSection = caseStudySections.some((section) =>
@@ -268,28 +326,13 @@ const CaseStudyLongForm = ({
     setActiveSection(caseStudySections[0]?.title ?? "Case Study");
   }, [caseStudySections]);
 
-  const openExternalResource = useCallback((href: string) => {
-    window.open(href, "_blank", "noopener,noreferrer");
-  }, []);
-
-  const onResourceCardClick = useCallback(
-    (event: ReactMouseEvent<HTMLElement>, href?: string) => {
-      if (!href) return;
-      if (isNestedInteractiveTarget(event.target)) return;
-      openExternalResource(href);
-    },
-    [openExternalResource]
-  );
-
-  const onResourceCardKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>, href?: string) => {
-      if (!href) return;
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      openExternalResource(href);
-    },
-    [openExternalResource]
-  );
+  useEffect(() => {
+    const nextState: Record<string, string | null> = {};
+    caseStudySections.forEach((section) => {
+      nextState[section.title] = null;
+    });
+    setExpandedAssetBySection(nextState);
+  }, [caseStudySections]);
 
   useEffect(() => {
     if (!caseStudySections.length) return;
@@ -322,42 +365,44 @@ const CaseStudyLongForm = ({
   }, [caseStudySections]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-8 sm:pb-10">
+    <div className="mx-auto w-full max-w-[90rem] px-4 pb-10 sm:px-8 lg:px-10">
       {hasStructuredCaseStudy ? (
-        <div className="sticky top-[4.4rem] z-30 mb-7 flex items-center justify-center">
-          <div className="w-full max-w-5xl rounded-2xl border border-white/25 bg-[radial-gradient(circle_at_20%_0%,rgba(51,115,204,0.3),transparent_35%),linear-gradient(160deg,rgba(8,13,24,0.9),rgba(6,10,20,0.92))] px-3 py-3 shadow-[0_16px_44px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
-            <div className="mb-2 flex items-center justify-between gap-4">
-              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-clay">
+        <div className="sticky top-[4.5rem] z-30 mb-6 flex items-center justify-center">
+          <div className="w-full max-w-[84rem] rounded-2xl border border-white/25 bg-[radial-gradient(circle_at_50%_-30%,rgba(51,115,204,0.42),transparent_48%),linear-gradient(165deg,rgba(8,14,26,0.92),rgba(6,11,22,0.94))] px-3 py-2.5 shadow-[0_18px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
+            <div className="mb-1.5 flex items-center justify-between gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-clay">
                 Narrative Map
               </span>
-              <span className="rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-300">
+              <span className="rounded-full border border-brand-apricot/40 bg-brand-apricot/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-apricot shadow-[0_0_16px_rgba(242,197,124,0.32)]">
                 {activeSection}
               </span>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {caseStudySections.map((section) => {
-                const isActive = activeSection === section.title;
-                return (
-                  <a
-                    key={section.title}
-                    href={`#${toSectionId(section.title)}`}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                      isActive
-                        ? "border-brand-apricot/50 bg-brand-apricot/25 text-brand-apricot"
-                        : "border-white/15 bg-white/5 text-gray-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    {section.title}
-                  </a>
-                );
-              })}
+            <div className="overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex min-w-max gap-2">
+                {caseStudySections.map((section) => {
+                  const isActive = activeSection === section.title;
+                  return (
+                    <a
+                      key={section.title}
+                      href={`#${toSectionId(section.title)}`}
+                      className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-semibold transition ${
+                        isActive
+                          ? "border-brand-apricot/55 bg-[linear-gradient(120deg,rgba(242,197,124,0.42),rgba(221,174,126,0.32))] text-white shadow-[0_0_20px_rgba(242,197,124,0.35)]"
+                          : "border-white/15 bg-white/5 text-gray-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      {section.title}
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       ) : null}
 
       <div
-        className={`mx-auto mt-8 max-w-5xl space-y-5 rounded-[2rem] border border-white/15 p-6 sm:p-8 ${
+        className={`mx-auto mt-8 max-w-[84rem] space-y-6 rounded-[2rem] border border-white/15 p-6 shadow-[0_24px_54px_rgba(0,0,0,0.35)] sm:p-8 ${
           isTandemCaseStudy ? CASE_STUDY_GRADIENTS.sky : CASE_STUDY_GRADIENTS.slate
         }`}
       >
@@ -381,30 +426,88 @@ const CaseStudyLongForm = ({
             </h2>
             <p className="text-base leading-relaxed text-gray-200 sm:text-lg">{caseStudySummary}</p>
 
-            <div className="grid gap-3 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,0.95fr)_minmax(0,0.95fr)]">
-              <div className="rounded-2xl border border-white/10 bg-black/35 p-5 shadow-[0_10px_24px_rgba(0,0,0,0.26)]">
+            <div className="grid gap-3 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)] lg:items-stretch">
+              <div className="rounded-2xl border border-white/10 bg-black/35 p-5 shadow-[0_12px_26px_rgba(0,0,0,0.28)] sm:p-6">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
                   Role
                 </p>
-                <p className="mt-2 text-sm font-medium leading-relaxed text-gray-100 sm:text-base">
+                <p className="mt-2 text-xl font-bold tracking-tight text-white sm:text-2xl">
                   {project.caseStudyRole ?? "Role pending"}
                 </p>
+                {caseStudyRoleResponsibilities.length ? (
+                  <ul className="mt-4 grid gap-2">
+                    {caseStudyRoleResponsibilities.map((item) => (
+                      <li
+                        key={item}
+                        className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm leading-relaxed text-gray-100"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm leading-relaxed text-gray-100">
+                    Responsibility details pending.
+                  </p>
+                )}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Timeline
-                </p>
-                <p className="mt-1 text-sm font-medium text-gray-100 sm:text-[15px]">
-                  {project.caseStudyTimeline ?? "Timeline placeholder"}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Team
-                </p>
-                <p className="mt-1 text-sm font-medium text-gray-100 sm:text-[15px]">
-                  {project.caseStudyTeam ?? "Team placeholder"}
-                </p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="rounded-xl border border-white/10 bg-black/30 px-4 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                    Timeline
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-gray-100">
+                    {project.caseStudyTimeline ?? "Timeline placeholder"}
+                  </p>
+                  <div className="mt-2.5">
+                    <div className="h-1.5 w-full rounded-full bg-white/10">
+                      <div className="h-1.5 w-[82%] rounded-full bg-gradient-to-r from-brand-apricot to-brand-clay" />
+                    </div>
+                    <div className="mt-1 flex justify-between text-[10px] uppercase tracking-[0.12em] text-gray-400">
+                      <span>Start</span>
+                      <span>Delivery</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.getElementById("case-study-team-credits")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
+                  className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-left transition hover:border-brand-apricot/50"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                    Team
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-gray-100">
+                    {project.caseStudyTeam ?? "Team placeholder"}
+                  </p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="inline-flex gap-1.5">
+                      {Array.from({ length: 3 }).map((_, index) => (
+                        <span
+                          key={`dev-${index}`}
+                          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-apricot/45 bg-black/30 text-brand-apricot"
+                        >
+                          <LuUser className="h-3 w-3" aria-hidden="true" />
+                        </span>
+                      ))}
+                    </span>
+                    <span className="inline-flex gap-1.5">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <span
+                          key={`design-${index}`}
+                          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-brand-clay/45 bg-black/30 text-brand-clay"
+                        >
+                          <LuPencilRuler className="h-3 w-3" aria-hidden="true" />
+                        </span>
+                      ))}
+                    </span>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -413,17 +516,17 @@ const CaseStudyLongForm = ({
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
                   Project Links
                 </p>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {project.links?.map((link) => (
                     <a
                       key={`${link.label}-${link.href}`}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group rounded-2xl border border-brand-apricot/30 bg-black/35 px-4 py-3 text-sm font-semibold text-gray-100 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:border-brand-apricot hover:text-brand-apricot"
+                      className="group flex min-h-[64px] items-center justify-center rounded-2xl border border-brand-apricot/30 bg-black/35 px-4 py-3 text-center text-sm font-semibold text-gray-100 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:border-brand-apricot hover:text-brand-apricot"
                       data-stop-card-click="true"
                     >
-                      <span className="flex items-center justify-between gap-2">
+                      <span className="flex items-center justify-center gap-2">
                         <span>{link.label}</span>
                         <LuExternalLink
                           className="h-4 w-4 text-brand-clay transition group-hover:text-brand-apricot"
@@ -438,25 +541,55 @@ const CaseStudyLongForm = ({
 
             {caseStudyStack.length ? (
               <div className="space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Stack
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {caseStudyStack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-xl border border-white/15 bg-black/35 px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-gray-200"
+                <button
+                  type="button"
+                  onClick={() => setIsStackExpanded((current) => !current)}
+                  className="flex w-full items-center justify-between rounded-2xl border border-white/15 bg-black/25 px-4 py-3 text-left transition hover:border-brand-apricot/60"
+                >
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                      Stack
+                    </p>
+                    {!isStackExpanded ? (
+                      <p className="mt-1 text-sm font-semibold text-gray-200">
+                        {caseStudyStack[0]} + {Math.max(caseStudyStack.length - 1, 0)} more
+                      </p>
+                    ) : null}
+                  </div>
+                  {isStackExpanded ? (
+                    <LuChevronUp className="h-4.5 w-4.5 text-brand-apricot" aria-hidden="true" />
+                  ) : (
+                    <LuChevronDown className="h-4.5 w-4.5 text-brand-apricot" aria-hidden="true" />
+                  )}
+                </button>
+                <AnimatePresence initial={false}>
+                  {isStackExpanded ? (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="overflow-hidden"
                     >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                      <div className="grid gap-2 pt-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+                        {caseStudyStack.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-xl border border-white/15 bg-black/35 px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-gray-200"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
               </div>
             ) : null}
 
             {caseStudyPreview ? (
               <section
-                className={`space-y-4 rounded-3xl border border-white/20 p-5 shadow-[0_14px_28px_rgba(0,0,0,0.3)] sm:p-6 ${CASE_STUDY_GRADIENTS.teal}`}
+                className={`space-y-4 rounded-3xl border border-white/20 p-5 shadow-[0_18px_34px_rgba(0,0,0,0.34)] sm:p-6 ${CASE_STUDY_GRADIENTS.teal}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
@@ -477,55 +610,47 @@ const CaseStudyLongForm = ({
                     >
                       Open Live <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                     </a>
-                    {caseStudyPreview.sandboxHref ? (
-                      <a
-                        href={caseStudyPreview.sandboxHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-sm font-semibold text-gray-100 transition hover:border-brand-apricot hover:text-brand-apricot"
-                        data-stop-card-click="true"
-                      >
-                        Open Sandbox <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                      </a>
-                    ) : null}
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed text-gray-200">{caseStudyPreview.summary}</p>
-                <div className="overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45">
-                  <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-black/45 px-3 py-2 text-xs text-gray-300">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-                      <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-                      <a
-                        href={caseStudyPreview.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex h-3 w-3 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-400 text-[8px] text-emerald-950 transition hover:scale-110"
-                        aria-label="Open Tandem live app in a new tab"
-                        data-stop-card-click="true"
-                      >
-                        +
-                      </a>
+                <div className="mx-auto w-full max-w-[760px] space-y-3">
+                  <p className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center text-sm leading-relaxed text-gray-200">
+                    {caseStudyPreview.summary}
+                  </p>
+                  <div className="overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45">
+                    <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-black/45 px-3 py-2 text-xs text-gray-300">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+                        <a
+                          href={caseStudyPreview.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-400 text-[9px] text-emerald-950 transition hover:scale-110"
+                          aria-label="Open Tandem live app in a new tab"
+                          data-stop-card-click="true"
+                        >
+                          +
+                        </a>
+                      </div>
+                      <span className="truncate">{caseStudyPreview.iframeUrl}</span>
+                      <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-brand-clay">
+                        Embedded
+                      </span>
                     </div>
-                    <span className="truncate">{caseStudyPreview.iframeUrl}</span>
-                    <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-brand-clay">
-                      Embedded
-                    </span>
-                  </div>
-
-                  <div className="bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] px-4 py-5 sm:px-6 sm:py-6">
-                    <div className="mx-auto w-full max-w-[360px] rounded-[2.35rem] border-[10px] border-[#1c2433] bg-[#0d1424] p-2 shadow-[0_24px_48px_rgba(0,0,0,0.38)]">
-                      <div className="relative">
-                        <div className="absolute left-1/2 top-0 z-10 h-4 w-24 -translate-x-1/2 rounded-b-full bg-black/40" />
-                        <div className="overflow-hidden rounded-[1.8rem] border border-black/35 bg-white">
-                          <iframe
-                            src={caseStudyPreview.iframeUrl}
-                            title="Tandem interactive preview"
-                            className="h-[560px] w-full bg-white"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                          />
+                    <div className="bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] px-3 py-4 sm:px-6 sm:py-6">
+                      <div className="mx-auto w-full max-w-[420px] rounded-[2.35rem] border-[12px] border-[#1c2433] bg-[#0d1424] p-2 shadow-[0_24px_44px_rgba(0,0,0,0.38)]">
+                        <div className="relative">
+                          <div className="absolute left-1/2 top-0 z-10 h-4 w-24 -translate-x-1/2 rounded-b-full bg-black/40" />
+                          <div className="overflow-hidden rounded-[2rem] border border-black/35 bg-white">
+                            <iframe
+                              src={caseStudyPreview.iframeUrl}
+                              title="Tandem interactive preview"
+                              className="h-[min(56vh,540px)] w-full bg-white"
+                              loading="lazy"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -550,26 +675,18 @@ const CaseStudyLongForm = ({
       </div>
 
       {hasStructuredCaseStudy ? (
-        <div className="mx-auto mt-10 max-w-5xl space-y-6">
+        <div className="mx-auto mt-10 max-w-[84rem] space-y-6">
           {caseStudySections.map((section, index) => {
             const gradientKey: keyof typeof CASE_STUDY_GRADIENTS =
               section.gradientVariant ??
               GRADIENT_VARIANT_ORDER[index % GRADIENT_VARIANT_ORDER.length]!;
             const sectionGradient = CASE_STUDY_GRADIENTS[gradientKey];
-            const sectionHref = section.resourceHref ?? section.assets?.[0]?.href;
-            const isResourceCard = Boolean(sectionHref);
             const isOutcomeSection = /outcome|impact/i.test(section.title);
             return (
               <section
                 key={section.title}
                 id={toSectionId(section.title)}
-                role={isResourceCard ? "link" : undefined}
-                tabIndex={isResourceCard ? 0 : undefined}
-                onClick={(event) => onResourceCardClick(event, sectionHref)}
-                onKeyDown={(event) => onResourceCardKeyDown(event, sectionHref)}
-                className={`space-y-4 rounded-3xl border border-white/15 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.34)] sm:p-8 ${sectionGradient} ${
-                  isResourceCard ? "cursor-pointer transition hover:-translate-y-0.5" : ""
-                }`}
+                className={`space-y-4 rounded-3xl border border-white/15 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.34)] sm:p-8 ${sectionGradient}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -585,18 +702,6 @@ const CaseStudyLongForm = ({
                       {section.title}
                     </h3>
                   </div>
-                  {sectionHref ? (
-                    <a
-                      href={sectionHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-brand-clay transition hover:border-brand-apricot hover:text-brand-apricot"
-                      data-stop-card-click="true"
-                    >
-                      {section.resourceLabel ?? "Open Resource"}
-                      <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                  ) : null}
                 </div>
 
                 {section.paragraphs.map((paragraph) => (
@@ -621,50 +726,39 @@ const CaseStudyLongForm = ({
                   </ul>
                 ) : null}
 
-                {section.assets?.length ? (
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {section.assets.map((asset) => (
-                      <article
-                        key={`${asset.title}-${asset.caption}`}
-                        role={asset.href ? "link" : undefined}
-                        tabIndex={asset.href ? 0 : undefined}
-                        onClick={(event) => onResourceCardClick(event, asset.href)}
-                        onKeyDown={(event) => onResourceCardKeyDown(event, asset.href)}
-                        className={`space-y-3 rounded-2xl border border-white/10 bg-black/20 p-4 ${
-                          asset.href
-                            ? "cursor-pointer transition hover:border-brand-apricot/40"
-                            : ""
-                        }`}
-                      >
+                {section.assets?.length
+                  ? (() => {
+                      const expandedAssetTitle = expandedAssetBySection[section.title] ?? null;
+                      const visibleAssets = expandedAssetTitle
+                        ? section.assets.filter((asset) => asset.title === expandedAssetTitle)
+                        : section.assets;
+
+                      return (
                         <div
-                          className={`flex items-center justify-center rounded-xl border border-dashed border-white/20 bg-gradient-to-b from-white/10 to-white/0 p-4 text-center ${
-                            /context|problem/i.test(section.title)
-                              ? "min-h-[300px]"
-                              : "min-h-[220px]"
-                          }`}
+                          className={`grid gap-4 ${expandedAssetTitle ? "grid-cols-1" : "md:grid-cols-2"}`}
                         >
-                          <p className="text-sm font-medium text-gray-300">
-                            {asset.placeholder ? "Placeholder visual" : "Visual preview"}
-                            <span className="mt-1 block text-xs text-gray-400">{asset.title}</span>
-                          </p>
+                          {visibleAssets.map((asset) => (
+                            <CaseStudyPlaceholderAsset
+                              key={`${asset.title}-${asset.caption}`}
+                              asset={asset}
+                              sectionTitle={section.title}
+                              isExpanded={expandedAssetTitle === asset.title}
+                              onToggle={() => {
+                                setExpandedAssetBySection((current) => {
+                                  const currentExpanded = current[section.title] ?? null;
+                                  return {
+                                    ...current,
+                                    [section.title]:
+                                      currentExpanded === asset.title ? null : asset.title,
+                                  };
+                                });
+                              }}
+                            />
+                          ))}
                         </div>
-                        <p className="text-sm font-semibold text-white">{asset.title}</p>
-                        <p className="text-sm leading-relaxed text-gray-300">{asset.caption}</p>
-                        {asset.href ? (
-                          <a
-                            href={asset.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={CASE_STUDY_LINK_CLASS}
-                            data-stop-card-click="true"
-                          >
-                            {asset.placeholder ? "Open placeholder resource" : "Open resource"}
-                          </a>
-                        ) : null}
-                      </article>
-                    ))}
-                  </div>
-                ) : null}
+                      );
+                    })()
+                  : null}
 
                 {section.citations?.length ? (
                   <div className="space-y-2">
@@ -730,6 +824,7 @@ const CaseStudyLongForm = ({
 
           {project.caseStudyTeamCredits?.length ? (
             <section
+              id="case-study-team-credits"
               className={`space-y-4 rounded-3xl border border-white/15 p-6 sm:p-8 ${CASE_STUDY_GRADIENTS.mint}`}
             >
               <h3 className="text-2xl font-semibold text-white sm:text-3xl">Team Credits</h3>
@@ -740,9 +835,8 @@ const CaseStudyLongForm = ({
                     className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200 sm:text-base"
                   >
                     <span className="font-semibold text-white">{credit.name}</span>
-                    {credit.role ? <span className="text-gray-300"> - {credit.role}</span> : null}
                     {credit.team ? (
-                      <span className="ml-2 rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-clay">
+                      <span className="ml-2 rounded-full border border-brand-apricot/45 bg-brand-apricot/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-apricot">
                         {credit.team}
                       </span>
                     ) : null}
@@ -852,7 +946,7 @@ const CaseStudyLongForm = ({
       ) : null}
 
       {hasStructuredCaseStudy ? (
-        <p className="mx-auto mt-8 max-w-5xl text-xs text-gray-400" data-case-study-id={cardId}>
+        <p className="mx-auto mt-8 max-w-[84rem] text-xs text-gray-400" data-case-study-id={cardId}>
           Some visual assets and citations are placeholders and will be replaced during final
           content packaging.
         </p>

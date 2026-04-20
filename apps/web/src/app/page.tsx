@@ -15,10 +15,9 @@ const caseStudyProject = {
   logoSrc: "/logos/tandem/tandem-logo.svg",
   wordmarkSrc: "/logos/tandem/wordmark.svg",
   links: [
-    { label: "Live", href: "https://tandem-app.com" },
-    { label: "Repo", href: "https://github.com/IDSP-TRADECARE/Tandem" },
-    { label: "Blog", href: "https://tandem-blog.vercel.app" },
-    { label: "Figma (Placeholder)", href: "https://placeholder.example/tandem-figma" },
+    { label: "Live Link", href: "https://tandem-app.com" },
+    { label: "Repository Link", href: "https://github.com/IDSP-TRADECARE/Tandem" },
+    { label: "Blog Site Link", href: "https://tandem-blog.vercel.app" },
   ],
   achievements: ["Trust", "Balance", "Support"],
   coverSrc: "/logos/tandem/cover.png",
@@ -33,19 +32,31 @@ const caseStudyProject = {
   caseStudyHeading: "Tandem: Case Study",
   caseStudySummary:
     "Tandem is a mobile web application designed for parents in the trades who need to coordinate childcare around changing work schedules. The case study documents problem framing, challenge constraints, implementation strategy, and delivery outcomes from a 16-week team cycle.",
-  caseStudyRole:
-    "Role: Lead Full-Stack Developer. Responsible for core application architecture, real-time synchronized sessions, live messaging, profile system implementation, guest access architecture, and key nanny-sharing flows.",
+  caseStudyRole: "Lead Full-Stack Developer",
+  caseStudyRoleResponsibilities: [
+    "Led core application architecture and system integration decisions.",
+    "Implemented real-time synchronized sessions and live messaging continuity.",
+    "Built the profile system end-to-end, including user schema and persistence layers.",
+    "Delivered nanny-sharing flows covering async group joins, calendar transfer, and automatic share creation.",
+  ],
   caseStudyTimeline: "Sep 2025 - Dec 2025 (16 weeks)",
   caseStudyTeam: "3 developers + 5 designers",
   caseStudyStack: [
-    "Next.js",
-    "React",
+    "Next.js 16",
+    "React 19",
     "TypeScript",
     "Tailwind CSS",
-    "PostgreSQL",
     "Drizzle ORM",
-    "Real-time Messaging",
-    "Mobile-first Web",
+    "Neon Postgres",
+    "Clerk Auth",
+    "Socket.IO",
+    "FullCalendar",
+    "Radix UI",
+    "date-fns",
+    "react-dropzone",
+    "uuid",
+    "IBM watsonx AI",
+    "Groq SDK",
   ],
   caseStudySections: [
     {
@@ -68,17 +79,16 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-overview-screen",
         },
       ],
-      resourceLabel: "Open Context Asset",
       gradientVariant: "sky",
     },
     {
       title: "Role and Scope",
       paragraphs: [
-        "The lead full-stack role covered architecture decisions and delivery across multiple feature areas, with direct ownership over profile systems, guest-mode behavior, and major nanny-sharing logic. Work also included integration support across navigation, schedule transfer behavior, and system-level feature linking.",
+        "The lead full-stack role covered architecture decisions and delivery across multiple feature areas, with direct ownership over profile systems and major nanny-sharing logic. Work also included integration support across navigation, schedule transfer behavior, and system-level feature linking.",
         "The profile section was implemented end-to-end, including user schema and data-layer structures tied to identity and app state. Collaboration followed an Agile team workflow with regular iteration and integration checkpoints across design and development.",
       ],
       highlights: [
-        "Owned feature surfaces: profile, guest mode, nanny-sharing system flow, and linked integrations.",
+        "Owned feature surfaces: profile, nanny-sharing system flow, and linked integrations.",
         "Architecture responsibilities included real-time session synchronization and live messaging continuity.",
         "Data responsibilities included user schemas and related persistence structures.",
       ],
@@ -91,39 +101,28 @@ const caseStudyProject = {
           href: "https://placeholder.example/tandem-profile-evidence",
         },
       ],
-      resourceLabel: "Open Scope Asset",
       gradientVariant: "teal",
     },
     {
       title: "Challenge Breakdown",
       paragraphs: [
         "One major challenge was delivering a mobile-first experience that still functioned reliably on desktop contexts. Layout and interaction behavior required repeated tuning to maintain clarity across viewport sizes without fragmenting feature behavior.",
-        "Another challenge was privacy-safe guest access. The product needed guest usability for demos and embeds while preserving privacy boundaries for child-related and family scheduling data. This required authentication rewiring and a controlled temporary guest-user model that stayed compatible with app-level chat and feature flows.",
         "Nanny-sharing integration introduced additional complexity around acceptance behavior, cross-connection state handling, calendar timing, and overlap logic. Reliable date generation, transfer, and persistence required rigorous handling of async states and timing dependencies.",
       ],
       highlights: [
         "Cross-device consistency challenge solved through responsive relative layout strategy.",
-        "Privacy challenge solved through guest-user architecture integrated with auth boundaries.",
         "Date overlap challenge solved through strict date generation and transfer logic controls.",
         "Integration challenge solved by separating high-coupling flows into stable service boundaries.",
       ],
       assets: [
         {
-          title: "Responsive behavior comparison",
+          title: "Responsive scheduling viewport study",
           caption:
-            "Replace with mobile vs desktop comparison set that demonstrates consistent scheduling flow.",
+            "Replace with mobile and desktop scheduling captures that show consistent interaction quality.",
           placeholder: true,
-          href: "https://placeholder.example/tandem-responsive-compare",
-        },
-        {
-          title: "Guest-mode privacy flow",
-          caption:
-            "Replace with authentication flow diagram showing guest-entry boundary and temporary user lifecycle.",
-          placeholder: true,
-          href: "https://placeholder.example/tandem-guest-privacy-flow",
+          href: "https://placeholder.example/tandem-responsive-viewport-study",
         },
       ],
-      resourceLabel: "Open Challenge Resource",
       gradientVariant: "amber",
     },
     {
@@ -150,12 +149,11 @@ const caseStudyProject = {
         {
           title: "System integration map",
           caption:
-            "Replace with diagram that links profile, guest mode, messaging, and scheduling subsystems.",
+            "Replace with diagram that links profile, messaging, scheduling, and nanny-sharing subsystems.",
           placeholder: true,
           href: "https://placeholder.example/tandem-system-map",
         },
       ],
-      resourceLabel: "Open Solution Resource",
       gradientVariant: "mint",
     },
     {
@@ -175,31 +173,17 @@ const caseStudyProject = {
           title: "Figma user flow",
           caption: "Replace with final approved user-flow board.",
           placeholder: true,
-          href: "https://placeholder.example/tandem-user-flow-figma",
         },
         {
           title: "Figma high-fidelity screens",
           caption: "Replace with final high-fidelity screen set used for implementation.",
           placeholder: true,
-          href: "https://placeholder.example/tandem-hifi-figma",
         },
       ],
-      citations: [
-        {
-          label: "Case-study structure reference",
-          href: "https://www.casestudy.club/case-studies",
-        },
-        {
-          label: "Research source placeholder",
-          href: "https://placeholder.example/tandem-research-source-01",
-          placeholder: true,
-        },
-      ],
-      resourceLabel: "Open Process Resource",
       gradientVariant: "slate",
     },
     {
-      title: "Outcomes and Delivery Impact",
+      title: "Outcomes & Delivery Impact",
       paragraphs: [
         "Measured impact in this phase was primarily qualitative. The final product became more concise, easier to navigate, and more predictable for users moving between scheduling tasks and related feature pages.",
         "Flow complexity was reduced by removing unnecessary navigation steps and clarifying system transitions. Users can identify destination pages and relevant actions with less friction, improving practical usability without heavy tutorial dependency.",
@@ -207,80 +191,71 @@ const caseStudyProject = {
       highlights: [
         "Reduced interaction clutter and improved navigation clarity.",
         "Improved flow predictability across scheduling, profile, and shared-feature transitions.",
-        "Maintained privacy-conscious behavior while supporting guest-mode usability.",
+        "Strengthened scheduling consistency in high-variance, time-sensitive planning flows.",
       ],
       assets: [
         {
-          title: "Before/after flow map",
+          title: "Delivery impact snapshot",
           caption:
-            "Replace with side-by-side flow complexity comparison that visualizes simplification outcomes.",
+            "Replace with a single visual summary highlighting final flow clarity and delivery outcomes.",
           placeholder: true,
-          href: "https://placeholder.example/tandem-before-after-flow",
+          href: "https://placeholder.example/tandem-delivery-impact-snapshot",
         },
       ],
-      resourceLabel: "Open Outcomes Resource",
       gradientVariant: "teal",
     },
   ],
   caseStudyOutcomes: [
     "Core navigation became more concise and easier to understand without onboarding tutorials.",
     "Scheduling and related pages were reorganized into clearer pathways with reduced interaction clutter.",
-    "Guest mode made product sharing and embedding practical while preserving privacy boundaries.",
     "Nanny-sharing flow achieved reliable transfer and persistence behavior across async connections.",
   ],
   caseStudyTeamCredits: [
     {
       name: "Developer Placeholder 01",
-      role: "Backend / Integration",
+      role: "Full Stack Developer",
       team: "Development",
       linkedin: "https://placeholder.example/linkedin-developer-01",
       placeholder: true,
     },
     {
       name: "Developer Placeholder 02",
-      role: "Frontend / Realtime",
+      role: "Full Stack Developer",
       team: "Development",
       linkedin: "https://placeholder.example/linkedin-developer-02",
       placeholder: true,
     },
     {
-      name: "Developer Placeholder 03",
-      role: "Full-Stack",
-      team: "Development",
-      linkedin: "https://placeholder.example/linkedin-developer-03",
-      placeholder: true,
-    },
-    {
       name: "Design Team Member 01",
-      role: "UI/UX Designer",
+      role: "Designer",
       team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-01",
       placeholder: true,
     },
     {
       name: "Design Team Member 02",
-      role: "UI/UX Designer",
+      role: "Designer",
       team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-02",
       placeholder: true,
     },
     {
       name: "Design Team Member 03",
-      role: "UI/UX Designer",
+      role: "Designer",
       team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-03",
       placeholder: true,
     },
     {
       name: "Design Team Member 04",
-      role: "UI/UX Designer",
+      role: "Designer",
       team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-04",
       placeholder: true,
     },
     {
       name: "Design Team Member 05",
-      role: "UI/UX Designer",
+      role: "Designer",
       team: "Design",
       linkedin: "https://placeholder.example/linkedin-designer-05",
       placeholder: true,
@@ -290,24 +265,13 @@ const caseStudyProject = {
     { label: "Tandem live application", href: "https://tandem-app.com" },
     { label: "Tandem repository", href: "https://github.com/IDSP-TRADECARE/Tandem" },
     { label: "Tandem development blog", href: "https://tandem-blog.vercel.app" },
-    {
-      label: "Figma case-study board",
-      href: "https://placeholder.example/tandem-figma-case-study",
-      placeholder: true,
-    },
-    {
-      label: "Research citation placeholder",
-      href: "https://placeholder.example/tandem-research-source-02",
-      placeholder: true,
-    },
   ],
   caseStudyPreview: {
     title: "Tandem Embedded Product Preview",
     summary:
-      "This embedded preview mirrors the live interaction style tested in the sandbox route and lets reviewers quickly experience scheduling UI behavior without leaving the case study narrative.",
+      "This embedded preview lets reviewers quickly experience Tandem's live scheduling interactions without leaving the case study narrative.",
     iframeUrl: process.env.NEXT_PUBLIC_TANDEM_URL || "https://tandem-app.com",
     liveUrl: "https://tandem-app.com",
-    sandboxHref: "/test",
   },
 };
 
