@@ -2,7 +2,6 @@
 
 import {
   type KeyboardEvent as ReactKeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -16,6 +15,8 @@ import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-m
 import { createPortal } from "react-dom";
 import {
   LuArrowLeft,
+  LuChevronDown,
+  LuChevronUp,
   LuExternalLink,
   LuLayoutTemplate,
   LuScrollText,
@@ -27,7 +28,6 @@ import { HeroBackHoverCard } from "./hero-back-hover-card";
 type CaseStudyCitation = {
   label: string;
   href: string;
-  placeholder?: boolean;
 };
 
 type CaseStudyAsset = {
@@ -35,7 +35,8 @@ type CaseStudyAsset = {
   caption: string;
   src?: string;
   href?: string;
-  placeholder?: boolean;
+  figmaEmbedUrl?: string;
+  imageAlt?: string;
 };
 
 type CaseStudySection = {
@@ -44,8 +45,6 @@ type CaseStudySection = {
   highlights?: string[];
   assets?: CaseStudyAsset[];
   citations?: CaseStudyCitation[];
-  resourceHref?: string;
-  resourceLabel?: string;
   gradientVariant?: "sky" | "mint" | "teal" | "slate" | "amber";
 };
 
@@ -53,8 +52,11 @@ type CaseStudyTeamCredit = {
   name: string;
   role?: string;
   linkedin?: string;
-  placeholder?: boolean;
+  portfolio?: string;
+  github?: string;
+  avatarSrc?: string;
   team?: "Design" | "Development";
+  isSelf?: boolean;
 };
 
 type CaseStudyPreview = {
@@ -62,7 +64,6 @@ type CaseStudyPreview = {
   summary: string;
   iframeUrl: string;
   liveUrl: string;
-  sandboxHref?: string;
 };
 
 export type ProjectData = {
@@ -70,11 +71,18 @@ export type ProjectData = {
   slogan: string;
   description: string;
   stack: string[];
-  logoSrc: string;
+  logoSrc?: string;
   wordmarkSrc?: string;
   links?: Array<{ label: string; href: string }>;
   achievements?: string[];
   coverSrc?: string;
+  showLogo?: boolean;
+  caseStudyBadge?: string;
+  compactLogoContainerClassName?: string;
+  compactLogoImageClassName?: string;
+  compactLogoPixelSize?: number;
+  rationaleBadgeClassName?: string;
+  rationalePanelClassName?: string;
   brand?: {
     primary: string;
     primaryLight: string;
@@ -85,6 +93,7 @@ export type ProjectData = {
   caseStudyHeading?: string;
   caseStudySummary?: string;
   caseStudyRole?: string;
+  caseStudyRoleResponsibilities?: string[];
   caseStudyDraft?: string[];
   caseStudyTimeline?: string;
   caseStudyTeam?: string;
@@ -106,6 +115,9 @@ type ProjectFocusCardProps = {
   interactionArmDelayMs?: number;
   renderFullscreenInPortal?: boolean;
   openViewLabel?: "fullscreen" | "case-study";
+  showRationaleToggle?: boolean;
+  onRationaleToggle?: () => void;
+  isRationaleOpen?: boolean;
 };
 
 type FocusPhase = "idle" | "priming" | "open";
@@ -155,13 +167,6 @@ const getCaseStudySectionIcon = (title: string) => {
     return LuSmartphone;
   }
   return LuScrollText;
-};
-
-const isNestedInteractiveTarget = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement)) return false;
-  return Boolean(
-    target.closest("a,button,iframe,input,textarea,select,[data-stop-card-click='true']")
-  );
 };
 
 const GRADIENT_VARIANT_ORDER: Array<keyof typeof CASE_STUDY_GRADIENTS> = [
@@ -238,6 +243,97 @@ const FullscreenHeader = ({
   </div>
 );
 
+const CaseStudyPlaceholderAsset = ({
+  asset,
+  sectionTitle,
+  isExpanded,
+  onToggle,
+}: {
+  asset: CaseStudyAsset;
+  sectionTitle: string;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) => {
+  const isContextSection = /context|problem/i.test(sectionTitle);
+  const hasFigmaEmbed = Boolean(asset.figmaEmbedUrl);
+  const hasImageAsset = Boolean(asset.src);
+  const figmaEmbedSrc = asset.figmaEmbedUrl
+    ? asset.figmaEmbedUrl.includes("hide-ui=1")
+      ? asset.figmaEmbedUrl
+      : `${asset.figmaEmbedUrl}${asset.figmaEmbedUrl.includes("?") ? "&" : "?"}hide-ui=1`
+    : undefined;
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    onToggle();
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      onKeyDown={handleKeyDown}
+      className={`w-full cursor-pointer space-y-3 rounded-2xl border bg-black/20 p-4 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-apricot/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+        isExpanded
+          ? "border-brand-apricot/55 shadow-[0_16px_30px_rgba(242,197,124,0.16)]"
+          : "border-white/10"
+      }`}
+      aria-label={`Toggle preview for ${asset.title}`}
+      aria-pressed={isExpanded}
+    >
+      <div
+        className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${
+          isExpanded
+            ? "min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] border-brand-apricot/45 bg-black/35"
+            : `${isContextSection ? "min-h-[260px] sm:min-h-[300px]" : "min-h-[210px] sm:min-h-[240px]"} border-dashed border-white/20 bg-black/25`
+        }`}
+      >
+        {hasFigmaEmbed ? (
+          <div className="relative overflow-hidden rounded-xl border border-white/15 bg-black/30">
+            <iframe
+              src={figmaEmbedSrc}
+              title={`${asset.title} Figma embed`}
+              className="-mb-[120px] -ml-[180px] h-[620px] w-[calc(100%+220px)]"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        ) : hasImageAsset ? (
+          <div
+            className={`w-full overflow-hidden rounded-xl border border-white/15 bg-black/30 ${
+              isExpanded ? "h-[700px]" : "h-[480px]"
+            }`}
+          >
+            <Image
+              src={asset.src ?? ""}
+              alt={asset.imageAlt ?? asset.title}
+              width={1600}
+              height={900}
+              className="h-full w-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_10%,rgba(51,115,204,0.28),transparent_44%),radial-gradient(circle_at_84%_4%,rgba(242,197,124,0.18),transparent_38%),linear-gradient(170deg,rgba(255,255,255,0.08),rgba(255,255,255,0))]" />
+            <div className="absolute right-3 top-3 rounded-full border border-white/20 bg-black/45 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-clay">
+              {isExpanded ? "Preview Zoomed" : "Preview"}
+            </div>
+            <div className="relative z-10 flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
+              <LuLayoutTemplate className="h-6 w-6 text-brand-apricot" aria-hidden="true" />
+              <p className="text-sm font-semibold text-gray-100">Visual preview</p>
+              <p className="text-xs text-gray-300">{asset.title}</p>
+            </div>
+          </>
+        )}
+      </div>
+      <p className="text-sm font-semibold text-white">{asset.title}</p>
+      <p className="text-sm leading-relaxed text-gray-300">{asset.caption}</p>
+    </button>
+  );
+};
+
 const CaseStudyLongForm = ({
   project,
   cardId,
@@ -256,114 +352,72 @@ const CaseStudyLongForm = ({
   const caseStudyHeading = project.caseStudyHeading ?? `${project.title} Case Study`;
   const caseStudySummary = project.caseStudySummary ?? fullscreenDescription;
   const caseStudyStack = project.caseStudyStack ?? project.stack;
+  const caseStudyRoleResponsibilities = project.caseStudyRoleResponsibilities ?? [];
   const hasCaseStudyLinks = Boolean(project.links?.length);
   const caseStudyPreview = project.caseStudyPreview;
-  const [activeSection, setActiveSection] = useState(caseStudySections[0]?.title ?? "Case Study");
+  const caseStudyPreviewHost = caseStudyPreview?.liveUrl
+    .replace(/^https?:\/\//, "")
+    .replace(/\/$/, "");
+  const [isStackExpanded, setIsStackExpanded] = useState(false);
+  const [expandedAssetBySection, setExpandedAssetBySection] = useState<
+    Record<string, string | null>
+  >({});
   const isTandemCaseStudy = cardId === TANDEM_FOCUS_ID;
   const hasOutcomeNarrativeSection = caseStudySections.some((section) =>
     /outcome|impact/i.test(section.title)
   );
+  const teamCredits = project.caseStudyTeamCredits ?? [];
+  const developerCredits = teamCredits.filter((credit) => credit.team === "Development");
+  const designerCredits = teamCredits.filter((credit) => credit.team === "Design");
+  const teamPreviewCredits = [...developerCredits.slice(0, 3), ...designerCredits.slice(0, 5)];
+  const stackChipClass =
+    "rounded-xl border border-white/15 bg-black/35 px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-gray-200";
 
-  useEffect(() => {
-    setActiveSection(caseStudySections[0]?.title ?? "Case Study");
-  }, [caseStudySections]);
-
-  const openExternalResource = useCallback((href: string) => {
-    window.open(href, "_blank", "noopener,noreferrer");
-  }, []);
-
-  const onResourceCardClick = useCallback(
-    (event: ReactMouseEvent<HTMLElement>, href?: string) => {
-      if (!href) return;
-      if (isNestedInteractiveTarget(event.target)) return;
-      openExternalResource(href);
-    },
-    [openExternalResource]
-  );
-
-  const onResourceCardKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>, href?: string) => {
-      if (!href) return;
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      openExternalResource(href);
-    },
-    [openExternalResource]
-  );
-
-  useEffect(() => {
-    if (!caseStudySections.length) return;
-
-    const observers: IntersectionObserver[] = [];
-    caseStudySections.forEach((section) => {
-      const element = document.getElementById(toSectionId(section.title));
+  const scrollWithinCaseStudy = useCallback(
+    (elementId: string, align: "start" | "center" = "start") => {
+      const element = document.getElementById(elementId);
       if (!element) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(section.title);
-            }
-          });
-        },
-        {
-          root: null,
-          threshold: 0.35,
-          rootMargin: "-80px 0px -40% 0px",
-        }
-      );
-      observer.observe(element);
-      observers.push(observer);
-    });
 
-    return () => {
-      observers.forEach((observer) => observer.disconnect());
-    };
+      const scrollRoot = element.closest('[data-focus-scroll-root="true"]');
+      if (!(scrollRoot instanceof HTMLElement)) {
+        element.scrollIntoView({ behavior: "smooth", block: align });
+        return;
+      }
+
+      const rootRect = scrollRoot.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const elementOffsetTop = scrollRoot.scrollTop + (elementRect.top - rootRect.top);
+      const targetTop =
+        align === "center"
+          ? elementOffsetTop - (rootRect.height - elementRect.height) / 2
+          : elementOffsetTop - 16;
+
+      scrollRoot.scrollTo({
+        top: Math.max(targetTop, 0),
+        behavior: "smooth",
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    const nextState: Record<string, string | null> = {};
+    caseStudySections.forEach((section) => {
+      nextState[section.title] = null;
+    });
+    setExpandedAssetBySection(nextState);
   }, [caseStudySections]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-8 sm:pb-10">
-      {hasStructuredCaseStudy ? (
-        <div className="sticky top-[4.4rem] z-30 mb-7 flex items-center justify-center">
-          <div className="w-full max-w-5xl rounded-2xl border border-white/25 bg-[radial-gradient(circle_at_20%_0%,rgba(51,115,204,0.3),transparent_35%),linear-gradient(160deg,rgba(8,13,24,0.9),rgba(6,10,20,0.92))] px-3 py-3 shadow-[0_16px_44px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
-            <div className="mb-2 flex items-center justify-between gap-4">
-              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-clay">
-                Narrative Map
-              </span>
-              <span className="rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-300">
-                {activeSection}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {caseStudySections.map((section) => {
-                const isActive = activeSection === section.title;
-                return (
-                  <a
-                    key={section.title}
-                    href={`#${toSectionId(section.title)}`}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                      isActive
-                        ? "border-brand-apricot/50 bg-brand-apricot/25 text-brand-apricot"
-                        : "border-white/15 bg-white/5 text-gray-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    {section.title}
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ) : null}
-
+    <div className="mx-auto w-full max-w-[90rem] px-4 pb-10 sm:px-8 lg:px-10">
       <div
-        className={`mx-auto mt-8 max-w-5xl space-y-5 rounded-[2rem] border border-white/15 p-6 sm:p-8 ${
+        className={`mx-auto mt-8 max-w-[84rem] space-y-6 rounded-[2rem] border border-white/15 p-6 shadow-[0_24px_54px_rgba(0,0,0,0.35)] sm:p-8 ${
           isTandemCaseStudy ? CASE_STUDY_GRADIENTS.sky : CASE_STUDY_GRADIENTS.slate
         }`}
       >
         <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/20 bg-black/30">
           <Image
-            src={project.logoSrc}
+            src={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
             alt={`${project.title} logo`}
             fill
             className="object-contain p-2"
@@ -381,30 +435,102 @@ const CaseStudyLongForm = ({
             </h2>
             <p className="text-base leading-relaxed text-gray-200 sm:text-lg">{caseStudySummary}</p>
 
-            <div className="grid gap-3 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,0.95fr)_minmax(0,0.95fr)]">
-              <div className="rounded-2xl border border-white/10 bg-black/35 p-5 shadow-[0_10px_24px_rgba(0,0,0,0.26)]">
+            <div className="grid gap-3 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)] lg:items-stretch">
+              <div className="rounded-2xl border border-white/10 bg-black/35 p-5 shadow-[0_12px_26px_rgba(0,0,0,0.28)] sm:p-6">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
                   Role
                 </p>
-                <p className="mt-2 text-sm font-medium leading-relaxed text-gray-100 sm:text-base">
+                <p className="mt-2 text-xl font-bold tracking-tight text-white sm:text-2xl">
                   {project.caseStudyRole ?? "Role pending"}
                 </p>
+                {caseStudyRoleResponsibilities.length ? (
+                  <ul className="mt-4 grid gap-2">
+                    {caseStudyRoleResponsibilities.map((item) => (
+                      <li
+                        key={item}
+                        className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm leading-relaxed text-gray-100"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm leading-relaxed text-gray-100">
+                    Responsibility details pending.
+                  </p>
+                )}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Timeline
-                </p>
-                <p className="mt-1 text-sm font-medium text-gray-100 sm:text-[15px]">
-                  {project.caseStudyTimeline ?? "Timeline placeholder"}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Team
-                </p>
-                <p className="mt-1 text-sm font-medium text-gray-100 sm:text-[15px]">
-                  {project.caseStudyTeam ?? "Team placeholder"}
-                </p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="rounded-xl border border-white/10 bg-black/30 px-4 py-3">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                    Timeline
+                  </p>
+                  <p className="mt-1 text-base font-semibold text-gray-100 sm:text-lg">
+                    {project.caseStudyTimeline ?? "Timeline"}
+                  </p>
+                  <div className="mt-3.5">
+                    <div className="relative h-8">
+                      <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-white/25" />
+                      <div className="absolute left-0 right-0 top-1/2 flex -translate-y-1/2 justify-between px-[2px]">
+                        {[4, 8, 12, 16].map((week) => (
+                          <span
+                            key={week}
+                            className="inline-flex h-3.5 w-3.5 rounded-full border border-brand-apricot/60 bg-brand-apricot/80"
+                            aria-hidden="true"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mt-1 flex justify-between text-sm font-semibold tracking-[0.08em] text-gray-300">
+                      <span>4</span>
+                      <span>8</span>
+                      <span>12</span>
+                      <span>16</span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    scrollWithinCaseStudy("case-study-team-credits", "center");
+                  }}
+                  className="rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-left transition hover:border-brand-apricot/50"
+                >
+                  <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                    Team
+                  </p>
+                  <p className="mt-1 text-base font-semibold text-gray-100 sm:text-lg">
+                    {project.caseStudyTeam ?? "Team details"}
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
+                    {teamPreviewCredits.map((credit) => (
+                      <span
+                        key={`team-preview-${credit.name}`}
+                        className="inline-flex h-8 w-8 overflow-hidden rounded-full border border-white/25 bg-black/40"
+                        title={`${credit.name} (${credit.team ?? "Team"})`}
+                      >
+                        {credit.avatarSrc ? (
+                          <Image
+                            src={credit.avatarSrc}
+                            alt={`${credit.name} portrait`}
+                            width={32}
+                            height={32}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span className="inline-flex h-full w-full items-center justify-center text-[10px] font-bold text-brand-apricot">
+                            {credit.name
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)}
+                          </span>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -413,22 +539,29 @@ const CaseStudyLongForm = ({
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
                   Project Links
                 </p>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {project.links?.map((link) => (
                     <a
                       key={`${link.label}-${link.href}`}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group rounded-2xl border border-brand-apricot/30 bg-black/35 px-4 py-3 text-sm font-semibold text-gray-100 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:border-brand-apricot hover:text-brand-apricot"
+                      className="group flex min-h-[64px] items-center justify-center rounded-2xl border border-brand-apricot/30 bg-black/35 px-4 py-3 text-center text-sm font-semibold text-gray-100 shadow-[0_10px_24px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:border-brand-apricot hover:text-brand-apricot"
                       data-stop-card-click="true"
                     >
-                      <span className="flex items-center justify-between gap-2">
-                        <span>{link.label}</span>
-                        <LuExternalLink
-                          className="h-4 w-4 text-brand-clay transition group-hover:text-brand-apricot"
-                          aria-hidden="true"
-                        />
+                      <span className="flex flex-col items-center justify-center gap-1">
+                        <span className="inline-flex items-center justify-center gap-2">
+                          <span>{link.label}</span>
+                          <LuExternalLink
+                            className="h-4 w-4 text-brand-clay transition group-hover:text-brand-apricot"
+                            aria-hidden="true"
+                          />
+                        </span>
+                        {link.label === "App Link" ? (
+                          <span className="rounded-full border border-emerald-300/50 bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-emerald-300">
+                            Currently Live
+                          </span>
+                        ) : null}
                       </span>
                     </a>
                   ))}
@@ -438,61 +571,60 @@ const CaseStudyLongForm = ({
 
             {caseStudyStack.length ? (
               <div className="space-y-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                  Stack
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {caseStudyStack.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-xl border border-white/15 bg-black/35 px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-gray-200"
+                <button
+                  type="button"
+                  onClick={() => setIsStackExpanded((current) => !current)}
+                  className="flex w-full items-center justify-between rounded-2xl border border-white/15 bg-black/25 px-4 py-3 text-left transition hover:border-brand-apricot/60"
+                >
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
+                      Tech Stack
+                    </p>
+                    {!isStackExpanded && caseStudyStack.length ? (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {caseStudyStack.slice(0, 6).map((item) => (
+                          <span key={`collapsed-${item}`} className={stackChipClass}>
+                            {item}
+                          </span>
+                        ))}
+                        {caseStudyStack.length > 6 ? (
+                          <span className={stackChipClass}>+{caseStudyStack.length - 6}</span>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </div>
+                  {isStackExpanded ? (
+                    <LuChevronUp className="h-4.5 w-4.5 text-brand-apricot" aria-hidden="true" />
+                  ) : (
+                    <LuChevronDown className="h-4.5 w-4.5 text-brand-apricot" aria-hidden="true" />
+                  )}
+                </button>
+                <AnimatePresence initial={false}>
+                  {isStackExpanded ? (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.24, ease: "easeOut" }}
+                      className="overflow-hidden"
                     >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                      <div className="grid gap-2 pt-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+                        {caseStudyStack.map((item) => (
+                          <span key={item} className={stackChipClass}>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ) : null}
+                </AnimatePresence>
               </div>
             ) : null}
 
             {caseStudyPreview ? (
-              <section
-                className={`space-y-4 rounded-3xl border border-white/20 p-5 shadow-[0_14px_28px_rgba(0,0,0,0.3)] sm:p-6 ${CASE_STUDY_GRADIENTS.teal}`}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                      Live Interactive Preview
-                    </p>
-                    <h3 className="mt-1 text-xl font-semibold text-white">
-                      {caseStudyPreview.title}
-                    </h3>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <a
-                      href={caseStudyPreview.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-sm font-semibold text-gray-100 transition hover:border-brand-apricot hover:text-brand-apricot"
-                      data-stop-card-click="true"
-                    >
-                      Open Live <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                    {caseStudyPreview.sandboxHref ? (
-                      <a
-                        href={caseStudyPreview.sandboxHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-sm font-semibold text-gray-100 transition hover:border-brand-apricot hover:text-brand-apricot"
-                        data-stop-card-click="true"
-                      >
-                        Open Sandbox <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-200">{caseStudyPreview.summary}</p>
-                <div className="overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45">
-                  <div className="flex items-center justify-between gap-3 border-b border-white/10 bg-black/45 px-3 py-2 text-xs text-gray-300">
+              <section className="space-y-3">
+                <div className="mx-auto w-full max-w-[460px] overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45 shadow-[0_20px_40px_rgba(0,0,0,0.38)]">
+                  <div className="flex items-center gap-3 border-b border-white/10 bg-black/55 px-3 py-2.5 text-xs text-gray-300 sm:text-sm">
                     <div className="flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
                       <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
@@ -500,35 +632,29 @@ const CaseStudyLongForm = ({
                         href={caseStudyPreview.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex h-3 w-3 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-400 text-[8px] text-emerald-950 transition hover:scale-110"
+                        className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border border-emerald-300/60 bg-emerald-400 text-[9px] text-emerald-950"
                         aria-label="Open Tandem live app in a new tab"
                         data-stop-card-click="true"
                       >
                         +
                       </a>
                     </div>
-                    <span className="truncate">{caseStudyPreview.iframeUrl}</span>
-                    <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-brand-clay">
-                      Embedded
-                    </span>
-                  </div>
-
-                  <div className="bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] px-4 py-5 sm:px-6 sm:py-6">
-                    <div className="mx-auto w-full max-w-[360px] rounded-[2.35rem] border-[10px] border-[#1c2433] bg-[#0d1424] p-2 shadow-[0_24px_48px_rgba(0,0,0,0.38)]">
-                      <div className="relative">
-                        <div className="absolute left-1/2 top-0 z-10 h-4 w-24 -translate-x-1/2 rounded-b-full bg-black/40" />
-                        <div className="overflow-hidden rounded-[1.8rem] border border-black/35 bg-white">
-                          <iframe
-                            src={caseStudyPreview.iframeUrl}
-                            title="Tandem interactive preview"
-                            className="h-[560px] w-full bg-white"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                          />
-                        </div>
-                      </div>
+                    <div className="flex min-w-0 flex-1 items-center justify-center gap-2 overflow-hidden text-center font-semibold text-gray-100">
+                      <span className="whitespace-nowrap">Live Interaction</span>
+                      <span className="truncate rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-clay sm:text-[11px]">
+                        {caseStudyPreviewHost ?? "tandem-app.com"}
+                      </span>
                     </div>
+                  </div>
+                  <div className="bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] p-3 sm:p-4">
+                    <iframe
+                      src={caseStudyPreview.iframeUrl}
+                      title="Tandem interactive preview"
+                      className="h-[680px] w-full rounded-[0.9rem] border border-white/15 bg-white sm:h-[720px]"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                    />
                   </div>
                 </div>
               </section>
@@ -550,26 +676,18 @@ const CaseStudyLongForm = ({
       </div>
 
       {hasStructuredCaseStudy ? (
-        <div className="mx-auto mt-10 max-w-5xl space-y-6">
+        <div className="mx-auto mt-10 max-w-[84rem] space-y-6">
           {caseStudySections.map((section, index) => {
             const gradientKey: keyof typeof CASE_STUDY_GRADIENTS =
               section.gradientVariant ??
               GRADIENT_VARIANT_ORDER[index % GRADIENT_VARIANT_ORDER.length]!;
             const sectionGradient = CASE_STUDY_GRADIENTS[gradientKey];
-            const sectionHref = section.resourceHref ?? section.assets?.[0]?.href;
-            const isResourceCard = Boolean(sectionHref);
             const isOutcomeSection = /outcome|impact/i.test(section.title);
             return (
               <section
                 key={section.title}
                 id={toSectionId(section.title)}
-                role={isResourceCard ? "link" : undefined}
-                tabIndex={isResourceCard ? 0 : undefined}
-                onClick={(event) => onResourceCardClick(event, sectionHref)}
-                onKeyDown={(event) => onResourceCardKeyDown(event, sectionHref)}
-                className={`space-y-4 rounded-3xl border border-white/15 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.34)] sm:p-8 ${sectionGradient} ${
-                  isResourceCard ? "cursor-pointer transition hover:-translate-y-0.5" : ""
-                }`}
+                className={`space-y-4 rounded-3xl border border-white/15 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.34)] sm:p-8 ${sectionGradient}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -585,18 +703,6 @@ const CaseStudyLongForm = ({
                       {section.title}
                     </h3>
                   </div>
-                  {sectionHref ? (
-                    <a
-                      href={sectionHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-brand-clay transition hover:border-brand-apricot hover:text-brand-apricot"
-                      data-stop-card-click="true"
-                    >
-                      {section.resourceLabel ?? "Open Resource"}
-                      <LuExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                    </a>
-                  ) : null}
                 </div>
 
                 {section.paragraphs.map((paragraph) => (
@@ -621,50 +727,57 @@ const CaseStudyLongForm = ({
                   </ul>
                 ) : null}
 
-                {section.assets?.length ? (
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {section.assets.map((asset) => (
-                      <article
-                        key={`${asset.title}-${asset.caption}`}
-                        role={asset.href ? "link" : undefined}
-                        tabIndex={asset.href ? 0 : undefined}
-                        onClick={(event) => onResourceCardClick(event, asset.href)}
-                        onKeyDown={(event) => onResourceCardKeyDown(event, asset.href)}
-                        className={`space-y-3 rounded-2xl border border-white/10 bg-black/20 p-4 ${
-                          asset.href
-                            ? "cursor-pointer transition hover:border-brand-apricot/40"
-                            : ""
-                        }`}
-                      >
-                        <div
-                          className={`flex items-center justify-center rounded-xl border border-dashed border-white/20 bg-gradient-to-b from-white/10 to-white/0 p-4 text-center ${
-                            /context|problem/i.test(section.title)
-                              ? "min-h-[300px]"
-                              : "min-h-[220px]"
-                          }`}
-                        >
-                          <p className="text-sm font-medium text-gray-300">
-                            {asset.placeholder ? "Placeholder visual" : "Visual preview"}
-                            <span className="mt-1 block text-xs text-gray-400">{asset.title}</span>
-                          </p>
+                {section.assets?.length
+                  ? (() => {
+                      const sectionAssets = section.assets;
+                      if (!sectionAssets?.length) return null;
+
+                      const expandedAssetTitle = expandedAssetBySection[section.title] ?? null;
+                      if (!expandedAssetTitle) {
+                        return (
+                          <div className="grid gap-4 md:grid-cols-2">
+                            {sectionAssets.map((asset) => (
+                              <CaseStudyPlaceholderAsset
+                                key={`${asset.title}-${asset.caption}`}
+                                asset={asset}
+                                sectionTitle={section.title}
+                                isExpanded={false}
+                                onToggle={() => {
+                                  setExpandedAssetBySection((current) => ({
+                                    ...current,
+                                    [section.title]: asset.title,
+                                  }));
+                                }}
+                              />
+                            ))}
+                          </div>
+                        );
+                      }
+
+                      const expandedAsset =
+                        sectionAssets.find((asset) => asset.title === expandedAssetTitle) ??
+                        sectionAssets[0];
+
+                      if (!expandedAsset) return null;
+
+                      return (
+                        <div className="relative">
+                          <CaseStudyPlaceholderAsset
+                            key={`${expandedAsset.title}-${expandedAsset.caption}`}
+                            asset={expandedAsset}
+                            sectionTitle={section.title}
+                            isExpanded
+                            onToggle={() => {
+                              setExpandedAssetBySection((current) => ({
+                                ...current,
+                                [section.title]: null,
+                              }));
+                            }}
+                          />
                         </div>
-                        <p className="text-sm font-semibold text-white">{asset.title}</p>
-                        <p className="text-sm leading-relaxed text-gray-300">{asset.caption}</p>
-                        {asset.href ? (
-                          <a
-                            href={asset.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={CASE_STUDY_LINK_CLASS}
-                            data-stop-card-click="true"
-                          >
-                            {asset.placeholder ? "Open placeholder resource" : "Open resource"}
-                          </a>
-                        ) : null}
-                      </article>
-                    ))}
-                  </div>
-                ) : null}
+                      );
+                    })()
+                  : null}
 
                 {section.citations?.length ? (
                   <div className="space-y-2">
@@ -682,7 +795,6 @@ const CaseStudyLongForm = ({
                           data-stop-card-click="true"
                         >
                           {citation.label}
-                          {citation.placeholder ? " (placeholder)" : ""}
                         </a>
                       ))}
                     </div>
@@ -730,6 +842,7 @@ const CaseStudyLongForm = ({
 
           {project.caseStudyTeamCredits?.length ? (
             <section
+              id="case-study-team-credits"
               className={`space-y-4 rounded-3xl border border-white/15 p-6 sm:p-8 ${CASE_STUDY_GRADIENTS.mint}`}
             >
               <h3 className="text-2xl font-semibold text-white sm:text-3xl">Team Credits</h3>
@@ -737,12 +850,30 @@ const CaseStudyLongForm = ({
                 {project.caseStudyTeamCredits.map((credit) => (
                   <li
                     key={`${credit.name}-${credit.linkedin ?? "no-link"}`}
-                    className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200 sm:text-base"
+                    className={`rounded-2xl border px-4 py-3 text-sm text-gray-200 sm:text-base ${
+                      credit.isSelf
+                        ? "border-brand-apricot/55 bg-[linear-gradient(145deg,rgba(242,197,124,0.28),rgba(221,174,126,0.16),rgba(0,0,0,0.24))] shadow-[0_0_24px_rgba(242,197,124,0.24)]"
+                        : "border-white/10 bg-black/20"
+                    }`}
                   >
+                    {credit.avatarSrc ? (
+                      <Image
+                        src={credit.avatarSrc}
+                        alt={`${credit.name} avatar`}
+                        width={40}
+                        height={40}
+                        className="mr-2 inline-flex h-10 w-10 rounded-full border border-white/15 object-cover align-middle"
+                        loading="lazy"
+                      />
+                    ) : null}
                     <span className="font-semibold text-white">{credit.name}</span>
-                    {credit.role ? <span className="text-gray-300"> - {credit.role}</span> : null}
+                    {credit.isSelf ? (
+                      <span className="ml-2 rounded-full border border-emerald-300/55 bg-emerald-400/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-200">
+                        Lead developer (me)
+                      </span>
+                    ) : null}
                     {credit.team ? (
-                      <span className="ml-2 rounded-full border border-white/20 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-clay">
+                      <span className="ml-2 rounded-full border border-brand-apricot/45 bg-brand-apricot/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-apricot">
                         {credit.team}
                       </span>
                     ) : null}
@@ -755,7 +886,17 @@ const CaseStudyLongForm = ({
                         data-stop-card-click="true"
                       >
                         LinkedIn
-                        {credit.placeholder ? " (placeholder)" : ""}
+                      </a>
+                    ) : null}
+                    {credit.portfolio ? (
+                      <a
+                        href={credit.portfolio}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`ml-2 ${CASE_STUDY_LINK_CLASS}`}
+                        data-stop-card-click="true"
+                      >
+                        Portfolio
                       </a>
                     ) : null}
                   </li>
@@ -783,7 +924,6 @@ const CaseStudyLongForm = ({
                       data-stop-card-click="true"
                     >
                       {reference.label}
-                      {reference.placeholder ? " (placeholder)" : ""}
                     </a>
                   </li>
                 ))}
@@ -850,13 +990,6 @@ const CaseStudyLongForm = ({
           </section>
         </div>
       ) : null}
-
-      {hasStructuredCaseStudy ? (
-        <p className="mx-auto mt-8 max-w-5xl text-xs text-gray-400" data-case-study-id={cardId}>
-          Some visual assets and citations are placeholders and will be replaced during final
-          content packaging.
-        </p>
-      ) : null}
     </div>
   );
 };
@@ -871,6 +1004,9 @@ export const ProjectFocusCard = ({
   interactionArmDelayMs = 0,
   renderFullscreenInPortal = false,
   openViewLabel = "fullscreen",
+  showRationaleToggle = false,
+  onRationaleToggle,
+  isRationaleOpen = false,
 }: ProjectFocusCardProps) => {
   const prefersReducedMotion = useReducedMotion();
   const cardId = useMemo(() => toCardId(project.title), [project.title]);
@@ -1089,7 +1225,6 @@ export const ProjectFocusCard = ({
   const fullscreenDescription = isInsurFlow
     ? "Built as a portfolio-grade InsurTech system using a modern TypeScript stack with strong reliability, testing, and deployment standards."
     : project.description;
-
   return (
     <LayoutGroup id={`project-focus-${cardId}`}>
       <div data-focus-card={cardId} data-focus-phase={phase} className="relative">
@@ -1146,7 +1281,7 @@ export const ProjectFocusCard = ({
                 slogan={project.slogan}
                 description={project.description}
                 stack={project.stack}
-                logoSrc={project.logoSrc}
+                logoSrc={project.logoSrc ?? "/logos/sdx24/logo-bw.svg"}
                 wordmarkSrc={project.wordmarkSrc}
                 links={project.links}
                 achievements={project.achievements}
@@ -1155,9 +1290,14 @@ export const ProjectFocusCard = ({
                 expandedDescription={project.expandedDescription}
                 interactive={false}
                 showLinksOnCompact={showCompactLinks}
-                compactLogoContainerClassName={isInsurFlow ? "h-14 w-14" : undefined}
-                compactLogoImageClassName={isInsurFlow ? "p-1.5" : undefined}
-                compactLogoPixelSize={isInsurFlow ? 56 : undefined}
+                compactLogoContainerClassName={project.compactLogoContainerClassName}
+                compactLogoImageClassName={project.compactLogoImageClassName}
+                compactLogoPixelSize={project.compactLogoPixelSize ?? 72}
+                showLogoOnCompact={project.showLogo ?? true}
+                caseStudyBadge={project.caseStudyBadge}
+                onRationaleToggle={showRationaleToggle ? onRationaleToggle : undefined}
+                isRationaleOpen={isRationaleOpen}
+                rationaleBadgeClassName={project.rationaleBadgeClassName}
               />
 
               <AnimatePresence>
@@ -1275,11 +1415,14 @@ export const ProjectFocusCard = ({
                           "radial-gradient(circle at 50% 42%, rgba(242,197,124,0.18) 0%, rgba(221,174,126,0.1) 46%, rgba(17,24,39,0) 78%)",
                       }}
                     />
-                    <div className="relative z-10 flex h-full flex-col overflow-y-auto">
+                    <div
+                      data-focus-scroll-root="true"
+                      className="relative z-10 flex h-full flex-col overflow-y-auto"
+                    >
                       <FullscreenHeader
                         cardId={cardId}
                         title={project.title}
-                        logoSrc={project.logoSrc}
+                        logoSrc={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
                         wordmarkSrc={project.wordmarkSrc}
                         onBack={closeFullscreen}
                         viewLabel={openViewLabel}
@@ -1336,11 +1479,14 @@ export const ProjectFocusCard = ({
                       "radial-gradient(circle at 50% 42%, rgba(242,197,124,0.18) 0%, rgba(221,174,126,0.1) 46%, rgba(17,24,39,0) 78%)",
                   }}
                 />
-                <div className="relative z-10 flex h-full flex-col overflow-y-auto">
+                <div
+                  data-focus-scroll-root="true"
+                  className="relative z-10 flex h-full flex-col overflow-y-auto"
+                >
                   <FullscreenHeader
                     cardId={cardId}
                     title={project.title}
-                    logoSrc={project.logoSrc}
+                    logoSrc={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
                     wordmarkSrc={project.wordmarkSrc}
                     onBack={closeFullscreen}
                     viewLabel={openViewLabel}

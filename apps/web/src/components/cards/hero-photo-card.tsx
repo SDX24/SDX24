@@ -347,7 +347,7 @@ const HeroPhotoCardInner = ({
             : undefined,
       }}
       className={cn(
-        "w-full min-w-[280px] max-w-[360px] will-change-transform",
+        "relative w-full min-w-[280px] max-w-[360px] will-change-transform",
         disableMotion ? "pointer-events-none" : undefined,
         className
       )}
