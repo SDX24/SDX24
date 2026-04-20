@@ -1,5 +1,3 @@
-import React from "react";
-
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
@@ -16,7 +14,7 @@ type ProjectCardCompactProps = {
   slogan: string;
   description: string;
   stack: string[];
-  logoSrc: string;
+  logoSrc?: string;
   wordmarkSrc?: string;
   links?: ProjectLink[];
   className?: string;
@@ -25,6 +23,11 @@ type ProjectCardCompactProps = {
   logoContainerClassName?: string;
   logoImageClassName?: string;
   logoPixelSize?: number;
+  showLogo?: boolean;
+  caseStudyBadge?: string;
+  onRationaleToggle?: () => void;
+  isRationaleOpen?: boolean;
+  rationaleBadgeClassName?: string;
 };
 
 export const ProjectCardCompact = ({
@@ -40,7 +43,12 @@ export const ProjectCardCompact = ({
   interactive = false,
   logoContainerClassName,
   logoImageClassName,
-  logoPixelSize = 48,
+  logoPixelSize = 64,
+  showLogo = true,
+  caseStudyBadge,
+  onRationaleToggle,
+  isRationaleOpen = false,
+  rationaleBadgeClassName,
 }: ProjectCardCompactProps) => (
   <CometCard
     className={cn("w-full", className)}
@@ -52,22 +60,40 @@ export const ProjectCardCompact = ({
     glareMidColor="rgba(145, 179, 227, 0.25)"
     interactive={interactive}
   >
-    <div className="flex flex-col gap-4 text-gray-100 flex-1">
-      <div className="flex items-center gap-4">
-        <div
+    <div className="relative flex flex-col gap-4 text-gray-100 flex-1">
+      {onRationaleToggle ? (
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onRationaleToggle();
+          }}
           className={cn(
-            "relative h-12 w-12 overflow-hidden rounded-2xl bg-white/10",
-            logoContainerClassName
+            "absolute right-0 top-0 z-20 h-14 w-24 [clip-path:polygon(22%_0,100%_0,100%_100%,0_100%)] rounded-bl-[1.2rem] border px-3 text-right text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_18px_rgba(239,111,108,0.28)] transition hover:brightness-110",
+            isRationaleOpen
+              ? "border-brand-coral/70 bg-[linear-gradient(130deg,rgba(239,111,108,0.9),rgba(127,182,133,0.72))]"
+              : (rationaleBadgeClassName ??
+                  "border-brand-coral/55 bg-[linear-gradient(130deg,rgba(66,106,90,0.86),rgba(0,169,145,0.78))]")
           )}
+          aria-label={`Toggle rationale for ${title}`}
+          aria-pressed={isRationaleOpen}
         >
-          <Image
-            src={logoSrc}
-            alt={`${title} logo`}
-            fill
-            className={cn("object-contain p-2", logoImageClassName)}
-            sizes={`${logoPixelSize}px`}
-          />
-        </div>
+          Rationale
+        </button>
+      ) : null}
+      <div className="flex items-center gap-4">
+        {showLogo && logoSrc ? (
+          <div className={cn("relative h-16 w-16 overflow-hidden", logoContainerClassName)}>
+            <Image
+              src={logoSrc}
+              alt={`${title} logo`}
+              fill
+              className={cn("object-contain", logoImageClassName)}
+              sizes={`${logoPixelSize}px`}
+            />
+          </div>
+        ) : null}
         <div>
           {wordmarkSrc ? (
             <Image
@@ -80,6 +106,11 @@ export const ProjectCardCompact = ({
           ) : (
             <h2 className="text-xl font-semibold font-alan">{title}</h2>
           )}
+          {caseStudyBadge ? (
+            <span className="mt-1.5 inline-flex rounded-full border border-brand-apricot/60 bg-brand-apricot/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-apricot shadow-[0_0_14px_rgba(242,197,124,0.28)]">
+              {caseStudyBadge}
+            </span>
+          ) : null}
           <p className="mt-2 text-xs uppercase tracking-[0.3em] text-brand-clay">{slogan}</p>
         </div>
       </div>

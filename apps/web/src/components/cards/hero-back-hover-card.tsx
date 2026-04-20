@@ -34,6 +34,11 @@ type HeroBackHoverCardProps = {
   compactLogoContainerClassName?: string;
   compactLogoImageClassName?: string;
   compactLogoPixelSize?: number;
+  showLogoOnCompact?: boolean;
+  caseStudyBadge?: string;
+  onRationaleToggle?: () => void;
+  isRationaleOpen?: boolean;
+  rationaleBadgeClassName?: string;
   resetToken?: number;
   onCardDismiss?: () => void;
 };
@@ -55,6 +60,11 @@ export const HeroBackHoverCard = ({
   compactLogoContainerClassName,
   compactLogoImageClassName,
   compactLogoPixelSize,
+  showLogoOnCompact = true,
+  caseStudyBadge,
+  onRationaleToggle,
+  isRationaleOpen = false,
+  rationaleBadgeClassName,
   resetToken = 0,
   onCardDismiss,
 }: HeroBackHoverCardProps) => {
@@ -203,8 +213,14 @@ export const HeroBackHoverCard = ({
           logoContainerClassName={compactLogoContainerClassName}
           logoImageClassName={compactLogoImageClassName}
           logoPixelSize={compactLogoPixelSize}
+          showLogo={showLogoOnCompact}
+          caseStudyBadge={caseStudyBadge}
+          onRationaleToggle={onRationaleToggle}
+          isRationaleOpen={isRationaleOpen}
+          rationaleBadgeClassName={rationaleBadgeClassName}
         />
       </div>
+
       <div
         className={
           isExpanded

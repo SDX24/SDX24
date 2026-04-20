@@ -19,10 +19,8 @@ import {
   LuChevronUp,
   LuExternalLink,
   LuLayoutTemplate,
-  LuPencilRuler,
   LuScrollText,
   LuSmartphone,
-  LuUser,
 } from "react-icons/lu";
 
 import { HeroBackHoverCard } from "./hero-back-hover-card";
@@ -58,6 +56,7 @@ type CaseStudyTeamCredit = {
   github?: string;
   avatarSrc?: string;
   team?: "Design" | "Development";
+  isSelf?: boolean;
 };
 
 type CaseStudyPreview = {
@@ -72,11 +71,18 @@ export type ProjectData = {
   slogan: string;
   description: string;
   stack: string[];
-  logoSrc: string;
+  logoSrc?: string;
   wordmarkSrc?: string;
   links?: Array<{ label: string; href: string }>;
   achievements?: string[];
   coverSrc?: string;
+  showLogo?: boolean;
+  caseStudyBadge?: string;
+  compactLogoContainerClassName?: string;
+  compactLogoImageClassName?: string;
+  compactLogoPixelSize?: number;
+  rationaleBadgeClassName?: string;
+  rationalePanelClassName?: string;
   brand?: {
     primary: string;
     primaryLight: string;
@@ -109,6 +115,9 @@ type ProjectFocusCardProps = {
   interactionArmDelayMs?: number;
   renderFullscreenInPortal?: boolean;
   openViewLabel?: "fullscreen" | "case-study";
+  showRationaleToggle?: boolean;
+  onRationaleToggle?: () => void;
+  isRationaleOpen?: boolean;
 };
 
 type FocusPhase = "idle" | "priming" | "open";
@@ -125,7 +134,6 @@ const GLASS_BACKGROUND = "rgba(2, 6, 23, 0.34)";
 const INSURFLOW_FOCUS_ID = "insurflow";
 const TANDEM_FOCUS_ID = "tandem";
 const TANDEM_GLASS_BACKGROUND = "rgba(7, 20, 36, 0.24)";
-const PHONE_ASPECT_RATIO = 301.5 / 655.5;
 const CASE_STUDY_LINK_CLASS =
   "text-sm font-semibold text-blue-300 underline decoration-blue-300/70 underline-offset-4 transition hover:text-blue-200";
 
@@ -249,6 +257,11 @@ const CaseStudyPlaceholderAsset = ({
   const isContextSection = /context|problem/i.test(sectionTitle);
   const hasFigmaEmbed = Boolean(asset.figmaEmbedUrl);
   const hasImageAsset = Boolean(asset.src);
+  const figmaEmbedSrc = asset.figmaEmbedUrl
+    ? asset.figmaEmbedUrl.includes("hide-ui=1")
+      ? asset.figmaEmbedUrl
+      : `${asset.figmaEmbedUrl}${asset.figmaEmbedUrl.includes("?") ? "&" : "?"}hide-ui=1`
+    : undefined;
 
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (event.key !== "Enter" && event.key !== " ") return;
@@ -257,17 +270,10 @@ const CaseStudyPlaceholderAsset = ({
   };
 
   return (
-    <motion.button
-      layout
+    <button
       type="button"
       onClick={onToggle}
       onKeyDown={handleKeyDown}
-      whileTap={{ scale: 0.997 }}
-      transition={{
-        layout: { duration: 0.18, ease: "easeOut" },
-        duration: 0.15,
-        ease: "easeOut",
-      }}
       className={`w-full cursor-pointer space-y-3 rounded-2xl border bg-black/20 p-4 text-left transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-apricot/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
         isExpanded
           ? "border-brand-apricot/55 shadow-[0_16px_30px_rgba(242,197,124,0.16)]"
@@ -284,15 +290,11 @@ const CaseStudyPlaceholderAsset = ({
         }`}
       >
         {hasFigmaEmbed ? (
-          <div
-            className={`w-full overflow-hidden rounded-xl border border-white/15 bg-black/30 ${
-              isExpanded ? "h-[700px]" : "h-[480px]"
-            }`}
-          >
+          <div className="relative overflow-hidden rounded-xl border border-white/15 bg-black/30">
             <iframe
-              src={asset.figmaEmbedUrl}
+              src={figmaEmbedSrc}
               title={`${asset.title} Figma embed`}
-              className="h-full w-full"
+              className="-mb-[120px] -ml-[180px] h-[620px] w-[calc(100%+220px)]"
               allowFullScreen
               loading="lazy"
             />
@@ -328,7 +330,7 @@ const CaseStudyPlaceholderAsset = ({
       </div>
       <p className="text-sm font-semibold text-white">{asset.title}</p>
       <p className="text-sm leading-relaxed text-gray-300">{asset.caption}</p>
-    </motion.button>
+    </button>
   );
 };
 
@@ -360,11 +362,14 @@ const CaseStudyLongForm = ({
   const [expandedAssetBySection, setExpandedAssetBySection] = useState<
     Record<string, string | null>
   >({});
-  const [activeSection, setActiveSection] = useState(caseStudySections[0]?.title ?? "Case Study");
   const isTandemCaseStudy = cardId === TANDEM_FOCUS_ID;
   const hasOutcomeNarrativeSection = caseStudySections.some((section) =>
     /outcome|impact/i.test(section.title)
   );
+  const teamCredits = project.caseStudyTeamCredits ?? [];
+  const developerCredits = teamCredits.filter((credit) => credit.team === "Development");
+  const designerCredits = teamCredits.filter((credit) => credit.team === "Design");
+  const teamPreviewCredits = [...developerCredits.slice(0, 3), ...designerCredits.slice(0, 5)];
   const stackChipClass =
     "rounded-xl border border-white/15 bg-black/35 px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-gray-200";
 
@@ -396,10 +401,6 @@ const CaseStudyLongForm = ({
   );
 
   useEffect(() => {
-    setActiveSection(caseStudySections[0]?.title ?? "Case Study");
-  }, [caseStudySections]);
-
-  useEffect(() => {
     const nextState: Record<string, string | null> = {};
     caseStudySections.forEach((section) => {
       nextState[section.title] = null;
@@ -407,77 +408,8 @@ const CaseStudyLongForm = ({
     setExpandedAssetBySection(nextState);
   }, [caseStudySections]);
 
-  useEffect(() => {
-    if (!caseStudySections.length) return;
-
-    const observers: IntersectionObserver[] = [];
-    caseStudySections.forEach((section) => {
-      const element = document.getElementById(toSectionId(section.title));
-      if (!element) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(section.title);
-            }
-          });
-        },
-        {
-          root: null,
-          threshold: 0.35,
-          rootMargin: "-80px 0px -40% 0px",
-        }
-      );
-      observer.observe(element);
-      observers.push(observer);
-    });
-
-    return () => {
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, [caseStudySections]);
-
   return (
     <div className="mx-auto w-full max-w-[90rem] px-4 pb-10 sm:px-8 lg:px-10">
-      {hasStructuredCaseStudy ? (
-        <div className="sticky top-[4.5rem] z-30 mb-6 flex items-center justify-center">
-          <div className="w-full max-w-[84rem] rounded-2xl border border-white/25 bg-[radial-gradient(circle_at_50%_-30%,rgba(51,115,204,0.42),transparent_48%),linear-gradient(165deg,rgba(8,14,26,0.92),rgba(6,11,22,0.94))] px-3 py-2.5 shadow-[0_18px_48px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
-            <div className="mb-1.5 flex items-center justify-between gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-clay">
-                Narrative Map
-              </span>
-              <span className="rounded-full border border-brand-apricot/40 bg-brand-apricot/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-apricot shadow-[0_0_16px_rgba(242,197,124,0.32)]">
-                {activeSection}
-              </span>
-            </div>
-            <div className="overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex min-w-max gap-2">
-                {caseStudySections.map((section) => {
-                  const isActive = activeSection === section.title;
-                  return (
-                    <button
-                      type="button"
-                      key={section.title}
-                      onClick={() => {
-                        setActiveSection(section.title);
-                        scrollWithinCaseStudy(toSectionId(section.title));
-                      }}
-                      className={`whitespace-nowrap rounded-full border px-3 py-1 text-[11px] font-semibold transition ${
-                        isActive
-                          ? "border-brand-apricot/55 bg-[linear-gradient(120deg,rgba(242,197,124,0.42),rgba(221,174,126,0.32))] text-white shadow-[0_0_20px_rgba(242,197,124,0.35)]"
-                          : "border-white/15 bg-white/5 text-gray-300 hover:border-white/30 hover:bg-white/10 hover:text-white"
-                      }`}
-                    >
-                      {section.title}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
       <div
         className={`mx-auto mt-8 max-w-[84rem] space-y-6 rounded-[2rem] border border-white/15 p-6 shadow-[0_24px_54px_rgba(0,0,0,0.35)] sm:p-8 ${
           isTandemCaseStudy ? CASE_STUDY_GRADIENTS.sky : CASE_STUDY_GRADIENTS.slate
@@ -485,7 +417,7 @@ const CaseStudyLongForm = ({
       >
         <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/20 bg-black/30">
           <Image
-            src={project.logoSrc}
+            src={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
             alt={`${project.title} logo`}
             fill
             className="object-contain p-2"
@@ -553,7 +485,7 @@ const CaseStudyLongForm = ({
                       <span>4</span>
                       <span>8</span>
                       <span>12</span>
-                      <span>16 (weeks)</span>
+                      <span>16</span>
                     </div>
                   </div>
                 </div>
@@ -570,27 +502,33 @@ const CaseStudyLongForm = ({
                   <p className="mt-1 text-base font-semibold text-gray-100 sm:text-lg">
                     {project.caseStudyTeam ?? "Team details"}
                   </p>
-                  <div className="mt-2.5 flex items-center gap-2.5">
-                    <span className="inline-flex gap-2">
-                      {Array.from({ length: 3 }).map((_, index) => (
-                        <span
-                          key={`dev-${index}`}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-brand-apricot/45 bg-black/30 text-brand-apricot"
-                        >
-                          <LuUser className="h-4.5 w-4.5" aria-hidden="true" />
-                        </span>
-                      ))}
-                    </span>
-                    <span className="inline-flex gap-2">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <span
-                          key={`design-${index}`}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-brand-clay/45 bg-black/30 text-brand-clay"
-                        >
-                          <LuPencilRuler className="h-4.5 w-4.5" aria-hidden="true" />
-                        </span>
-                      ))}
-                    </span>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
+                    {teamPreviewCredits.map((credit) => (
+                      <span
+                        key={`team-preview-${credit.name}`}
+                        className="inline-flex h-8 w-8 overflow-hidden rounded-full border border-white/25 bg-black/40"
+                        title={`${credit.name} (${credit.team ?? "Team"})`}
+                      >
+                        {credit.avatarSrc ? (
+                          <Image
+                            src={credit.avatarSrc}
+                            alt={`${credit.name} portrait`}
+                            width={32}
+                            height={32}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span className="inline-flex h-full w-full items-center justify-center text-[10px] font-bold text-brand-apricot">
+                            {credit.name
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)}
+                          </span>
+                        )}
+                      </span>
+                    ))}
                   </div>
                 </button>
               </div>
@@ -685,7 +623,7 @@ const CaseStudyLongForm = ({
 
             {caseStudyPreview ? (
               <section className="space-y-3">
-                <div className="mx-auto w-full max-w-[760px] overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45 shadow-[0_20px_40px_rgba(0,0,0,0.38)]">
+                <div className="mx-auto w-full max-w-[460px] overflow-hidden rounded-[1.4rem] border border-white/20 bg-black/45 shadow-[0_20px_40px_rgba(0,0,0,0.38)]">
                   <div className="flex items-center gap-3 border-b border-white/10 bg-black/55 px-3 py-2.5 text-xs text-gray-300 sm:text-sm">
                     <div className="flex items-center gap-2">
                       <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
@@ -708,23 +646,15 @@ const CaseStudyLongForm = ({
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] px-3 py-5 sm:px-4 sm:py-6">
-                    <div className="w-full max-w-[328px] rounded-[2.35rem] border-[12px] border-[#1c2433] bg-[#0d1424] p-2 shadow-[0_24px_44px_rgba(0,0,0,0.38)]">
-                      <div className="relative">
-                        <div className="absolute left-1/2 top-0 z-10 h-4 w-24 -translate-x-1/2 rounded-b-full bg-black/40" />
-                        <div className="overflow-hidden rounded-[2rem] border border-black/35 bg-white">
-                          <iframe
-                            src={caseStudyPreview.iframeUrl}
-                            title="Tandem interactive preview"
-                            style={{ aspectRatio: `${PHONE_ASPECT_RATIO}` }}
-                            className="w-full bg-white"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                  <div className="bg-[radial-gradient(circle_at_10%_0%,rgba(51,115,204,0.2),transparent_38%),radial-gradient(circle_at_88%_8%,rgba(146,241,137,0.16),transparent_32%)] p-3 sm:p-4">
+                    <iframe
+                      src={caseStudyPreview.iframeUrl}
+                      title="Tandem interactive preview"
+                      className="h-[680px] w-full rounded-[0.9rem] border border-white/15 bg-white sm:h-[720px]"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                    />
                   </div>
                 </div>
               </section>
@@ -844,39 +774,6 @@ const CaseStudyLongForm = ({
                               }));
                             }}
                           />
-
-                          {sectionAssets.length > 1
-                            ? sectionAssets
-                                .filter((asset) => asset.title !== expandedAsset.title)
-                                .map((asset) => {
-                                  const originalIndex = sectionAssets.findIndex(
-                                    (candidate) => candidate.title === asset.title
-                                  );
-                                  const sideClass = originalIndex === 0 ? "right-3" : "left-3";
-
-                                  return (
-                                    <button
-                                      key={`switch-${section.title}-${asset.title}`}
-                                      type="button"
-                                      onClick={() => {
-                                        setExpandedAssetBySection((current) => ({
-                                          ...current,
-                                          [section.title]: asset.title,
-                                        }));
-                                      }}
-                                      className={`absolute top-1/2 z-20 -translate-y-1/2 rounded-xl border border-brand-apricot/45 bg-black/65 px-3 py-2 text-left shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur ${sideClass}`}
-                                      aria-label={`Switch to ${asset.title} preview`}
-                                    >
-                                      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-clay">
-                                        Switch Preview
-                                      </p>
-                                      <p className="max-w-[150px] text-xs font-semibold text-white">
-                                        {asset.title}
-                                      </p>
-                                    </button>
-                                  );
-                                })
-                            : null}
                         </div>
                       );
                     })()
@@ -953,7 +850,11 @@ const CaseStudyLongForm = ({
                 {project.caseStudyTeamCredits.map((credit) => (
                   <li
                     key={`${credit.name}-${credit.linkedin ?? "no-link"}`}
-                    className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-gray-200 sm:text-base"
+                    className={`rounded-2xl border px-4 py-3 text-sm text-gray-200 sm:text-base ${
+                      credit.isSelf
+                        ? "border-brand-apricot/55 bg-[linear-gradient(145deg,rgba(242,197,124,0.28),rgba(221,174,126,0.16),rgba(0,0,0,0.24))] shadow-[0_0_24px_rgba(242,197,124,0.24)]"
+                        : "border-white/10 bg-black/20"
+                    }`}
                   >
                     {credit.avatarSrc ? (
                       <Image
@@ -966,6 +867,11 @@ const CaseStudyLongForm = ({
                       />
                     ) : null}
                     <span className="font-semibold text-white">{credit.name}</span>
+                    {credit.isSelf ? (
+                      <span className="ml-2 rounded-full border border-emerald-300/55 bg-emerald-400/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-200">
+                        Lead developer (me)
+                      </span>
+                    ) : null}
                     {credit.team ? (
                       <span className="ml-2 rounded-full border border-brand-apricot/45 bg-brand-apricot/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-apricot">
                         {credit.team}
@@ -991,17 +897,6 @@ const CaseStudyLongForm = ({
                         data-stop-card-click="true"
                       >
                         Portfolio
-                      </a>
-                    ) : null}
-                    {credit.github ? (
-                      <a
-                        href={credit.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`ml-2 ${CASE_STUDY_LINK_CLASS}`}
-                        data-stop-card-click="true"
-                      >
-                        GitHub
                       </a>
                     ) : null}
                   </li>
@@ -1109,6 +1004,9 @@ export const ProjectFocusCard = ({
   interactionArmDelayMs = 0,
   renderFullscreenInPortal = false,
   openViewLabel = "fullscreen",
+  showRationaleToggle = false,
+  onRationaleToggle,
+  isRationaleOpen = false,
 }: ProjectFocusCardProps) => {
   const prefersReducedMotion = useReducedMotion();
   const cardId = useMemo(() => toCardId(project.title), [project.title]);
@@ -1327,7 +1225,6 @@ export const ProjectFocusCard = ({
   const fullscreenDescription = isInsurFlow
     ? "Built as a portfolio-grade InsurTech system using a modern TypeScript stack with strong reliability, testing, and deployment standards."
     : project.description;
-
   return (
     <LayoutGroup id={`project-focus-${cardId}`}>
       <div data-focus-card={cardId} data-focus-phase={phase} className="relative">
@@ -1384,7 +1281,7 @@ export const ProjectFocusCard = ({
                 slogan={project.slogan}
                 description={project.description}
                 stack={project.stack}
-                logoSrc={project.logoSrc}
+                logoSrc={project.logoSrc ?? "/logos/sdx24/logo-bw.svg"}
                 wordmarkSrc={project.wordmarkSrc}
                 links={project.links}
                 achievements={project.achievements}
@@ -1393,9 +1290,14 @@ export const ProjectFocusCard = ({
                 expandedDescription={project.expandedDescription}
                 interactive={false}
                 showLinksOnCompact={showCompactLinks}
-                compactLogoContainerClassName={isInsurFlow ? "h-14 w-14" : undefined}
-                compactLogoImageClassName={isInsurFlow ? "p-1.5" : undefined}
-                compactLogoPixelSize={isInsurFlow ? 56 : undefined}
+                compactLogoContainerClassName={project.compactLogoContainerClassName}
+                compactLogoImageClassName={project.compactLogoImageClassName}
+                compactLogoPixelSize={project.compactLogoPixelSize ?? 72}
+                showLogoOnCompact={project.showLogo ?? true}
+                caseStudyBadge={project.caseStudyBadge}
+                onRationaleToggle={showRationaleToggle ? onRationaleToggle : undefined}
+                isRationaleOpen={isRationaleOpen}
+                rationaleBadgeClassName={project.rationaleBadgeClassName}
               />
 
               <AnimatePresence>
@@ -1520,7 +1422,7 @@ export const ProjectFocusCard = ({
                       <FullscreenHeader
                         cardId={cardId}
                         title={project.title}
-                        logoSrc={project.logoSrc}
+                        logoSrc={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
                         wordmarkSrc={project.wordmarkSrc}
                         onBack={closeFullscreen}
                         viewLabel={openViewLabel}
@@ -1584,7 +1486,7 @@ export const ProjectFocusCard = ({
                   <FullscreenHeader
                     cardId={cardId}
                     title={project.title}
-                    logoSrc={project.logoSrc}
+                    logoSrc={project.logoSrc ?? "/logos/tandem/tandem-logo.svg"}
                     wordmarkSrc={project.wordmarkSrc}
                     onBack={closeFullscreen}
                     viewLabel={openViewLabel}
