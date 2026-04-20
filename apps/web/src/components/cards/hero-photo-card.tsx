@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { MainTealCard } from "../ui/main-teal-card";
 import { ProjectCardCompact } from "../ui/project-card-compact";
 import { HeroBackHoverCard } from "./hero-back-hover-card";
+import { ProjectFocusCard } from "./project-focus-card";
 
 type HeroPhotoCardProps = {
   className?: string;
@@ -37,6 +38,8 @@ type HeroPhotoCardProps = {
     };
     expandedDescription?: string;
   };
+  enableBackHoverExpand?: boolean;
+  enableLandedFocusEffect?: boolean;
 };
 
 export const HeroPhotoCard = ({
@@ -70,6 +73,8 @@ export const HeroPhotoCard = ({
     expandedDescription:
       "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
   },
+  enableBackHoverExpand = true,
+  enableLandedFocusEffect = false,
 }: HeroPhotoCardProps) => (
   <HeroPhotoCardInner
     className={className}
@@ -80,14 +85,21 @@ export const HeroPhotoCard = ({
     role={role}
     sizes={sizes}
     project={project}
+    enableBackHoverExpand={enableBackHoverExpand}
+    enableLandedFocusEffect={enableLandedFocusEffect}
   />
 );
 
 type HeroPhotoCardInnerProps = Required<
-  Omit<HeroPhotoCardProps, "className" | "contentClassName">
+  Omit<
+    HeroPhotoCardProps,
+    "className" | "contentClassName" | "enableBackHoverExpand" | "enableLandedFocusEffect"
+  >
 > & {
   className?: string;
   contentClassName?: string;
+  enableBackHoverExpand: boolean;
+  enableLandedFocusEffect: boolean;
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
@@ -118,6 +130,8 @@ const HeroPhotoCardInner = ({
   role,
   sizes,
   project,
+  enableBackHoverExpand,
+  enableLandedFocusEffect,
 }: HeroPhotoCardInnerProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<HTMLDivElement>(null);
@@ -379,21 +393,32 @@ const HeroPhotoCardInner = ({
               transform: "rotate3d(1, 1, 0, 180deg)",
             }}
           >
-            <HeroBackHoverCard
-              title={project.title}
-              slogan={project.slogan}
-              description={project.description}
-              stack={project.stack}
-              logoSrc={project.logoSrc}
-              wordmarkSrc={project.wordmarkSrc}
-              links={project.links}
-              achievements={project.achievements}
-              coverSrc={project.coverSrc}
-              brand={project.brand}
-              expandedDescription={project.expandedDescription}
-              interactive={isLanded && showBack}
-              resetToken={resetToken}
-            />
+            {enableLandedFocusEffect ? (
+              <ProjectFocusCard
+                key={`${project.title}-${resetToken}`}
+                project={project}
+                featured={isLanded && showBack}
+                enableFullscreen={isLanded && showBack}
+                enableSharedLayoutMorph={false}
+                interactionArmDelayMs={1000}
+              />
+            ) : (
+              <HeroBackHoverCard
+                title={project.title}
+                slogan={project.slogan}
+                description={project.description}
+                stack={project.stack}
+                logoSrc={project.logoSrc}
+                wordmarkSrc={project.wordmarkSrc}
+                links={project.links}
+                achievements={project.achievements}
+                coverSrc={project.coverSrc}
+                brand={project.brand}
+                expandedDescription={project.expandedDescription}
+                interactive={enableBackHoverExpand && isLanded && showBack}
+                resetToken={resetToken}
+              />
+            )}
           </div>
           <div className="invisible">
             <ProjectCardCompact

@@ -25,6 +25,9 @@ export type ProjectData = {
     analogous: string;
   };
   expandedDescription?: string;
+  caseStudyHeading?: string;
+  caseStudyRole?: string;
+  caseStudyDraft?: string[];
 };
 
 type ProjectFocusCardProps = {
@@ -33,6 +36,8 @@ type ProjectFocusCardProps = {
   enableFullscreen?: boolean;
   openDelayMs?: number;
   showCompactLinks?: boolean;
+  enableSharedLayoutMorph?: boolean;
+  interactionArmDelayMs?: number;
 };
 
 type FocusPhase = "idle" | "priming" | "open";
@@ -60,15 +65,23 @@ export const ProjectFocusCard = ({
   enableFullscreen = false,
   openDelayMs = 1800,
   showCompactLinks = false,
+  enableSharedLayoutMorph = true,
+  interactionArmDelayMs = 0,
 }: ProjectFocusCardProps) => {
   const prefersReducedMotion = useReducedMotion();
   const cardId = useMemo(() => toCardId(project.title), [project.title]);
   const layoutId = useMemo(() => `project-focus-shell-${cardId}`, [cardId]);
+  const sharedLayoutId = enableSharedLayoutMorph ? layoutId : undefined;
   const isInsurFlow = cardId === INSURFLOW_FOCUS_ID;
   const interactionEnabled = featured && enableFullscreen;
   const [phase, setPhase] = useState<FocusPhase>("idle");
   const [canHover, setCanHover] = useState(true);
+  const [isInteractionArmed, setIsInteractionArmed] = useState(interactionArmDelayMs === 0);
+  const [canInstantArmOnEnter, setCanInstantArmOnEnter] = useState(true);
   const primingTimeoutRef = useRef<number | null>(null);
+  const armTimeoutRef = useRef<number | null>(null);
+  const hitboxRef = useRef<HTMLButtonElement>(null);
+  const pointerRef = useRef<{ x: number; y: number } | null>(null);
 
   const clearPrimingTimeout = useCallback(() => {
     if (primingTimeoutRef.current) {
@@ -77,15 +90,28 @@ export const ProjectFocusCard = ({
     }
   }, []);
 
-  const startPriming = useCallback(() => {
-    if (!interactionEnabled || phase !== "idle") return;
+  const clearArmTimeout = useCallback(() => {
+    if (armTimeoutRef.current) {
+      window.clearTimeout(armTimeoutRef.current);
+      armTimeoutRef.current = null;
+    }
+  }, []);
+
+  const beginPriming = useCallback(() => {
+    if (phase !== "idle") return;
 
     setPhase("priming");
     clearPrimingTimeout();
     primingTimeoutRef.current = window.setTimeout(() => {
       setPhase("open");
     }, openDelayMs);
-  }, [clearPrimingTimeout, interactionEnabled, openDelayMs, phase]);
+  }, [clearPrimingTimeout, openDelayMs, phase]);
+
+  const startPriming = useCallback(() => {
+    if (!interactionEnabled || !isInteractionArmed || phase !== "idle") return;
+
+    beginPriming();
+  }, [beginPriming, interactionEnabled, isInteractionArmed, phase]);
 
   const cancelPriming = useCallback(() => {
     if (phase !== "priming") return;
@@ -102,15 +128,76 @@ export const ProjectFocusCard = ({
     if (!interactionEnabled) {
       setPhase("idle");
       clearPrimingTimeout();
+      clearArmTimeout();
+      setIsInteractionArmed(interactionArmDelayMs === 0);
+      setCanInstantArmOnEnter(true);
+      return;
     }
-  }, [clearPrimingTimeout, interactionEnabled]);
+
+    if (interactionArmDelayMs === 0) {
+      setIsInteractionArmed(true);
+      setCanInstantArmOnEnter(true);
+      return;
+    }
+
+    if (!canHover) {
+      setIsInteractionArmed(true);
+      setCanInstantArmOnEnter(true);
+      return;
+    }
+
+    const rect = hitboxRef.current?.getBoundingClientRect();
+    const pointer = pointerRef.current;
+    const pointerStartsInsideByPosition =
+      !!rect &&
+      !!pointer &&
+      pointer.x >= rect.left &&
+      pointer.x <= rect.right &&
+      pointer.y >= rect.top &&
+      pointer.y <= rect.bottom;
+    const pointerStartsInsideByHover = hitboxRef.current?.matches(":hover") ?? false;
+    const pointerStartsInside = pointerStartsInsideByPosition || pointerStartsInsideByHover;
+
+    if (!pointerStartsInside) {
+      setIsInteractionArmed(true);
+      setCanInstantArmOnEnter(true);
+      return;
+    }
+
+    setIsInteractionArmed(false);
+    setCanInstantArmOnEnter(false);
+    clearArmTimeout();
+    armTimeoutRef.current = window.setTimeout(() => {
+      setIsInteractionArmed(true);
+      if (hitboxRef.current?.matches(":hover")) {
+        beginPriming();
+      }
+    }, interactionArmDelayMs);
+  }, [
+    beginPriming,
+    canHover,
+    clearArmTimeout,
+    clearPrimingTimeout,
+    interactionArmDelayMs,
+    interactionEnabled,
+  ]);
 
   useEffect(
     () => () => {
       clearPrimingTimeout();
+      clearArmTimeout();
     },
-    [clearPrimingTimeout]
+    [clearArmTimeout, clearPrimingTimeout]
   );
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -207,7 +294,7 @@ export const ProjectFocusCard = ({
             ) : null}
 
             <motion.div
-              layoutId={layoutId}
+              layoutId={sharedLayoutId}
               transition={CARD_MORPH_TRANSITION}
               className="relative overflow-hidden"
               style={{ borderRadius: 26 }}
@@ -278,19 +365,31 @@ export const ProjectFocusCard = ({
 
               {interactionEnabled ? (
                 <button
+                  ref={hitboxRef}
                   type="button"
                   className="absolute inset-0 z-40 cursor-pointer bg-transparent"
                   aria-label={`Open ${project.title} project`}
                   onPointerEnter={() => {
-                    if (canHover) startPriming();
+                    if (!canHover) return;
+                    if (!isInteractionArmed) {
+                      if (!canInstantArmOnEnter) return;
+                      clearArmTimeout();
+                      setIsInteractionArmed(true);
+                      beginPriming();
+                      return;
+                    }
+                    startPriming();
                   }}
                   onPointerLeave={() => {
+                    clearArmTimeout();
+                    setIsInteractionArmed(true);
+                    setCanInstantArmOnEnter(true);
                     if (canHover) cancelPriming();
                   }}
                   onPointerDown={(event) => {
                     const isTouchLike =
                       event.pointerType === "touch" || event.pointerType === "pen";
-                    if (!isTouchLike || canHover) return;
+                    if (!isTouchLike || canHover || !isInteractionArmed) return;
                     event.preventDefault();
                     startPriming();
                   }}
@@ -319,7 +418,7 @@ export const ProjectFocusCard = ({
             transition={{ duration: 0.28, ease: "easeOut" }}
           >
             <motion.div
-              layoutId={layoutId}
+              layoutId={sharedLayoutId}
               transition={CARD_MORPH_TRANSITION}
               className="relative h-full w-full overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl"
               style={{ borderRadius: 0, willChange: "transform, opacity" }}
@@ -372,7 +471,26 @@ export const ProjectFocusCard = ({
                   </p>
                 </div>
 
-                {isInsurFlow ? (
+                {project.caseStudyDraft?.length ? (
+                  <div className="mt-10 max-w-4xl space-y-6 rounded-3xl border border-white/10 bg-black/25 p-6 sm:p-8">
+                    <h3 className="text-2xl font-semibold text-white">
+                      {project.caseStudyHeading ?? "Case Study Draft"}
+                    </h3>
+                    {project.caseStudyRole ? (
+                      <p className="text-sm font-medium leading-relaxed text-brand-clay sm:text-base">
+                        {project.caseStudyRole}
+                      </p>
+                    ) : null}
+                    {project.caseStudyDraft.map((paragraph) => (
+                      <p
+                        key={paragraph.slice(0, 72)}
+                        className="text-sm leading-relaxed text-gray-200 sm:text-base"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                ) : isInsurFlow ? (
                   <div className="mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                     <section className="space-y-4">
                       <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">

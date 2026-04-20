@@ -1,11 +1,19 @@
 import Image from "next/image";
 
 import { HeroPhotoCard } from "@/components";
-import { ProjectFocusCard } from "@/components/cards/project-focus-card";
 import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
   "BCIT Full-Stack Web Development diploma candidate building Tandem's real-time childcare scheduler and InsurFlow's AI-powered InsurTech platform, with UI/UX internship experience at W3rlds.";
+
+const caseStudyPlaceholderParagraphs = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec faucibus lectus non massa feugiat, at porta eros tempus. In eget aliquam sem. Fusce eleifend, massa nec ullamcorper fermentum, metus lectus rhoncus libero, eget gravida velit lorem nec mauris. Integer consequat nibh nec lorem tincidunt, in bibendum nisl pulvinar. Curabitur eu turpis a nisl tempor placerat. Sed suscipit urna id neque lacinia, non consectetur sem sodales. Proin malesuada, augue a interdum aliquet, lectus lectus pulvinar libero, non pretium erat erat et dolor.",
+  "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed in congue lectus. Nunc vulputate, leo at ultricies tempus, sem lacus pulvinar augue, et finibus erat urna vel nibh. Cras in tincidunt est. Integer laoreet, turpis non eleifend maximus, libero erat pulvinar lorem, id volutpat magna ipsum in nisl. Nullam semper feugiat nisl, id pretium sem facilisis vel. Suspendisse potenti. Donec rutrum aliquet sapien, ac consectetur lectus mattis sed.",
+  "Praesent ac massa sit amet turpis volutpat pulvinar. Nam faucibus dui id orci consequat posuere. In non nisl volutpat, sodales nibh et, consectetur elit. Maecenas vulputate, neque sed euismod finibus, nisl ex malesuada turpis, et faucibus mauris tortor quis dui. Integer ac nisi arcu. Pellentesque a purus a tortor posuere vulputate. Duis vel lectus at orci elementum tincidunt. Nullam euismod, sapien quis volutpat tristique, orci risus maximus dolor, sed semper est mi non lectus.",
+  "Morbi finibus, ligula in auctor pharetra, augue enim egestas purus, non varius leo metus eget odio. Aliquam erat volutpat. In hac habitasse platea dictumst. Integer posuere urna at ligula volutpat, vitae posuere est posuere. Quisque congue turpis non odio auctor, nec gravida erat blandit. Suspendisse et faucibus justo. Aliquam non sem et justo placerat iaculis. Aenean dignissim, purus in sodales lacinia, ligula nisl commodo nisi, nec fermentum orci nisl et augue.",
+  "Aenean dapibus enim non magna aliquam, id tincidunt eros sagittis. Duis pretium justo at odio congue, sed eleifend nibh rhoncus. Sed vel ex in turpis vulputate congue. Curabitur dictum elementum massa, et efficitur orci pharetra sit amet. Etiam vehicula blandit posuere. Duis eu lacinia lorem. Donec volutpat eros sit amet viverra tincidunt. Nulla facilisi. Donec ullamcorper, mauris at porta vulputate, mauris est dictum est, at posuere enim justo vitae arcu.",
+  "Nam euismod augue eu tortor rhoncus porttitor. Vivamus vitae purus sit amet nunc suscipit blandit. Aliquam vestibulum ultrices velit, sed condimentum odio pellentesque at. Integer feugiat molestie tortor at ultrices. Duis sed arcu et lorem porta suscipit. Sed sollicitudin vestibulum sapien, eu vulputate neque tempor nec. Curabitur pretium consectetur magna, ut egestas augue congue eget. Fusce non ultrices metus. Integer dictum sem at turpis eleifend, id fermentum metus congue.",
+];
 
 const caseStudyProject = {
   title: "Tandem",
@@ -29,16 +37,11 @@ const caseStudyProject = {
   },
   expandedDescription:
     "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
+  caseStudyHeading: "Case Study Draft Placeholder",
+  caseStudyRole:
+    "Role: Front-End Developer. Involved in project structure, responsive interface design, interaction flow, and portfolio presentation of the end-to-end process.",
+  caseStudyDraft: caseStudyPlaceholderParagraphs,
 };
-
-const caseStudyPlaceholderParagraphs = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec faucibus lectus non massa feugiat, at porta eros tempus. In eget aliquam sem. Fusce eleifend, massa nec ullamcorper fermentum, metus lectus rhoncus libero, eget gravida velit lorem nec mauris. Integer consequat nibh nec lorem tincidunt, in bibendum nisl pulvinar. Curabitur eu turpis a nisl tempor placerat. Sed suscipit urna id neque lacinia, non consectetur sem sodales. Proin malesuada, augue a interdum aliquet, lectus lectus pulvinar libero, non pretium erat erat et dolor.",
-  "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed in congue lectus. Nunc vulputate, leo at ultricies tempus, sem lacus pulvinar augue, et finibus erat urna vel nibh. Cras in tincidunt est. Integer laoreet, turpis non eleifend maximus, libero erat pulvinar lorem, id volutpat magna ipsum in nisl. Nullam semper feugiat nisl, id pretium sem facilisis vel. Suspendisse potenti. Donec rutrum aliquet sapien, ac consectetur lectus mattis sed.",
-  "Praesent ac massa sit amet turpis volutpat pulvinar. Nam faucibus dui id orci consequat posuere. In non nisl volutpat, sodales nibh et, consectetur elit. Maecenas vulputate, neque sed euismod finibus, nisl ex malesuada turpis, et faucibus mauris tortor quis dui. Integer ac nisi arcu. Pellentesque a purus a tortor posuere vulputate. Duis vel lectus at orci elementum tincidunt. Nullam euismod, sapien quis volutpat tristique, orci risus maximus dolor, sed semper est mi non lectus.",
-  "Morbi finibus, ligula in auctor pharetra, augue enim egestas purus, non varius leo metus eget odio. Aliquam erat volutpat. In hac habitasse platea dictumst. Integer posuere urna at ligula volutpat, vitae posuere est posuere. Quisque congue turpis non odio auctor, nec gravida erat blandit. Suspendisse et faucibus justo. Aliquam non sem et justo placerat iaculis. Aenean dignissim, purus in sodales lacinia, ligula nisl commodo nisi, nec fermentum orci nisl et augue.",
-  "Aenean dapibus enim non magna aliquam, id tincidunt eros sagittis. Duis pretium justo at odio congue, sed eleifend nibh rhoncus. Sed vel ex in turpis vulputate congue. Curabitur dictum elementum massa, et efficitur orci pharetra sit amet. Etiam vehicula blandit posuere. Duis eu lacinia lorem. Donec volutpat eros sit amet viverra tincidunt. Nulla facilisi. Donec ullamcorper, mauris at porta vulputate, mauris est dictum est, at posuere enim justo vitae arcu.",
-  "Nam euismod augue eu tortor rhoncus porttitor. Vivamus vitae purus sit amet nunc suscipit blandit. Aliquam vestibulum ultrices velit, sed condimentum odio pellentesque at. Integer feugiat molestie tortor at ultrices. Duis sed arcu et lorem porta suscipit. Sed sollicitudin vestibulum sapien, eu vulputate neque tempor nec. Curabitur pretium consectetur magna, ut egestas augue congue eget. Fusce non ultrices metus. Integer dictum sem at turpis eleifend, id fermentum metus congue.",
-];
 
 const rationales = [
   {
@@ -147,43 +150,14 @@ export default function Home() {
             <div className="grid gap-10 lg:gap-12">
               <div className="hidden lg:block" aria-hidden="true" />
               <div className="flex w-full flex-col items-center gap-6 lg:items-end">
-                <HeroPhotoCard contentClassName="p-4" project={caseStudyProject} />
+                <HeroPhotoCard
+                  contentClassName="p-4"
+                  project={caseStudyProject}
+                  enableBackHoverExpand={false}
+                  enableLandedFocusEffect
+                />
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
-          <div className="mb-8 flex flex-col gap-3 text-center lg:text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-clay">
-              Assignment 05 Case Study
-            </p>
-            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Tandem</h2>
-            <p className="max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg">
-              Role: Front-End Developer. Involved in project structure, responsive interface design,
-              interaction flow, and portfolio presentation of the end-to-end process.
-            </p>
-          </div>
-
-          <div className="flex justify-center lg:justify-start">
-            <ProjectFocusCard
-              project={caseStudyProject}
-              featured
-              enableFullscreen
-              showCompactLinks
-            />
-          </div>
-
-          <div className="mt-10 space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8">
-            <h3 className="text-2xl font-semibold text-white">Case Study Draft Placeholder</h3>
-            {caseStudyPlaceholderParagraphs.map((paragraph) => (
-              <p
-                key={paragraph.slice(0, 60)}
-                className="text-sm leading-relaxed text-gray-200 sm:text-base"
-              >
-                {paragraph}
-              </p>
-            ))}
           </div>
         </section>
 
