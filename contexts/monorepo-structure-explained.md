@@ -223,7 +223,7 @@ You basically did! But with:
 - Monorepo capability (easy to add backend later)
 - Shared configs (DRY principle)
 - Professional DevOps (CI/CD, security)
-- AI-friendly documentation (`.context/`)
+- AI-friendly documentation (`contexts/`)
 
 ### "Should I reorganize?"
 

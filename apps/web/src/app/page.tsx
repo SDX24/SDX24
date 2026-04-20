@@ -1,12 +1,13 @@
 import Image from "next/image";
 
 import { HeroPhotoCard } from "@/components";
+import { ProjectFocusCard } from "@/components/cards/project-focus-card";
 import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
   "BCIT Full-Stack Web Development diploma candidate building Tandem's real-time childcare scheduler and InsurFlow's AI-powered InsurTech platform, with UI/UX internship experience at W3rlds.";
 
-const featuredProject = {
+const caseStudyProject = {
   title: "Tandem",
   slogan: "Bridging work and childcare",
   description:
@@ -29,6 +30,42 @@ const featuredProject = {
   expandedDescription:
     "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
 };
+
+const caseStudyPlaceholderParagraphs = [
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec faucibus lectus non massa feugiat, at porta eros tempus. In eget aliquam sem. Fusce eleifend, massa nec ullamcorper fermentum, metus lectus rhoncus libero, eget gravida velit lorem nec mauris. Integer consequat nibh nec lorem tincidunt, in bibendum nisl pulvinar. Curabitur eu turpis a nisl tempor placerat. Sed suscipit urna id neque lacinia, non consectetur sem sodales. Proin malesuada, augue a interdum aliquet, lectus lectus pulvinar libero, non pretium erat erat et dolor.",
+  "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed in congue lectus. Nunc vulputate, leo at ultricies tempus, sem lacus pulvinar augue, et finibus erat urna vel nibh. Cras in tincidunt est. Integer laoreet, turpis non eleifend maximus, libero erat pulvinar lorem, id volutpat magna ipsum in nisl. Nullam semper feugiat nisl, id pretium sem facilisis vel. Suspendisse potenti. Donec rutrum aliquet sapien, ac consectetur lectus mattis sed.",
+  "Praesent ac massa sit amet turpis volutpat pulvinar. Nam faucibus dui id orci consequat posuere. In non nisl volutpat, sodales nibh et, consectetur elit. Maecenas vulputate, neque sed euismod finibus, nisl ex malesuada turpis, et faucibus mauris tortor quis dui. Integer ac nisi arcu. Pellentesque a purus a tortor posuere vulputate. Duis vel lectus at orci elementum tincidunt. Nullam euismod, sapien quis volutpat tristique, orci risus maximus dolor, sed semper est mi non lectus.",
+  "Morbi finibus, ligula in auctor pharetra, augue enim egestas purus, non varius leo metus eget odio. Aliquam erat volutpat. In hac habitasse platea dictumst. Integer posuere urna at ligula volutpat, vitae posuere est posuere. Quisque congue turpis non odio auctor, nec gravida erat blandit. Suspendisse et faucibus justo. Aliquam non sem et justo placerat iaculis. Aenean dignissim, purus in sodales lacinia, ligula nisl commodo nisi, nec fermentum orci nisl et augue.",
+  "Aenean dapibus enim non magna aliquam, id tincidunt eros sagittis. Duis pretium justo at odio congue, sed eleifend nibh rhoncus. Sed vel ex in turpis vulputate congue. Curabitur dictum elementum massa, et efficitur orci pharetra sit amet. Etiam vehicula blandit posuere. Duis eu lacinia lorem. Donec volutpat eros sit amet viverra tincidunt. Nulla facilisi. Donec ullamcorper, mauris at porta vulputate, mauris est dictum est, at posuere enim justo vitae arcu.",
+  "Nam euismod augue eu tortor rhoncus porttitor. Vivamus vitae purus sit amet nunc suscipit blandit. Aliquam vestibulum ultrices velit, sed condimentum odio pellentesque at. Integer feugiat molestie tortor at ultrices. Duis sed arcu et lorem porta suscipit. Sed sollicitudin vestibulum sapien, eu vulputate neque tempor nec. Curabitur pretium consectetur magna, ut egestas augue congue eget. Fusce non ultrices metus. Integer dictum sem at turpis eleifend, id fermentum metus congue.",
+];
+
+const rationales = [
+  {
+    title: "Tandem (Case Study)",
+    body: "Tandem is a childcare and scheduling platform designed for trade families with irregular shifts and limited support windows. The project challenge was to reduce planning stress while preserving trust, safety, and transparency in every booking step. The solution combines guided scheduling, care-provider visibility, and clear status communication so families can move from uncertainty to action quickly. Interface decisions prioritize plain language, predictable navigation, and mobile-first readability because most scheduling moments happen under time pressure. The final structure presents process, decisions, and outcomes in sequence, allowing reviewers to understand the project from early framing to delivery without needing technical background.",
+  },
+  {
+    title: "Rudi",
+    body: "Rudi is a content-rich production website created to communicate services and brand value with stronger clarity. The core requirement was balancing visual identity with quick information access across desktop and mobile contexts. The design solution uses clear section hierarchy, consistent spacing rhythm, and readable typography so visitors can understand offerings without friction. Navigation and page flow were structured to reduce scanning effort and keep attention on the most important content first. The implementation emphasizes responsive behavior, stable performance, and visual consistency, resulting in a polished platform that supports both discovery and decision-making for first-time and returning visitors.",
+  },
+  {
+    title: "InsurFlow",
+    body: "InsurFlow is a direct-to-consumer term life insurance experience tailored for clarity during a high-stakes decision process. The main challenge was simplifying complex eligibility and estimate steps without removing important context. The solution introduces a guided flow with concise prompts, transparent estimate framing, and straightforward progress indicators that reduce confusion. Visual and structural choices support trust by keeping interactions consistent and predictable from intake to submission. Supporting architecture was built with production standards in mind so usability improvements are matched by reliability. The completed project demonstrates how information-heavy financial journeys can remain approachable while preserving quality and technical rigor.",
+  },
+  {
+    title: "Adult",
+    body: "Adult is a practical life-skills guide that helps young adults navigate budgeting, taxes, renting, and career preparation with less uncertainty. The key challenge was presenting broad topics without overwhelming users or burying critical next steps. The solution uses focused pathways, regional context, and accessible visual patterns that support quick comprehension. Content hierarchy and interaction design were shaped to keep each section actionable, with language that remains clear for general audiences. The final result is an educational resource that feels structured and supportive, turning complex real-world tasks into manageable sequences and improving confidence during early independent decision-making.",
+  },
+  {
+    title: "Bandit Breakout",
+    body: "Bandit Breakout is a browser game project centered on interaction timing, progression, and replay value. The challenge was to create a responsive gameplay loop that feels fair while still rewarding repeated attempts and skill improvement. The solution emphasizes readable state transitions, consistent controls, and pacing that escalates difficulty without breaking flow. Visual feedback and movement rhythm were tuned to make outcomes feel understandable, even during faster moments. Supporting project documentation helps viewers follow design intent and implementation logic at a high level. The completed work demonstrates strong control over mechanics, player guidance, and overall gameplay coherence in a compact format.",
+  },
+  {
+    title: "Express Documentation",
+    body: "Express Documentation is an educational reference site built to explain core Express concepts in a clear, structured format. The primary challenge was organizing technical material so it remains useful to beginners while still efficient for quick lookup. The solution uses deliberate sectioning, concise examples, and predictable navigation to improve scanning and retention. Information architecture decisions prioritize concept order and readability so each topic builds naturally on the previous one. The finished site presents implementation guidance in an approachable way, helping learners move from foundational understanding to practical application with less friction and stronger confidence.",
+  },
+];
 
 export default function Home() {
   return (
@@ -110,27 +147,64 @@ export default function Home() {
             <div className="grid gap-10 lg:gap-12">
               <div className="hidden lg:block" aria-hidden="true" />
               <div className="flex w-full flex-col items-center gap-6 lg:items-end">
-                <HeroPhotoCard contentClassName="p-4" project={featuredProject} />
+                <HeroPhotoCard contentClassName="p-4" project={caseStudyProject} />
               </div>
             </div>
           </div>
         </section>
 
-        <ProjectsScrollSection
-          project={{
-            title: featuredProject.title,
-            slogan: featuredProject.slogan,
-            description: featuredProject.description,
-            stack: featuredProject.stack,
-            logoSrc: featuredProject.logoSrc,
-            wordmarkSrc: featuredProject.wordmarkSrc,
-            links: [{ label: "Live", href: "https://tandem-blog.vercel.app" }],
-            achievements: featuredProject.achievements,
-            coverSrc: featuredProject.coverSrc,
-            brand: featuredProject.brand,
-            expandedDescription: featuredProject.expandedDescription,
-          }}
-        />
+        <section className="mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
+          <div className="mb-8 flex flex-col gap-3 text-center lg:text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-clay">
+              Assignment 05 Case Study
+            </p>
+            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Tandem</h2>
+            <p className="max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg">
+              Role: Front-End Developer. Involved in project structure, responsive interface design,
+              interaction flow, and portfolio presentation of the end-to-end process.
+            </p>
+          </div>
+
+          <div className="flex justify-center lg:justify-start">
+            <ProjectFocusCard
+              project={caseStudyProject}
+              featured
+              enableFullscreen
+              showCompactLinks
+            />
+          </div>
+
+          <div className="mt-10 space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8">
+            <h3 className="text-2xl font-semibold text-white">Case Study Draft Placeholder</h3>
+            {caseStudyPlaceholderParagraphs.map((paragraph) => (
+              <p
+                key={paragraph.slice(0, 60)}
+                className="text-sm leading-relaxed text-gray-200 sm:text-base"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </section>
+
+        <ProjectsScrollSection />
+
+        <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-24">
+          <h2 className="mb-10 text-center text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            Rationales
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {rationales.map((rationale) => (
+              <article
+                key={rationale.title}
+                className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur"
+              >
+                <h3 className="mb-3 text-xl font-semibold text-brand-apricot">{rationale.title}</h3>
+                <p className="text-sm leading-relaxed text-gray-200">{rationale.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <div className="min-h-[260vh]" aria-hidden="true" />
 

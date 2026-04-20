@@ -3,12 +3,23 @@
 import { type ProjectData, ProjectFocusCard } from "./project-focus-card";
 
 type ProjectsScrollSectionProps = {
-  project: ProjectData;
+  className?: string;
 };
 
-const FEATURED_FOCUS_TITLE = "InsurFlow";
+export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps) => {
+  const rudiProject: ProjectData = {
+    title: "Rudi",
+    slogan: "Community-first production website",
+    description:
+      "A content-rich website focused on clear storytelling, practical navigation, and a polished responsive experience.",
+    stack: ["Next.js", "TypeScript", "Responsive UI"],
+    logoSrc: "/logos/sdx24/logo-bw.svg",
+    links: [{ label: "Live", href: "https://rudi.asia" }],
+    achievements: ["Information Clarity", "Responsive Layout", "Production Polish"],
+    expandedDescription:
+      "Rudi delivers a structured, content-forward experience that balances branding and readability. The implementation focuses on section rhythm, hierarchy, and mobile-first behavior so visitors can quickly understand offerings and navigate with confidence.",
+  };
 
-export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) => {
   const insurFlowProject: ProjectData = {
     title: "InsurFlow",
     slogan: "A simpler way to apply for term life insurance",
@@ -40,10 +51,45 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
       "Adult is a practical web guide that helps young adults navigate core life tasks with clear regional guidance, accessible UI patterns, and focused educational flows.",
   };
 
-  const projects = [project, insurFlowProject, adultProject];
+  const banditBreakoutProject: ProjectData = {
+    title: "Bandit Breakout",
+    slogan: "Arcade mechanics with modern browser delivery",
+    description:
+      "A browser-based game project centered on timing, progression, and replay value, packaged with lightweight project documentation.",
+    stack: ["JavaScript", "Game Logic", "Frontend Architecture"],
+    logoSrc: "/logos/sdx24/logo-bw.svg",
+    links: [{ label: "Repo", href: "https://github.com/SDX24/BanditBreakout" }],
+    achievements: ["Gameplay Flow", "State Control", "Replayability"],
+    expandedDescription:
+      "Bandit Breakout explores interaction pacing and difficulty tuning through a focused arcade loop. The project prioritizes readable game-state transitions and straightforward controls so the experience remains intuitive while still rewarding skill improvement.",
+  };
+
+  const expressDocsProject: ProjectData = {
+    title: "Express Documentation",
+    slogan: "Developer education with structured examples",
+    description:
+      "A documentation site that explains Express fundamentals with concise examples, guided sections, and practical reference links.",
+    stack: ["Documentation", "Information Architecture", "Frontend"],
+    logoSrc: "/logos/sdx24/logo-bw.svg",
+    links: [
+      { label: "Live", href: "https://kamilbozz.github.io/Express-Documentation/" },
+      { label: "Repo", href: "https://github.com/SDX24/Express-Documentation" },
+    ],
+    achievements: ["Readable Structure", "Learning Support", "Reference Utility"],
+    expandedDescription:
+      "Express Documentation is organized to help learners move from setup concepts to implementation patterns without friction. Content hierarchy, section labeling, and example framing are intentionally designed for quick scanning and stronger concept retention.",
+  };
+
+  const projects = [
+    rudiProject,
+    insurFlowProject,
+    adultProject,
+    banditBreakoutProject,
+    expressDocsProject,
+  ];
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 pb-24 pt-[140vh]">
+    <section className={`mx-auto w-full max-w-6xl px-4 pb-24 pt-[140vh] ${className ?? ""}`}>
       <h2
         data-projects-title
         className="mb-12 text-center text-8xl font-bold tracking-tight sm:text-[9rem]"
@@ -53,19 +99,9 @@ export const ProjectsScrollSection = ({ project }: ProjectsScrollSectionProps) =
         </span>
       </h2>
       <div className="grid justify-items-center gap-14 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((projectCard) => {
-          const isFeaturedFocus = projectCard.title === FEATURED_FOCUS_TITLE;
-
-          return (
-            <ProjectFocusCard
-              key={projectCard.title}
-              project={projectCard}
-              featured={isFeaturedFocus}
-              enableFullscreen={isFeaturedFocus}
-              showCompactLinks
-            />
-          );
-        })}
+        {projects.map((projectCard) => (
+          <ProjectFocusCard key={projectCard.title} project={projectCard} showCompactLinks />
+        ))}
       </div>
     </section>
   );

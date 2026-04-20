@@ -54,7 +54,7 @@ This directory contains essential context files that AI assistants **MUST** read
 
 **MANDATORY CHECKLIST:**
 
-1. ✅ Read relevant `.context/` files
+1. ✅ Read relevant `contexts/` files
 2. ✅ If any requirement is unclear, ask clarifying questions before implementing
 3. ✅ Make your changes
 4. ✅ **Provide a quick summary of changes with examples** (var names, line changes, function names)
@@ -74,7 +74,7 @@ This directory contains essential context files that AI assistants **MUST** read
 - Modify CI/CD → Update `devops-rules.md`
 - Add new DevOps rules → Update `devops-rules.md`
 - Add new component files → Update `components.md`
-- Add new `.context/*.md` files → Update `.context/README.md`
+- Add new `contexts/*.md` files → Update `contexts/README.md`
 
 **Pre-commit hooks will BLOCK if context is missing!**
 
@@ -88,12 +88,12 @@ This directory contains essential context files that AI assistants **MUST** read
 - ❌ `feat:` commits without context updates
 - ❌ `chore(deps):` commits without tech-stack updates
 - ❌ `ci:` commits without devops-rules updates
-- ❌ New components without `.context/components.md`
-- ❌ New `.context/*.md` without `.context/README.md`
+- ❌ New components without `contexts/components.md`
+- ❌ New `contexts/*.md` without `contexts/README.md`
 
 ### This Context is Committed
 
-- ✅ `.context/` is tracked in git
+- ✅ `contexts/` is tracked in git
 - ✅ Helps future AI understand the project
 - ✅ Maintains living documentation
 - ❌ Never put secrets here (use env vars)
@@ -111,7 +111,7 @@ This directory contains essential context files that AI assistants **MUST** read
 - ❌ DO NOT edit main README.md for project documentation
 - ❌ DO NOT add setup instructions or technical details there
 - ✅ It should ONLY contain portfolio/profile information
-- ✅ For project docs, update `.context/` files instead
+- ✅ For project docs, update `contexts/` files instead
 - ✅ Main README is separate from this repository's development
 
 **Purpose**: GitHub profile page visible at `github.com/sdx24/sdx24`
@@ -121,9 +121,9 @@ This directory contains essential context files that AI assistants **MUST** read
 **Every time you make changes:**
 
 ```
-1. Read .context/devops-rules.md
-2. Read .context/project-structure.md
-3. Read .context/tech-stack.md
+1. Read contexts/devops-rules.md
+2. Read contexts/project-structure.md
+3. Read contexts/tech-stack.md
 4. Make your changes
 5. Check: Does this need context update?
    - Adding files? → Update project-structure.md
@@ -143,11 +143,11 @@ This directory contains essential context files that AI assistants **MUST** read
 touch apps/web/src/app/projects/page.tsx
 
 # 2. Update context
-# Edit .context/project-structure.md to document new route
+# Edit contexts/project-structure.md to document new route
 
 # 3. Stage everything
 git add apps/web/src/app/projects/
-git add .context/project-structure.md
+git add contexts/project-structure.md
 
 # 4. Commit
 git commit -m "feat(portfolio): add projects page"
@@ -160,11 +160,11 @@ git commit -m "feat(portfolio): add projects page"
 bun add framer-motion
 
 # 2. Update context
-# Edit .context/tech-stack.md to document new package
+# Edit contexts/tech-stack.md to document new package
 
 # 3. Stage everything
 git add package.json bun.lockb
-git add .context/tech-stack.md
+git add contexts/tech-stack.md
 
 # 4. Commit
 git commit -m "chore(deps): add framer-motion for animations"
@@ -178,7 +178,7 @@ git commit -m "chore(deps): add framer-motion for animations"
 - Did I add packages? → Update `tech-stack.md`
 - Did I change CI/CD? → Update `devops-rules.md`
 - Did I add component files? → Update `components.md`
-- Did I add a new context file? → Update `.context/README.md`
+- Did I add a new context file? → Update `contexts/README.md`
 - If YES to any → Stage those context files!
 
 **Hooks will catch missing context and block the commit.**

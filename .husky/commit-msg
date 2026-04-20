@@ -38,33 +38,33 @@ if [ "$commit_type" = "ci" ] || [ "$commit_type" = "build" ]; then
   echo "⚠️  CI/Build commit detected - checking for devops-rules update..."
 fi
 
-# If context update is needed, check if .context/ files are staged
+# If context update is needed, check if contexts/ files are staged
 if [ "$needs_context" = true ]; then
-  context_files_staged=$(git diff --cached --name-only | grep "^\.context/" || true)
+  context_files_staged=$(git diff --cached --name-only | grep "^contexts/" || true)
   
   if [ -z "$context_files_staged" ]; then
     echo ""
     echo "❌ ERROR: Context documentation required but not found!"
     echo ""
-    echo "This commit requires updating .context/ files:"
+    echo "This commit requires updating contexts/ files:"
     echo ""
     if [ "$commit_type" = "feat" ]; then
-      echo "  → Update .context/project-structure.md (if adding files/routes)"
-      echo "  → Update .context/tech-stack.md (if using new packages)"
+      echo "  → Update contexts/project-structure.md (if adding files/routes)"
+      echo "  → Update contexts/tech-stack.md (if using new packages)"
     fi
     if [ "$commit_type" = "chore" ] && [ "$commit_scope" = "deps" ]; then
-      echo "  → Update .context/tech-stack.md with new dependency"
+      echo "  → Update contexts/tech-stack.md with new dependency"
     fi
     if [ "$commit_type" = "ci" ] || [ "$commit_type" = "build" ]; then
-      echo "  → Update .context/devops-rules.md with new CI/build rules"
+      echo "  → Update contexts/devops-rules.md with new CI/build rules"
     fi
     echo ""
     echo "Please:"
-    echo "  1. Update appropriate .context/ files"
-    echo "  2. Stage them: git add .context/"
+    echo "  1. Update appropriate contexts/ files"
+    echo "  2. Stage them: git add contexts/"
     echo "  3. Commit again"
     echo ""
-    echo "See .context/commit-guidelines.md for details."
+    echo "See contexts/commit-guidelines.md for details."
     exit 1
   else
     echo "✅ Context files updated: $context_files_staged"

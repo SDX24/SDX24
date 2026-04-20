@@ -6,7 +6,7 @@ Complete file tree and organization for the SDX24 portfolio monorepo.
 
 ```
 SDX24/
-├── .context/                    # AI context files (READ FIRST!)
+├── contexts/                    # AI context files (READ FIRST!)
 │   ├── README.md               # Context directory guide
 │   ├── branding.md             # Brand guidelines (STRICT)
 │   ├── components.md           # Component architecture and behavior
@@ -116,7 +116,7 @@ SDX24/
 
 ## 🎯 Key Directories Explained
 
-### `.context/` - AI Context (CRITICAL)
+### `contexts/` - AI Context (CRITICAL)
 
 **Purpose**: Contains all rules, structure, and context AI must follow
 **When to update**:
@@ -426,7 +426,7 @@ bun add <package>
 1. Create feature branch
 2. Add code in appropriate directory
 3. Add tests (`e2e/` or `*.test.ts`)
-4. Update `.context/` files:
+4. Update `contexts/` files:
    - `tech-stack.md` if adding packages
    - `project-structure.md` if adding directories
    - `devops-rules.md` if adding rules
@@ -444,7 +444,7 @@ touch apps/web/src/app/projects/page.tsx
 touch apps/web/e2e/projects.spec.ts
 
 # 3. Update context
-# Edit .context/project-structure.md
+# Edit contexts/project-structure.md
 # Add: projects/ page structure
 
 # 4. Commit

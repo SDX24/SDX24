@@ -44,49 +44,49 @@ if echo "$STAGED_FILES" | grep -E '(^|\s)(\.github/workflows/|\.husky/|scripts/|
   needs_devops=true
 fi
 
-# New .context markdown files require README update
-if echo "$STAGED_STATUS" | grep -E '^(A|R|C).*\s\.context/.*\.md$' | grep -v -E '\.context/README\.md$' >/dev/null 2>&1; then
+# New contexts markdown files require README update
+if echo "$STAGED_STATUS" | grep -E '^(A|R|C).*\scontexts/.*\.md$' | grep -v -E 'contexts/README\.md$' >/dev/null 2>&1; then
   needs_context_readme=true
 fi
 
-context_staged=$(git diff --cached --name-only | grep '^\.context/' || true)
+context_staged=$(git diff --cached --name-only | grep '^contexts/' || true)
 
 if [ "$needs_project_structure" = true ]; then
-  if ! echo "$context_staged" | grep -q '^\.context/project-structure\.md$'; then
-    echo "❌ Context update required: .context/project-structure.md"
+  if ! echo "$context_staged" | grep -q '^contexts/project-structure\.md$'; then
+    echo "❌ Context update required: contexts/project-structure.md"
     echo "Reason: project structure changed in staged files."
     exit 1
   fi
 fi
 
 if [ "$needs_tech_stack" = true ]; then
-  if ! echo "$context_staged" | grep -q '^\.context/tech-stack\.md$'; then
-    echo "❌ Context update required: .context/tech-stack.md"
+  if ! echo "$context_staged" | grep -q '^contexts/tech-stack\.md$'; then
+    echo "❌ Context update required: contexts/tech-stack.md"
     echo "Reason: dependency change detected in staged files."
     exit 1
   fi
 fi
 
 if [ "$needs_devops" = true ]; then
-  if ! echo "$context_staged" | grep -q '^\.context/devops-rules\.md$'; then
-    echo "❌ Context update required: .context/devops-rules.md"
+  if ! echo "$context_staged" | grep -q '^contexts/devops-rules\.md$'; then
+    echo "❌ Context update required: contexts/devops-rules.md"
     echo "Reason: DevOps/CI/config changes detected in staged files."
     exit 1
   fi
 fi
 
 if [ "$needs_components_context" = true ]; then
-  if ! echo "$context_staged" | grep -q '^\.context/components\.md$'; then
-    echo "❌ Context update required: .context/components.md"
+  if ! echo "$context_staged" | grep -q '^contexts/components\.md$'; then
+    echo "❌ Context update required: contexts/components.md"
     echo "Reason: new component added under apps/web/src/components/."
     exit 1
   fi
 fi
 
 if [ "$needs_context_readme" = true ]; then
-  if ! echo "$context_staged" | grep -q '^\.context/README\.md$'; then
-    echo "❌ Context update required: .context/README.md"
-    echo "Reason: new .context markdown file added/renamed."
+  if ! echo "$context_staged" | grep -q '^contexts/README\.md$'; then
+    echo "❌ Context update required: contexts/README.md"
+    echo "Reason: new contexts markdown file added/renamed."
     exit 1
   fi
 fi

@@ -77,7 +77,7 @@ build(turborepo): optimize build pipeline
 
 ## 📝 Context Documentation Rules
 
-### When to Update `.context/` Files
+### When to Update `contexts/` Files
 
 #### 1. Adding New Features (`feat:`)
 
@@ -85,9 +85,9 @@ build(turborepo): optimize build pipeline
 
 **Update:**
 
-- `.context/project-structure.md` - If adding new files/folders
-- `.context/tech-stack.md` - If using new packages
-- `.context/devops-rules.md` - If adding quality rules
+- `contexts/project-structure.md` - If adding new files/folders
+- `contexts/tech-stack.md` - If using new packages
+- `contexts/devops-rules.md` - If adding quality rules
 
 **Example:**
 
@@ -98,7 +98,7 @@ build(turborepo): optimize build pipeline
 
 git add apps/web/src/app/projects/page.tsx
 git add apps/web/e2e/projects.spec.ts
-git add .context/project-structure.md  # Added projects/ route
+git add contexts/project-structure.md  # Added projects/ route
 git commit -m "feat(portfolio): add projects showcase section
 
 - Created projects page with grid layout
@@ -116,13 +116,13 @@ git commit -m "feat(portfolio): add projects showcase section
 # 1. Install package
 bun add framer-motion
 
-# 2. Update .context/tech-stack.md
+# 2. Update contexts/tech-stack.md
 # Add to "Animation" section:
 # - **Framer Motion** - Animation library
 
 # 3. Commit together
 git add package.json bun.lockb
-git add .context/tech-stack.md
+git add contexts/tech-stack.md
 git commit -m "chore(deps): add framer-motion for animations"
 ```
 
@@ -135,7 +135,7 @@ git commit -m "chore(deps): add framer-motion for animations"
 ```bash
 # If moving files to new structure
 git add src/components/
-git add .context/project-structure.md
+git add contexts/project-structure.md
 git commit -m "refactor(components): organize into feature folders
 
 - Moved components to features/ and ui/ directories
@@ -151,7 +151,7 @@ git commit -m "refactor(components): organize into feature folders
 ```bash
 # Adding new CI check
 git add .github/workflows/lighthouse.yml
-git add .context/devops-rules.md
+git add contexts/devops-rules.md
 git commit -m "ci(github): add lighthouse performance checks
 
 - Added workflow for performance audits
@@ -174,13 +174,13 @@ The hooks run:
 **Commit-msg (`/.husky/commit-msg`)**
 
 1. **Commitlint** - Validate conventional commit format
-2. **Context validation** - Require `.context/` updates for specific commit types
+2. **Context validation** - Require `contexts/` updates for specific commit types
 
 ### Context Validation Logic (Commit-msg)
 
 ```bash
 # If commit message starts with "feat:", "chore(deps):", or "ci:"
-# Hook checks if .context/ files are staged
+# Hook checks if contexts/ files are staged
 # If not, commit is BLOCKED with error message
 ```
 
@@ -199,9 +199,9 @@ git commit --no-verify -m "hotfix: critical production bug"
 
 - [ ] Feature code written
 - [ ] Tests added
-- [ ] `.context/project-structure.md` updated (if files added)
-- [ ] `.context/tech-stack.md` updated (if packages added)
-- [ ] `.context/devops-rules.md` updated (if rules added)
+- [ ] `contexts/project-structure.md` updated (if files added)
+- [ ] `contexts/tech-stack.md` updated (if packages added)
+- [ ] `contexts/devops-rules.md` updated (if rules added)
 - [ ] All files staged together
 - [ ] Conventional commit message written
 
@@ -213,13 +213,13 @@ touch apps/web/src/app/about/page.tsx
 touch apps/web/e2e/about.spec.ts
 
 # 2. Update context
-# Edit .context/project-structure.md
+# Edit contexts/project-structure.md
 # Add: about/ → /about route
 
 # 3. Stage everything
 git add apps/web/src/app/about/
 git add apps/web/e2e/about.spec.ts
-git add .context/project-structure.md
+git add contexts/project-structure.md
 
 # 4. Commit with conventional message
 git commit -m "feat(portfolio): add about page
@@ -247,7 +247,7 @@ git commit -m "feat(portfolio): add projects page"
 
 ```bash
 git add apps/web/src/app/projects/page.tsx
-git add .context/project-structure.md
+git add contexts/project-structure.md
 git commit -m "feat(portfolio): add projects page"
 # ✅ SUCCESS: Context updated
 ```
@@ -265,8 +265,8 @@ git commit -m "chore(deps): add axios"
 
 ```bash
 bun add axios
-# Update .context/tech-stack.md
-git add package.json bun.lockb .context/tech-stack.md
+# Update contexts/tech-stack.md
+git add package.json bun.lockb contexts/tech-stack.md
 git commit -m "chore(deps): add axios for API requests"
 # ✅ SUCCESS
 ```
@@ -312,7 +312,7 @@ git commit -m "fix: css issue"   # Where?
 
 ```bash
 # If you find outdated context
-git add .context/project-structure.md
+git add contexts/project-structure.md
 git commit -m "docs(context): update project structure
 
 - Removed deprecated routes
