@@ -39,7 +39,7 @@ SDX24/
 │       │   │       └── Stefan_Dorosh_Resume.txt # Downloadable plain-text resume file
 │       │   ├── case-study/
 │       │   │   ├── members/   # Team avatar drawings used in Tandem credits
-│       │   │   └── tandem/    # Tandem case study screenshots by section
+│       │   │   └── tandem/    # Tandem case-study assets by section (context/role/challenge/solution/outcomes)
 │       │   ├── images/
 │       │   │   └── profile.jpg # Profile photo (hero card)
 │       │   └── logos/
@@ -151,6 +151,7 @@ SDX24/
 #### Tandem Case-Study Asset Note
 
 - Tandem case-study evidence now includes expanded hi-fi captures distributed by section:
+  - `role/`: guest-auth cookie flow snippet, typed socket-room handlers, and schema captures (`users`, `pending_nanny_requests`, `nanny_shares`)
   - `challenge/`: monthly schedule and pending-work states
   - `solution/`: upload flow, new-month state, nanny-availability state, single-message confirmation state
   - `outcomes/`: childcare edit success state

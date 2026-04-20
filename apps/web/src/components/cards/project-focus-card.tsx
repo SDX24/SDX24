@@ -257,29 +257,34 @@ const CaseStudyPlaceholderAsset = ({
   const isContextSection = /context|problem/i.test(sectionTitle);
   const hasFigmaEmbed = Boolean(asset.figmaEmbedUrl);
   const hasImageAsset = Boolean(asset.src);
+  const hasVisualAsset = hasImageAsset || hasFigmaEmbed;
   const [resolvedAspectRatio, setResolvedAspectRatio] = useState<number>(16 / 9);
   const [imageNaturalSize, setImageNaturalSize] = useState<{ width: number; height: number }>({
     width: 1600,
     height: 900,
   });
-  const collapsedMaxHeight = 360;
-  const expandedMaxHeight = 560;
+  const collapsedMaxHeight = hasFigmaEmbed ? 680 : 360;
+  const expandedMaxHeight = hasFigmaEmbed ? 980 : 560;
   const activeMaxHeight = isExpanded ? expandedMaxHeight : collapsedMaxHeight;
   const maxHeightByImage = Math.min(activeMaxHeight, imageNaturalSize.height);
   const widthByHeight = Math.round(maxHeightByImage * resolvedAspectRatio);
   const maxWidthByImage = Math.min(widthByHeight, imageNaturalSize.width);
+  const figmaAspectRatio = 16 / 9;
+  const figmaMaxWidth = Math.round(activeMaxHeight * figmaAspectRatio);
   const figmaEmbedSrc = asset.figmaEmbedUrl
     ? (() => {
         const rawUrl = asset.figmaEmbedUrl.trim();
 
-        // Use the stable Figma embed gateway when given a share/design URL.
-        if (!rawUrl.includes("embed.figma.com") && rawUrl.includes("figma.com/")) {
+        // Preserve explicit embed links and only normalize plain design/share URLs.
+        if (rawUrl.includes("embed.figma.com")) {
+          return rawUrl;
+        }
+
+        if (rawUrl.includes("figma.com/")) {
           return `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(rawUrl)}`;
         }
 
-        return rawUrl.includes("hide-ui=1")
-          ? rawUrl
-          : `${rawUrl}${rawUrl.includes("?") ? "&" : "?"}hide-ui=1`;
+        return rawUrl;
       })()
     : undefined;
 
@@ -304,21 +309,37 @@ const CaseStudyPlaceholderAsset = ({
     >
       <div
         className={`relative overflow-hidden rounded-xl border transition-all duration-300 ${
-          hasImageAsset
+          hasVisualAsset
             ? isExpanded
               ? "border-dashed border-brand-apricot/45 bg-black/25"
               : "border-dashed border-white/20 bg-black/25"
             : isExpanded
               ? "min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] border-brand-apricot/45 bg-black/35"
               : `${isContextSection ? "min-h-[260px] sm:min-h-[300px]" : "min-h-[210px] sm:min-h-[240px]"} border-dashed border-white/20 bg-black/25`
-        } ${hasImageAsset ? "mx-auto w-fit" : ""}`}
+        } ${hasImageAsset ? "mx-auto w-fit" : hasFigmaEmbed ? "w-full" : ""}`}
       >
         {hasFigmaEmbed ? (
-          <div className="relative overflow-hidden rounded-xl border border-white/15 bg-black/30">
+          <div
+            className="relative mx-auto w-full overflow-hidden rounded-xl border border-white/15 bg-black/30"
+            style={{
+              aspectRatio: figmaAspectRatio,
+              width: "100%",
+              maxWidth: `${figmaMaxWidth}px`,
+            }}
+            onPointerDown={(event) => {
+              event.stopPropagation();
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <div className="pointer-events-none absolute bottom-3 right-3 z-10 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-gray-200">
+              Click / Scroll / Zoom
+            </div>
             <iframe
               src={figmaEmbedSrc}
               title={`${asset.title} Figma embed`}
-              className="-mb-[120px] -ml-[180px] h-[620px] w-[calc(100%+220px)]"
+              className="h-full w-full border-0"
               allowFullScreen
               loading="lazy"
             />
@@ -769,8 +790,15 @@ const CaseStudyLongForm = ({
 
                       const expandedAssetTitle = expandedAssetBySection[section.title] ?? null;
                       if (!expandedAssetTitle) {
+                        const hasFigmaAssets = sectionAssets.some((asset) =>
+                          Boolean(asset.figmaEmbedUrl)
+                        );
                         return (
-                          <div className="grid gap-4 md:grid-cols-2">
+                          <div
+                            className={`grid gap-4 ${
+                              hasFigmaAssets ? "lg:grid-cols-2" : "md:grid-cols-2"
+                            }`}
+                          >
                             {sectionAssets.map((asset) => (
                               <CaseStudyPlaceholderAsset
                                 key={`${asset.title}-${asset.caption}`}

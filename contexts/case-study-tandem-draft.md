@@ -23,6 +23,7 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 
 - Led core application architecture decisions.
 - Implemented real-time synchronized sessions and live messaging behavior.
+- Independently implemented guest authentication for iframe embedding with secure cookie settings (`HttpOnly`, `Secure`, `SameSite=None`).
 - Built profile section end-to-end including user schema and database structures tied to user data.
 - Implemented and integrated nanny-sharing feature logic including:
   - messaging behavior,
@@ -77,6 +78,10 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 ## Current Implementation Notes (Session Synced)
 
 - Role is presented as a highlighted role title with structured responsibility list.
+- Role section now includes technical ownership evidence with:
+  - guest auth API snippet,
+  - typed Socket.IO room handler snippet,
+  - schema captures for `users`, `pending_nanny_requests`, and `nanny_shares`.
 - Timeline block uses a horizontal rail with 4 markers (`4`, `8`, `12`, `16`) and no start/delivery labels.
 - Team block scroll targets Team Credits centered in the case-study scroll container.
 - Project links are finalized to `App Link`, `Repository Link`, `Blog Link`.
@@ -84,13 +89,20 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 - Tech stack is collapsible with matched chip styling in collapsed and expanded states.
 - Live interaction preview uses a simplified embedded frame focused on direct in-page interaction visibility.
 - Section assets use real screenshots per section; Figma embeds are limited to Process section only.
-- Process section now uses one public Figma embed plus one exported hi-fi screenshot to avoid private-access blockers.
-- Process-section Figma embeds are cropped to hide left-side selector UI.
+- Process section uses two public Figma embeds (mid-fi and hi-fi component files) with `embed.figma.com` links.
+- Process-section Figma embeds now render full frame (no side cropping) and include an explicit interactive cue.
+- Process-section embed cards are presented side-by-side on large screens to emphasize direct mid-fi to hi-fi comparison.
+- Process copy now explicitly frames iteration as mid-fi diagnosis -> hi-fi refinement.
 - Context copy and visual labels now reference a single primary persona.
 - Added new hi-fi evidence screens and mapped them by section to reduce repeated screenshot usage:
   - Challenge: monthly schedule board, pending work state
-  - Solution: upload schedule flow, new monthly state, nanny available state, single-message confirmation state
-  - Outcomes: childcare edit success month state
+  - Solution: empty-state onboarding, request detail review, upload flow, new monthly setup, single-message confirmation
+  - Outcomes: final request queue, final group join, final availability state, childcare edit success
+- Case-study visuals are now section-unique in the rendered flow (no repeated screenshot content between sections).
+- Role highlights now explicitly document:
+  - full guest session lifecycle (create, consume, cleanup),
+  - typed room-scoped realtime architecture (`share-${id}` / `dm-${id}`),
+  - persistence-first then socket-fanout messaging reliability approach.
 - Placeholder previews are click-only with section-scoped expansion and reduced-bounce transitions.
 - Team credits show avatar images from `apps/web/public/case-study/members/`.
 
@@ -99,4 +111,4 @@ Working source-of-truth for the Tandem hero case-study fullscreen content. This 
 - Competitive analysis statement included in context section:
   - "Competitive analysis revealed that while scheduling tools and childcare platforms exist, none effectively support shared childcare coordination between multiple families."
 - References include public sources for shiftwork/childcare context plus Tandem product links.
-- Process section retains mixed evidence (public mid-fi Figma flow + exported hi-fi screen).
+- Process section uses paired public Figma embeds (mid-fi + hi-fi) as direct iteration evidence.

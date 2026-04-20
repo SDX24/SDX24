@@ -17,7 +17,7 @@ type GridItem =
   | { type: "rationale"; project: ProjectWithRationale };
 
 export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps) => {
-  const [activeRationaleTitle, setActiveRationaleTitle] = useState<string | null>(null);
+  const [openRationaleTitles, setOpenRationaleTitles] = useState<string[]>([]);
 
   const rudiProject: ProjectWithRationale = {
     title: "Rudi",
@@ -63,7 +63,10 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
       "border-cyan-300/65 bg-[linear-gradient(130deg,rgba(34,211,238,0.84),rgba(30,64,175,0.72))]",
     rationalePanelClassName:
       "border-cyan-200/30 bg-[radial-gradient(circle_at_10%_8%,rgba(34,211,238,0.2),transparent_40%),linear-gradient(150deg,rgba(8,20,38,0.93),rgba(7,13,26,0.94))]",
-    links: [{ label: "Live", href: "https://insurflow.biz" }],
+    links: [
+      { label: "Live", href: "https://insurflow.biz" },
+      { label: "Repo", href: "https://github.com/Vero-Ventures/insurflow" },
+    ],
     achievements: [
       "5-minute Intake",
       "Clear Estimates",
@@ -102,7 +105,10 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
       "border-amber-300/65 bg-[linear-gradient(130deg,rgba(242,197,124,0.85),rgba(239,111,108,0.72))]",
     rationalePanelClassName:
       "border-amber-200/30 bg-[radial-gradient(circle_at_14%_12%,rgba(242,197,124,0.22),transparent_42%),linear-gradient(150deg,rgba(38,24,9,0.92),rgba(28,17,7,0.95))]",
-    links: [{ label: "Repo", href: "https://github.com/SDX24/BanditBreakout" }],
+    links: [
+      { label: "Live", href: "http://commandz.gochatus.org:30006" },
+      { label: "Repo", href: "https://github.com/SDX24/BanditBreakout" },
+    ],
     achievements: ["Gameplay Flow", "State Control", "Replayability"],
     expandedDescription:
       "Bandit Breakout explores interaction pacing and difficulty tuning through a focused arcade loop. The project prioritizes readable game-state transitions and straightforward controls so the experience remains intuitive while still rewarding skill improvement.",
@@ -137,7 +143,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
   ];
 
   const gridItems: GridItem[] = projects.flatMap((project) => {
-    if (project.title !== activeRationaleTitle) {
+    if (!openRationaleTitles.includes(project.title)) {
       return [{ type: "project", project }];
     }
 
@@ -174,7 +180,11 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
                 </p>
                 <button
                   type="button"
-                  onClick={() => setActiveRationaleTitle(null)}
+                  onClick={() => {
+                    setOpenRationaleTitles((current) =>
+                      current.filter((title) => title !== item.project.title)
+                    );
+                  }}
                   className="mt-5 rounded-full border border-white/20 bg-black/35 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-gray-100 transition hover:border-brand-apricot/60 hover:text-brand-apricot"
                 >
                   Close Rationale
@@ -183,7 +193,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
             );
           }
 
-          const isRationaleOpen = activeRationaleTitle === item.project.title;
+          const isRationaleOpen = openRationaleTitles.includes(item.project.title);
 
           return (
             <ProjectFocusCard
@@ -193,8 +203,10 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
               showRationaleToggle
               isRationaleOpen={isRationaleOpen}
               onRationaleToggle={() => {
-                setActiveRationaleTitle((current) =>
-                  current === item.project.title ? null : item.project.title
+                setOpenRationaleTitles((current) =>
+                  current.includes(item.project.title)
+                    ? current.filter((title) => title !== item.project.title)
+                    : [...current, item.project.title]
                 );
               }}
             />
