@@ -399,6 +399,7 @@ const HeroPhotoCardInner = ({
                 project={project}
                 featured={isLanded && showBack}
                 enableFullscreen={isLanded && showBack}
+                openViewLabel="case-study"
                 enableSharedLayoutMorph={false}
                 interactionArmDelayMs={1000}
                 renderFullscreenInPortal
