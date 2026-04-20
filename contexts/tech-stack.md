@@ -45,6 +45,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 - **clsx** `2.1.1` - Conditional className utility
 - **tailwind-merge** `3.4.0` - Tailwind class merging
 - **lucide-react** `0.563.0` - Icon library (UI accents)
+- **react-icons** `5.6.0` - Icon package used via `react-icons/lu`
 
 ### Animation
 
@@ -225,6 +226,7 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
   "next": "^16.1.6",
   "react": "^19.0.0",
   "react-dom": "^19.0.0",
+  "react-icons": "^5.6.0",
   "tailwind-merge": "^3.4.0",
   "zod": "^3.22.4"
 }

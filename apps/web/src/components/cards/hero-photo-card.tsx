@@ -401,6 +401,7 @@ const HeroPhotoCardInner = ({
                 enableFullscreen={isLanded && showBack}
                 enableSharedLayoutMorph={false}
                 interactionArmDelayMs={1000}
+                renderFullscreenInPortal
               />
             ) : (
               <HeroBackHoverCard

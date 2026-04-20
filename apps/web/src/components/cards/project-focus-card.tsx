@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import { createPortal } from "react-dom";
+import { LuArrowLeft } from "react-icons/lu";
 
 import { HeroBackHoverCard } from "./hero-back-hover-card";
 
@@ -38,6 +40,7 @@ type ProjectFocusCardProps = {
   showCompactLinks?: boolean;
   enableSharedLayoutMorph?: boolean;
   interactionArmDelayMs?: number;
+  renderFullscreenInPortal?: boolean;
 };
 
 type FocusPhase = "idle" | "priming" | "open";
@@ -59,6 +62,63 @@ const toCardId = (title: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+const FullscreenHeader = ({
+  cardId,
+  title,
+  logoSrc,
+  wordmarkSrc,
+  onBack,
+}: {
+  cardId: string;
+  title: string;
+  logoSrc: string;
+  wordmarkSrc?: string;
+  onBack: () => void;
+}) => (
+  <div className="sticky top-0 z-30 mb-6 border-b border-white/10 bg-black/75 px-6 py-3 backdrop-blur-xl sm:px-10">
+    <div className="mx-auto grid w-full max-w-6xl grid-cols-[40px_1fr_40px] items-center gap-3">
+      <button
+        type="button"
+        data-focus-back={cardId}
+        aria-label={`Back from ${title} fullscreen`}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/70 text-white transition hover:border-brand-apricot hover:text-brand-apricot"
+        onClick={onBack}
+      >
+        <LuArrowLeft className="h-5 w-5" aria-hidden="true" />
+      </button>
+
+      <div className="pointer-events-none flex -translate-x-14 items-center justify-center gap-3 sm:-translate-x-[4.25rem]">
+        <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-white/20 bg-black/40">
+          <Image
+            src={logoSrc}
+            alt={`${title} logo`}
+            fill
+            className="object-contain p-1"
+            sizes="32px"
+          />
+        </div>
+        {wordmarkSrc ? (
+          <div className="relative h-5 w-28">
+            <Image
+              src={wordmarkSrc}
+              alt={`${title} wordmark`}
+              fill
+              className="object-contain"
+              sizes="112px"
+            />
+          </div>
+        ) : (
+          <span className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-apricot">
+            {title}
+          </span>
+        )}
+      </div>
+
+      <div aria-hidden="true" className="h-10 w-10" />
+    </div>
+  </div>
+);
+
 export const ProjectFocusCard = ({
   project,
   featured = false,
@@ -67,6 +127,7 @@ export const ProjectFocusCard = ({
   showCompactLinks = false,
   enableSharedLayoutMorph = true,
   interactionArmDelayMs = 0,
+  renderFullscreenInPortal = false,
 }: ProjectFocusCardProps) => {
   const prefersReducedMotion = useReducedMotion();
   const cardId = useMemo(() => toCardId(project.title), [project.title]);
@@ -78,6 +139,7 @@ export const ProjectFocusCard = ({
   const [canHover, setCanHover] = useState(true);
   const [isInteractionArmed, setIsInteractionArmed] = useState(interactionArmDelayMs === 0);
   const [canInstantArmOnEnter, setCanInstantArmOnEnter] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false);
   const primingTimeoutRef = useRef<number | null>(null);
   const armTimeoutRef = useRef<number | null>(null);
   const hitboxRef = useRef<HTMLButtonElement>(null);
@@ -113,6 +175,27 @@ export const ProjectFocusCard = ({
     beginPriming();
   }, [beginPriming, interactionEnabled, isInteractionArmed, phase]);
 
+  const activateHoverIntent = useCallback(() => {
+    if (!canHover) return;
+
+    if (!isInteractionArmed) {
+      if (!canInstantArmOnEnter) return;
+      clearArmTimeout();
+      setIsInteractionArmed(true);
+      beginPriming();
+      return;
+    }
+
+    startPriming();
+  }, [
+    beginPriming,
+    canHover,
+    canInstantArmOnEnter,
+    clearArmTimeout,
+    isInteractionArmed,
+    startPriming,
+  ]);
+
   const cancelPriming = useCallback(() => {
     if (phase !== "priming") return;
     clearPrimingTimeout();
@@ -123,6 +206,15 @@ export const ProjectFocusCard = ({
     clearPrimingTimeout();
     setPhase("idle");
   }, [clearPrimingTimeout]);
+
+  const activateClickIntent = useCallback(() => {
+    if (!interactionEnabled || phase === "open") return;
+    clearPrimingTimeout();
+    clearArmTimeout();
+    setIsInteractionArmed(true);
+    setCanInstantArmOnEnter(true);
+    setPhase("open");
+  }, [clearArmTimeout, clearPrimingTimeout, interactionEnabled, phase]);
 
   useEffect(() => {
     if (!interactionEnabled) {
@@ -197,6 +289,10 @@ export const ProjectFocusCard = ({
 
     window.addEventListener("pointermove", handlePointerMove);
     return () => window.removeEventListener("pointermove", handlePointerMove);
+  }, []);
+
+  useEffect(() => {
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
@@ -370,15 +466,7 @@ export const ProjectFocusCard = ({
                   className="absolute inset-0 z-40 cursor-pointer bg-transparent"
                   aria-label={`Open ${project.title} project`}
                   onPointerEnter={() => {
-                    if (!canHover) return;
-                    if (!isInteractionArmed) {
-                      if (!canInstantArmOnEnter) return;
-                      clearArmTimeout();
-                      setIsInteractionArmed(true);
-                      beginPriming();
-                      return;
-                    }
-                    startPriming();
+                    activateHoverIntent();
                   }}
                   onPointerLeave={() => {
                     clearArmTimeout();
@@ -394,9 +482,8 @@ export const ProjectFocusCard = ({
                     startPriming();
                   }}
                   onClick={(event) => {
-                    if (canHover) {
-                      event.preventDefault();
-                    }
+                    event.preventDefault();
+                    activateClickIntent();
                   }}
                 />
               ) : null}
@@ -405,142 +492,294 @@ export const ProjectFocusCard = ({
         ) : null}
       </div>
 
-      <AnimatePresence>
-        {showFullscreen ? (
-          <motion.div
-            data-focus-fullscreen={cardId}
-            data-focus-glass="medium"
-            className="fixed inset-0 z-50 backdrop-blur-md"
-            style={{ backgroundColor: GLASS_BACKGROUND, willChange: "opacity" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: "easeOut" }}
-          >
-            <motion.div
-              layoutId={sharedLayoutId}
-              transition={CARD_MORPH_TRANSITION}
-              className="relative h-full w-full overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl"
-              style={{ borderRadius: 0, willChange: "transform, opacity" }}
-            >
-              <div className="absolute inset-0 z-[1] bg-black/24" />
-              <div
-                data-focus-dots={cardId}
-                className="absolute inset-0 z-[2] bg-grid-dot opacity-45 mix-blend-screen"
-              />
-              <motion.div
-                className="pointer-events-none absolute inset-0 z-[3]"
-                initial={{ opacity: 0.26 }}
-                animate={{ opacity: 0.12 }}
-                exit={{ opacity: 0.22 }}
-                transition={{ duration: 0.34, ease: "easeOut" }}
-                style={{
-                  background:
-                    "radial-gradient(circle at 50% 42%, rgba(242,197,124,0.18) 0%, rgba(221,174,126,0.1) 46%, rgba(17,24,39,0) 78%)",
-                }}
-              />
-              <div className="relative z-10 flex h-full flex-col p-6 sm:p-10">
-                <button
-                  type="button"
-                  data-focus-back={cardId}
-                  aria-label={`Back from ${project.title} fullscreen`}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/40 text-2xl font-bold text-white transition hover:border-brand-apricot hover:text-brand-apricot"
-                  onClick={closeFullscreen}
+      {renderFullscreenInPortal && hasMounted
+        ? createPortal(
+            <AnimatePresence>
+              {showFullscreen ? (
+                <motion.div
+                  data-focus-fullscreen={cardId}
+                  data-focus-glass="medium"
+                  className="fixed inset-0 z-50 backdrop-blur-md"
+                  style={{ backgroundColor: GLASS_BACKGROUND, willChange: "opacity" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
                 >
-                  {"<"}
-                </button>
-
-                <div className="mt-8 max-w-2xl space-y-4">
-                  <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/20 bg-black/30">
-                    <Image
-                      src={project.logoSrc}
-                      alt={`${project.title} logo`}
-                      fill
-                      className="object-contain p-2"
-                      sizes="64px"
+                  <motion.div
+                    layoutId={sharedLayoutId}
+                    transition={CARD_MORPH_TRANSITION}
+                    className="relative h-full w-full overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl"
+                    style={{ borderRadius: 0, willChange: "transform, opacity" }}
+                  >
+                    <div className="absolute inset-0 z-[1] bg-black/24" />
+                    <div
+                      data-focus-dots={cardId}
+                      className="absolute inset-0 z-[2] bg-grid-dot opacity-45 mix-blend-screen"
                     />
-                  </div>
-                  <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-apricot">
-                    {fullscreenSlogan}
-                  </p>
-                  <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                    {project.title}
-                  </h2>
-                  <p className="text-base leading-relaxed text-gray-200 sm:text-lg">
-                    {fullscreenDescription}
-                  </p>
-                </div>
+                    <motion.div
+                      className="pointer-events-none absolute inset-0 z-[3]"
+                      initial={{ opacity: 0.26 }}
+                      animate={{ opacity: 0.12 }}
+                      exit={{ opacity: 0.22 }}
+                      transition={{ duration: 0.34, ease: "easeOut" }}
+                      style={{
+                        background:
+                          "radial-gradient(circle at 50% 42%, rgba(242,197,124,0.18) 0%, rgba(221,174,126,0.1) 46%, rgba(17,24,39,0) 78%)",
+                      }}
+                    />
+                    <div className="relative z-10 flex h-full flex-col overflow-y-auto">
+                      <FullscreenHeader
+                        cardId={cardId}
+                        title={project.title}
+                        logoSrc={project.logoSrc}
+                        wordmarkSrc={project.wordmarkSrc}
+                        onBack={closeFullscreen}
+                      />
 
-                {project.caseStudyDraft?.length ? (
-                  <div className="mt-10 max-w-4xl space-y-6 rounded-3xl border border-white/10 bg-black/25 p-6 sm:p-8">
-                    <h3 className="text-2xl font-semibold text-white">
-                      {project.caseStudyHeading ?? "Case Study Draft"}
-                    </h3>
-                    {project.caseStudyRole ? (
-                      <p className="text-sm font-medium leading-relaxed text-brand-clay sm:text-base">
-                        {project.caseStudyRole}
+                      <div className="px-6 pb-6 sm:px-10 sm:pb-10">
+                        <div className="mt-8 max-w-2xl space-y-4">
+                          <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/20 bg-black/30">
+                            <Image
+                              src={project.logoSrc}
+                              alt={`${project.title} logo`}
+                              fill
+                              className="object-contain p-2"
+                              sizes="64px"
+                            />
+                          </div>
+                          <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-apricot">
+                            {fullscreenSlogan}
+                          </p>
+                          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                            {project.title}
+                          </h2>
+                          <p className="text-base leading-relaxed text-gray-200 sm:text-lg">
+                            {fullscreenDescription}
+                          </p>
+                        </div>
+
+                        {project.caseStudyDraft?.length ? (
+                          <div className="mt-10 max-w-4xl space-y-6 rounded-3xl border border-white/10 bg-black/25 p-6 sm:p-8">
+                            <h3 className="text-2xl font-semibold text-white">
+                              {project.caseStudyHeading ?? "Case Study Draft"}
+                            </h3>
+                            {project.caseStudyRole ? (
+                              <p className="text-sm font-medium leading-relaxed text-brand-clay sm:text-base">
+                                {project.caseStudyRole}
+                              </p>
+                            ) : null}
+                            {project.caseStudyDraft.map((paragraph) => (
+                              <p
+                                key={paragraph.slice(0, 72)}
+                                className="text-sm leading-relaxed text-gray-200 sm:text-base"
+                              >
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+                        ) : isInsurFlow ? (
+                          <div className="mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+                            <section className="space-y-4">
+                              <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
+                                Technical Architecture
+                              </h3>
+                              <ol className="space-y-3 text-sm text-gray-200 sm:text-base">
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  <strong className="text-brand-apricot">
+                                    Next.js 16 + React 19:
+                                  </strong>{" "}
+                                  App Router architecture with client/server boundaries optimized
+                                  for a fast guided flow.
+                                </li>
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  <strong className="text-brand-apricot">
+                                    TypeScript strict mode:
+                                  </strong>{" "}
+                                  End-to-end typed domain models with safer refactors and clearer
+                                  API contracts.
+                                </li>
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  <strong className="text-brand-apricot">
+                                    PostgreSQL + Drizzle:
+                                  </strong>{" "}
+                                  Structured application state and event persistence with
+                                  migration-first workflow hygiene.
+                                </li>
+                              </ol>
+                            </section>
+
+                            <section className="space-y-4">
+                              <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
+                                Engineering Highlights
+                              </h3>
+                              <ul className="space-y-3 text-sm text-gray-200 sm:text-base">
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  Better Auth integration with guarded route handlers and secure
+                                  identity boundaries.
+                                </li>
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  CI + lint + strict typing + Playwright coverage to keep production
+                                  quality stable.
+                                </li>
+                                <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                                  Modular feature surfaces built for fast iteration without
+                                  weakening code standards.
+                                </li>
+                              </ul>
+                            </section>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>,
+            document.body
+          )
+        : null}
+
+      {!renderFullscreenInPortal ? (
+        <AnimatePresence>
+          {showFullscreen ? (
+            <motion.div
+              data-focus-fullscreen={cardId}
+              data-focus-glass="medium"
+              className="fixed inset-0 z-50 backdrop-blur-md"
+              style={{ backgroundColor: GLASS_BACKGROUND, willChange: "opacity" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+            >
+              <motion.div
+                layoutId={sharedLayoutId}
+                transition={CARD_MORPH_TRANSITION}
+                className="relative h-full w-full overflow-hidden border border-white/10 bg-black/30 backdrop-blur-xl"
+                style={{ borderRadius: 0, willChange: "transform, opacity" }}
+              >
+                <div className="absolute inset-0 z-[1] bg-black/24" />
+                <div
+                  data-focus-dots={cardId}
+                  className="absolute inset-0 z-[2] bg-grid-dot opacity-45 mix-blend-screen"
+                />
+                <motion.div
+                  className="pointer-events-none absolute inset-0 z-[3]"
+                  initial={{ opacity: 0.26 }}
+                  animate={{ opacity: 0.12 }}
+                  exit={{ opacity: 0.22 }}
+                  transition={{ duration: 0.34, ease: "easeOut" }}
+                  style={{
+                    background:
+                      "radial-gradient(circle at 50% 42%, rgba(242,197,124,0.18) 0%, rgba(221,174,126,0.1) 46%, rgba(17,24,39,0) 78%)",
+                  }}
+                />
+                <div className="relative z-10 flex h-full flex-col overflow-y-auto">
+                  <FullscreenHeader
+                    cardId={cardId}
+                    title={project.title}
+                    logoSrc={project.logoSrc}
+                    wordmarkSrc={project.wordmarkSrc}
+                    onBack={closeFullscreen}
+                  />
+
+                  <div className="px-6 pb-6 sm:px-10 sm:pb-10">
+                    <div className="mt-8 max-w-2xl space-y-4">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/20 bg-black/30">
+                        <Image
+                          src={project.logoSrc}
+                          alt={`${project.title} logo`}
+                          fill
+                          className="object-contain p-2"
+                          sizes="64px"
+                        />
+                      </div>
+                      <p className="text-xs font-bold uppercase tracking-[0.28em] text-brand-apricot">
+                        {fullscreenSlogan}
                       </p>
+                      <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                        {project.title}
+                      </h2>
+                      <p className="text-base leading-relaxed text-gray-200 sm:text-lg">
+                        {fullscreenDescription}
+                      </p>
+                    </div>
+
+                    {project.caseStudyDraft?.length ? (
+                      <div className="mt-10 max-w-4xl space-y-6 rounded-3xl border border-white/10 bg-black/25 p-6 sm:p-8">
+                        <h3 className="text-2xl font-semibold text-white">
+                          {project.caseStudyHeading ?? "Case Study Draft"}
+                        </h3>
+                        {project.caseStudyRole ? (
+                          <p className="text-sm font-medium leading-relaxed text-brand-clay sm:text-base">
+                            {project.caseStudyRole}
+                          </p>
+                        ) : null}
+                        {project.caseStudyDraft.map((paragraph) => (
+                          <p
+                            key={paragraph.slice(0, 72)}
+                            className="text-sm leading-relaxed text-gray-200 sm:text-base"
+                          >
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    ) : isInsurFlow ? (
+                      <div className="mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+                        <section className="space-y-4">
+                          <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
+                            Technical Architecture
+                          </h3>
+                          <ol className="space-y-3 text-sm text-gray-200 sm:text-base">
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              <strong className="text-brand-apricot">Next.js 16 + React 19:</strong>{" "}
+                              App Router architecture with client/server boundaries optimized for a
+                              fast guided flow.
+                            </li>
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              <strong className="text-brand-apricot">
+                                TypeScript strict mode:
+                              </strong>{" "}
+                              End-to-end typed domain models with safer refactors and clearer API
+                              contracts.
+                            </li>
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              <strong className="text-brand-apricot">PostgreSQL + Drizzle:</strong>{" "}
+                              Structured application state and event persistence with
+                              migration-first workflow hygiene.
+                            </li>
+                          </ol>
+                        </section>
+
+                        <section className="space-y-4">
+                          <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
+                            Engineering Highlights
+                          </h3>
+                          <ul className="space-y-3 text-sm text-gray-200 sm:text-base">
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              Better Auth integration with guarded route handlers and secure
+                              identity boundaries.
+                            </li>
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              CI + lint + strict typing + Playwright coverage to keep production
+                              quality stable.
+                            </li>
+                            <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
+                              Modular feature surfaces built for fast iteration without weakening
+                              code standards.
+                            </li>
+                          </ul>
+                        </section>
+                      </div>
                     ) : null}
-                    {project.caseStudyDraft.map((paragraph) => (
-                      <p
-                        key={paragraph.slice(0, 72)}
-                        className="text-sm leading-relaxed text-gray-200 sm:text-base"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
                   </div>
-                ) : isInsurFlow ? (
-                  <div className="mt-10 grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-                    <section className="space-y-4">
-                      <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
-                        Technical Architecture
-                      </h3>
-                      <ol className="space-y-3 text-sm text-gray-200 sm:text-base">
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          <strong className="text-brand-apricot">Next.js 16 + React 19:</strong> App
-                          Router architecture with client/server boundaries optimized for a fast
-                          guided flow.
-                        </li>
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          <strong className="text-brand-apricot">TypeScript strict mode:</strong>{" "}
-                          End-to-end typed domain models with safer refactors and clearer API
-                          contracts.
-                        </li>
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          <strong className="text-brand-apricot">PostgreSQL + Drizzle:</strong>{" "}
-                          Structured application state and event persistence with migration-first
-                          workflow hygiene.
-                        </li>
-                      </ol>
-                    </section>
-
-                    <section className="space-y-4">
-                      <h3 className="text-sm font-bold uppercase tracking-[0.22em] text-brand-clay">
-                        Engineering Highlights
-                      </h3>
-                      <ul className="space-y-3 text-sm text-gray-200 sm:text-base">
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          Better Auth integration with guarded route handlers and secure identity
-                          boundaries.
-                        </li>
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          CI + lint + strict typing + Playwright coverage to keep production quality
-                          stable.
-                        </li>
-                        <li className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                          Modular feature surfaces built for fast iteration without weakening code
-                          standards.
-                        </li>
-                      </ul>
-                    </section>
-                  </div>
-                ) : null}
-              </div>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+          ) : null}
+        </AnimatePresence>
+      ) : null}
     </LayoutGroup>
   );
 };
