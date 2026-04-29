@@ -36,6 +36,7 @@ SDX24/
 │       │   ├── assets/
 │       │   │   ├── hand.png
 │       │   │   └── resume/
+│       │   │       ├── Resume-Stefan-Dorosh.pdf # Downloadable primary resume (PDF)
 │       │   │       └── Stefan_Dorosh_Resume.txt # Downloadable plain-text resume file
 │       │   ├── case-study/
 │       │   │   ├── members/   # Team avatar drawings used in Tandem credits

@@ -1,55 +1,49 @@
 Stefan Dorosh
-Full Stack Web Developer
+Full-Stack Web Developer
+Vancouver, BC
 stefandorosh24@gmail.com | 604-977-1604
-stefandorosh.com | github.com/SDX24 | linkedin.com/in/stefan-dorosh
+stefandorosh.com | github.com/SDX24 | gitlab.com/SDX24 | linkedin.com/in/stefan-dorosh
 
-SKILLS
-Languages & Frameworks:
-HTML, CSS / Tailwind, JavaScript, TypeScript, React, Next.js, Node.js, PHP, C#, .NET, MongoDB, MySQL, PostgreSQL
+SUMMARY
+Product-minded full-stack developer focused on TypeScript/Next.js applications, secure auth/session workflows, and relational data design. Experience across live company platforms and large-scale academic product builds.
 
-Tools & Platforms:
-Git, GitHub, VS Code, Figma, Photoshop, Vercel, Render, Jira, Trello, Slack, Linux, Framer, MySQL Workbench
+TECHNICAL SKILLS
+Languages: TypeScript, JavaScript, SQL, C#, HTML, CSS/Sass, PHP
+Frameworks/Libraries: React, Next.js, Node.js, Express, Socket.IO, Drizzle ORM, Prisma, Clerk, Tailwind CSS
+Data/Infra: PostgreSQL, MySQL, MongoDB, REST APIs, CI/CD, multi-tenant SaaS, object storage (S3-style)
+Engineering: Auth/session security, i18n localization, SEO strategy, Lighthouse optimization, AI API integration
+Tools: Git, GitHub, GitLab, GitHub Actions, VS Code, Linux, AWS, Vercel, Render, Jira, Trello, Figma
 
-Libraries & Technologies:
-Express, Clerk, Prisma, REST APIs, CI/CD, Cloud Services, S3 Buckets, Authentication, DevOps basics
+SELECTED TECHNICAL WORK
+RUDI | rudi.asia
+Full-Stack Developer Intern | Jan 2026 - Apr 2026
+- Built features in a production Next.js App Router platform for long-term housing discovery within established architecture constraints.
+- Implemented API-integrated product flows and localization across listing, discovery, and account experiences.
+- Improved performance and UX with Lighthouse-driven optimization, lazy-loading strategies, and page-level reformatting.
+- Strengthened SEO and technical foundations with metadata updates, React refactors, and Agile bug-fix cycles.
 
-Soft Skills:
-Agile workflow, UI/UX design, SEO, Accessibility, E-commerce systems, Networking fundamentals, Team collaboration, Communication
+Vero Ventures | InsurFlow | insurflow.biz
+Full-Stack Developer Intern | Jan 2026 - Apr 2026
+- Rebuilt a greenfield InsurTech SaaS in a team of 5 using Next.js, TypeScript, PostgreSQL, and Drizzle ORM.
+- Developed advisor-facing calculation and dashboard features; integrated AI-assisted workflows using OpenAI APIs.
+- Implemented DevOps and CI/CD guardrails using GitHub Actions with Vercel preview and production flows.
+
+Tandem | tandem-app.com
+Lead Full-Stack Developer (Academic Industry Project) | Sep 2025 - Dec 2025
+- Built a collaborative scheduling platform with secure authentication and reliable multi-user session flows.
+- Designed typed Socket.IO event contracts powering real-time sharing, live chat, and synchronized scheduling.
+- Implemented AI-assisted pipelines converting voice, text, and PDF inputs into structured scheduling-ready data.
+
+ADDITIONAL EXPERIENCE
+W3rlds | UI/UX Web Designer Intern (Remote) | Aug 2024
+- Designed layouts in Figma and Framer, improved usability from feedback, and supported SEO-oriented content structure.
+
+Platform 7 Coffee | Barista | Jul 2025 - Mar 2026
+- Delivered fast customer service, handled POS operations, and coordinated effectively in high-traffic team shifts.
 
 EDUCATION
+British Columbia Institute of Technology (BCIT) | Sep 2024 - May 2026
 Diploma, Full-Stack Web Development
-Sep 2024 - May 2026
-British Columbia Institute of Technology (BCIT)
 
+Canggu Community School | Sep 2021 - May 2024
 International Baccalaureate Diploma Programme
-2021 - May 2024
-Canggu Community School
-
-PROJECTS
-Tandem - Lead Developer
-Mobile web app helping parents in trades manage childcare scheduling
-https://tandem-blog.vercel.app
-- Led development of core application architecture.
-- Implemented real-time synchronized user sessions and live messaging.
-- Collaborated with teammates using Agile workflow.
-- Solved complex synchronization issues between users and schedules.
-
-InsurFlow - Full Stack Developer
-AI-powered InsurTech SaaS platform for life insurance advisors (greenfield project)
-https://github.com/Vero-Ventures/insurflow
-- Building a modern financial modeling platform to replace legacy spreadsheet workflows.
-- Established DevOps guardrails and engineering standards: linting, formatting, commit rules, and CI checks.
-- Working within an industry-style environment focused on scalability, security, and product-quality practices.
-
-EXPERIENCE
-W3rlds - UI/UX Web Designer Intern
-Remote | Aug 2024
-- Designed layouts in Figma and Framer.
-- Improved usability based on user feedback.
-- Contributed to SEO optimization and layout structure.
-
-Platform 7 Coffee - Barista
-Vancouver, BC | Jul 2025 - Present
-- Provide fast, friendly customer service.
-- Handle POS and multitask efficiently.
-- Communicate clearly with customers and team.

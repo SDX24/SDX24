@@ -4,14 +4,17 @@ import { HeroPhotoCard } from "@/components";
 import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
-  "BCIT Full-Stack Web Development graduate proficient in building reliable web applications, collaborating across teams, following established codebase structure, and finding practical solutions when requirements are unclear or complex. I bring a friendly, supportive working style with clear communication and strong ownership from planning to delivery.";
+  "Full-stack developer working in TypeScript/Next.js - auth flows, relational data modeling, and production-grade architecture. I've contributed to live platforms and greenfield SaaS builds: multi-tenant systems, real-time applications, AI-integrated pipelines, i18n, CI/CD, and performance optimization.";
+
+const heroCareerNote =
+  "Finishing my BCIT Full-Stack diploma in May 2026 and looking for a role where I can keep building and growing.";
 
 const caseStudyProject = {
   title: "Tandem",
   slogan: "Bridging work and childcare",
   description:
     "Tandem helps trade families plan childcare around changing shifts through one clear flow for scheduling, care sharing, and real-time status visibility.",
-  stack: ["Realtime Sync", "Socket.IO Messaging", "Neon + Drizzle"],
+  stack: ["Auth + Session Security", "Typed Socket.IO", "Neon + Drizzle"],
   logoSrc: "/logos/tandem/tandem-logo.svg",
   wordmarkSrc: "/logos/tandem/wordmark.svg",
   links: [
@@ -29,16 +32,17 @@ const caseStudyProject = {
     analogous: "#68D5FF",
   },
   expandedDescription:
-    "Tandem is built for trade parents who need dependable childcare and smart scheduling. It blends AI planning, trusted care networks, and community sharing to reduce stress and keep families supported.",
+    "Tandem is a collaborative scheduling platform for trade families, built with secure authentication, typed real-time architecture, and AI-assisted scheduling workflows.",
   caseStudyHeading: "Tandem: Case Study",
   caseStudySummary:
-    "Tandem is a mobile web application designed for parents in the trades who need to coordinate childcare around changing work schedules. The case study follows a clear beginning-to-end narrative across problem context, implementation decisions, and delivery outcomes from a 16-week team cycle.",
+    "Tandem is a mobile web application for parents in the trades who need to coordinate childcare around changing schedules. This case study traces the 16-week build from problem context through secure auth/session implementation, typed real-time architecture, and delivery outcomes.",
   caseStudyRole: "Lead Full-Stack Developer",
   caseStudyRoleResponsibilities: [
     "Independently implemented guest authentication for iframe embedding with hardened HttpOnly, SameSite=None, and Secure cookies.",
     "Designed typed Socket.IO event contracts and room routing for group collaboration and direct communication.",
     "Built profile and nanny-sharing data models in Postgres and integrated persistence with Drizzle + Neon.",
     "Added end-to-end reliability checks for guest session creation, cookie cleanup, and real-time flow behavior.",
+    "Implemented AI-assisted input flows that transformed voice, text, and PDF submissions into structured scheduling-ready data.",
   ],
   caseStudyTimeline: "Sep 2025 - Dec 2025 (16 weeks)",
   caseStudyTeam: "3 developers + 5 designers",
@@ -345,7 +349,7 @@ const caseStudyProject = {
       name: "Stefan Dorosh",
       team: "Development",
       avatarSrc: "/case-study/members/Stefan.PNG",
-      linkedin: "https://linkedin.com/in/stefan-dorosh-19b946323",
+      linkedin: "https://linkedin.com/in/stefan-dorosh",
       isSelf: true,
     },
     {
@@ -456,11 +460,14 @@ export default function Home() {
                   Stefan Dorosh
                 </h1>
                 <p className="text-xl font-semibold text-brand-apricot">
-                  Product-minded shipping with polish, clarity, and calm.
+                  Full-stack developer working in TypeScript/Next.js
                 </p>
               </div>
               <p className="mx-auto max-w-xl text-xl leading-relaxed text-gray-300 lg:mx-0">
                 {heroDescription}
+              </p>
+              <p className="mx-auto max-w-xl text-lg leading-relaxed text-gray-400 lg:mx-0">
+                {heroCareerNote}
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                 <a
@@ -480,7 +487,7 @@ export default function Home() {
                   View GitLab
                 </a>
                 <a
-                  href="https://linkedin.com/in/stefan-dorosh-19b946323"
+                  href="https://linkedin.com/in/stefan-dorosh"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-lg border-2 border-brand-teal-light px-8 py-3 font-bold text-brand-clay transition-colors hover:bg-brand-teal-light/10"
@@ -494,8 +501,8 @@ export default function Home() {
                   Contact
                 </a>
                 <a
-                  href="/assets/resume/Stefan_Dorosh_Resume.txt"
-                  download="Stefan_Dorosh_Resume.txt"
+                  href="/assets/resume/Resume-Stefan-Dorosh.pdf"
+                  download="Resume-Stefan-Dorosh.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-lg border-2 border-brand-teal-light px-8 py-3 font-bold text-brand-clay transition-colors hover:bg-brand-teal-light/10"
@@ -506,7 +513,7 @@ export default function Home() {
               <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400 lg:justify-start">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   <span className="h-2 w-2 rounded-full bg-brand-coral" />
-                  <span>Open to work from May 2026</span>
+                  <span>Open to full-stack opportunities</span>
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
                   Vancouver, BC

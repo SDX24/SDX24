@@ -21,9 +21,9 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
 
   const rudiProject: ProjectWithRationale = {
     title: "Rudi",
-    slogan: "AI-powered real estate operating system",
+    slogan: "AI-native real estate operating system for long-term rentals",
     description:
-      "An AI-first real estate platform that automates listing creation, behavioral matching, and transaction workflows for renters, owners, and agents.",
+      "An AI-first verified-villa platform that automates listing creation, behavioral matching, and transaction workflows for renters, owners, and agents.",
     stack: [
       "AI Video Processing",
       "AI Listing Generator",
@@ -43,19 +43,21 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
     links: [{ label: "Live", href: "https://rudi.asia" }],
     achievements: [
       "Up to 70% Process Automation",
-      "Lifestyle-Based Discovery",
       "Faster Listing Operations",
+      "Lifestyle-Based Discovery",
+      "2,000+ Verified Villas",
+      "AI-Assisted Listing Workflows",
     ],
     expandedDescription:
-      "RUDI is an AI-powered real estate system built to automate up to 70% of traditional workflows across renting, selling, and buying. The platform replaces legacy listing and search patterns with user-centered intelligence, including multilingual AI video analysis, automated listing generation, lifestyle-first mapping through SenseMap, and recommendation logic via the Best Offer Engine. Safe Payment infrastructure adds secure verification and transaction protection, while upcoming voice search expands hands-free discovery. RUDI introduces a new operating model where real estate interactions become simpler, faster, and smarter for renters, property owners, and agents.",
+      "RUDI is an AI-powered and AI-native real estate system built for long-term living workflows. The platform combines multilingual video-to-listing pipelines, automated listing generation, lifestyle-first mapping through SenseMap, recommendation logic via the Best Offer Engine, and secure transaction messaging through Safe Payment. It keeps the original goal of making real estate interactions simpler and faster while adding stronger verified-inventory and AI-assisted operations at scale.",
   };
 
   const insurFlowProject: ProjectWithRationale = {
     title: "InsurFlow",
     slogan: "A simpler way to apply for term life insurance",
     description:
-      "Consumer-first D2C broker flow for Canadian term life insurance with guided intake, clear non-binding estimates, and in-app submission tracking.",
-    stack: ["Next.js 16", "TypeScript", "PostgreSQL", "Better Auth", "CI/CD"],
+      "A consumer-first D2C broker flow for Canadian term life insurance, rebuilt as a greenfield SaaS to replace spreadsheet-heavy advisor workflows.",
+    stack: ["Next.js 16", "TypeScript", "PostgreSQL", "Better Auth", "Drizzle ORM", "CI/CD"],
     logoSrc: "/logos/insurflow/insurflow-logo_no_bg.png",
     compactLogoContainerClassName: "h-20 w-20",
     compactLogoPixelSize: 112,
@@ -71,10 +73,12 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
       "5-minute Intake",
       "Clear Estimates",
       "Status Tracking",
-      "Canada-first Guidance",
+      "Advisor Workflow Speedups",
+      "Modern Multi-Tenant Foundation",
+      "CI/CD Guardrails",
     ],
     expandedDescription:
-      "InsurFlow is a Canadian consumer-first D2C broker experience for term life insurance. Users move from a short eligibility intake to a clear non-binding estimate, then continue through one guided submission flow with transparent status updates. The product keeps recommendation context understandable while preserving production engineering standards across architecture, security, and CI.",
+      "InsurFlow is a Canadian consumer-first D2C broker experience and a greenfield InsurTech rebuild delivered with a modern TypeScript stack. Users move from short eligibility intake to clear non-binding estimates, then continue through guided submission with transparent status updates. On the engineering side, the platform includes advisor-facing calculations, dashboard workflows, AI-assisted product flows, and strong CI/CD guardrails for scalable and secure delivery.",
   };
 
   const adultProject: ProjectWithRationale = {
@@ -98,7 +102,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
     title: "Bandit Breakout",
     slogan: "Arcade mechanics with modern browser delivery",
     description:
-      "A browser-based game project centered on timing, progression, and replay value, packaged with lightweight project documentation.",
+      "A browser-based arcade project centered on timing, progression, and replay value, with documented mechanics and implementation notes.",
     stack: ["JavaScript", "Game Logic", "Frontend Architecture"],
     logoSrc: "/logos/bandit/bandit-logo-circle.svg",
     rationaleBadgeClassName:
@@ -111,7 +115,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
     ],
     achievements: ["Gameplay Flow", "State Control", "Replayability"],
     expandedDescription:
-      "Bandit Breakout explores interaction pacing and difficulty tuning through a focused arcade loop. The project prioritizes readable game-state transitions and straightforward controls so the experience remains intuitive while still rewarding skill improvement.",
+      "Bandit Breakout explores interaction pacing and difficulty tuning through a focused arcade loop. The project prioritizes readable game-state transitions and straightforward controls so the experience remains intuitive while still rewarding skill improvement. The implementation is documented, and deployment scope remains constrained by database storage limits in the original hosting setup.",
   };
 
   const expressDocsProject: ProjectWithRationale = {

@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Stefan Dorosh Portfolio | SDX24",
   description:
-    "Full Stack Web Developer specializing in React, Next.js, and TypeScript. View my projects and experience.",
+    "Product-minded full-stack developer focused on TypeScript/Next.js applications, secure auth/session workflows, and relational data design.",
   icons: {
     icon: "/logos/sdx24/logo-main-inverse.svg",
     apple: "/logos/sdx24/logo-main-inverse.svg",
