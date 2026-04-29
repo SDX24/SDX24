@@ -48,6 +48,9 @@ This directory contains essential context files that AI assistants **MUST** read
 - **[commit-guidelines.md](commit-guidelines.md)** - Commit requirements and context documentation rules
 - **[components.md](components.md)** - Component architecture, behavior, and usage rules
 - **[case-study-tandem-draft.md](case-study-tandem-draft.md)** - Working Tandem case-study content source and placeholders
+- **[Stefan_Dorosh_Master_Resume_Source.md](Stefan_Dorosh_Master_Resume_Source.md)** - Resume source-of-truth content bank for portfolio/resume alignment
+- **[Stefan_Dorosh_Resume_OnePage_Technical_V2.tex](Stefan_Dorosh_Resume_OnePage_Technical_V2.tex)** - One-page technical resume source (LaTeX)
+- **[Resume-Stefan-Dorosh.pdf](Resume-Stefan-Dorosh.pdf)** - Exported resume PDF reference snapshot
 
 ## Tandem Case-Study Note
 
