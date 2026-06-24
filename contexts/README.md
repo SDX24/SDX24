@@ -48,9 +48,20 @@ This directory contains essential context files that AI assistants **MUST** read
 - **[commit-guidelines.md](commit-guidelines.md)** - Commit requirements and context documentation rules
 - **[components.md](components.md)** - Component architecture, behavior, and usage rules
 - **[case-study-tandem-draft.md](case-study-tandem-draft.md)** - Working Tandem case-study content source and placeholders
-- **[Stefan_Dorosh_Master_Resume_Source.md](Stefan_Dorosh_Master_Resume_Source.md)** - Resume source-of-truth content bank for portfolio/resume alignment
-- **[Stefan_Dorosh_Resume_OnePage_Technical_V2.tex](Stefan_Dorosh_Resume_OnePage_Technical_V2.tex)** - One-page technical resume source (LaTeX)
-- **[Resume-Stefan-Dorosh.pdf](Resume-Stefan-Dorosh.pdf)** - Exported resume PDF reference snapshot
+
+## 📄 Resume & Career Source-of-Truth
+
+Stefan's resume material lives in **[resumes/](resumes/)** — the career source-of-truth
+(master content bank, contribution-report evidence, one-page resume `.tex` sources, cover
+letters, and the `tectonic` LaTeX engine). **This folder is local-only / gitignored** (personal
+data), so start at **[resumes/AGENTS.md](resumes/AGENTS.md)** for the map, editing rules, and the
+compile workflow.
+
+- **Source of truth:** `resumes/Stefan_Dorosh_Master_Resume_Source.md` (edit first when a fact changes).
+- **Current resume:** `resumes/resume/Stefan_Dorosh_Resume_OnePage_Technical_V4.tex` (compile with `tectonic`).
+- **Downloadable resume on the site:** the compiled V4 is copied (tracked) to
+  `apps/web/public/assets/resume/Resume-Stefan-Dorosh.pdf`, linked from the hero in
+  `apps/web/src/app/page.tsx`. Refresh that copy after recompiling.
 
 ## Tandem Case-Study Note
 
