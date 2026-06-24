@@ -4,16 +4,16 @@ import { HeroPhotoCard } from "@/components";
 import { ProjectsScrollSection } from "@/components/cards/projects-scroll-section";
 
 const heroDescription =
-  "Full-stack developer working in TypeScript/Next.js - auth flows, relational data modeling, and production-grade architecture. I've contributed to live platforms and greenfield SaaS builds: multi-tenant systems, real-time applications, AI-integrated pipelines, i18n, CI/CD, and performance optimization.";
+  "Full-stack developer working in TypeScript/Next.js - auth/session security, relational data modeling, real-time systems, and AI-integrated product flows. I build end-to-end across frontend, backend, data, and deployment: live company platforms, a client InsurTech SaaS, and a real-time scheduling app I led.";
 
 const heroCareerNote =
-  "Finishing my BCIT Full-Stack diploma in May 2026 and looking for a role where I can keep building and growing.";
+  "2026 BCIT Full-Stack Web Development graduate, currently building across the stack on RUDI (an AI-native real-estate platform) and open to a role where I can keep growing.";
 
 const caseStudyProject = {
   title: "Tandem",
   slogan: "Bridging work and childcare",
   description:
-    "Tandem helps trade families plan childcare around changing shifts through one clear flow for scheduling, care sharing, and real-time status visibility.",
+    "Tandem helps skilled-trades families plan childcare around changing shifts through one clear flow for scheduling, care sharing, and real-time status visibility.",
   stack: ["Auth + Session Security", "Typed Socket.IO", "Neon + Drizzle"],
   logoSrc: "/logos/tandem/tandem-logo.svg",
   wordmarkSrc: "/logos/tandem/wordmark.svg",
@@ -32,17 +32,16 @@ const caseStudyProject = {
     analogous: "#68D5FF",
   },
   expandedDescription:
-    "Tandem is a collaborative scheduling platform for trade families, built with secure authentication, typed real-time architecture, and AI-assisted scheduling workflows.",
+    "Tandem is a collaborative scheduling platform for skilled-trades families, built with secure authentication, typed real-time architecture, and AI-assisted scheduling workflows.",
   caseStudyHeading: "Tandem: Case Study",
   caseStudySummary:
-    "Tandem is a mobile web application for parents in the trades who need to coordinate childcare around changing schedules. This case study traces the 16-week build from problem context through secure auth/session implementation, typed real-time architecture, and delivery outcomes.",
+    "Tandem is a mobile web app that helps parents in the skilled trades coordinate childcare around changing shifts. This case study covers my full-stack ownership across the 16-week build: privacy-aware guest auth, typed real-time architecture, and the data models behind shared scheduling.",
   caseStudyRole: "Lead Full-Stack Developer",
   caseStudyRoleResponsibilities: [
-    "Independently implemented guest authentication for iframe embedding with hardened HttpOnly, SameSite=None, and Secure cookies.",
-    "Designed typed Socket.IO event contracts and room routing for group collaboration and direct communication.",
-    "Built profile and nanny-sharing data models in Postgres and integrated persistence with Drizzle + Neon.",
-    "Added end-to-end reliability checks for guest session creation, cookie cleanup, and real-time flow behavior.",
-    "Implemented AI-assisted input flows that transformed voice, text, and PDF submissions into structured scheduling-ready data.",
+    "Built privacy-aware guest auth for iframe embedding with hardened HttpOnly, Secure, SameSite=None cookies and a full session lifecycle.",
+    "Designed typed Socket.IO event contracts and room routing for group and direct real-time messaging.",
+    "Owned profile and nanny-sharing data models on Drizzle + Neon Postgres, backed by end-to-end reliability checks.",
+    "Implemented AI-assisted pipelines turning voice, text, and PDF input into structured scheduling data.",
   ],
   caseStudyTimeline: "Sep 2025 - Dec 2025 (16 weeks)",
   caseStudyTeam: "3 developers + 5 designers",
@@ -56,10 +55,6 @@ const caseStudyProject = {
     "Clerk Auth",
     "Socket.IO",
     "FullCalendar",
-    "Radix UI",
-    "date-fns",
-    "react-dropzone",
-    "uuid",
     "IBM watsonx AI",
     "Groq SDK",
   ],
@@ -67,14 +62,12 @@ const caseStudyProject = {
     {
       title: "Project Context and Problem",
       paragraphs: [
-        "Tandem was created for parents in the trades who often deal with early starts, overtime, and sudden schedule changes. Competitive analysis revealed that while scheduling tools and childcare platforms exist, none effectively support shared childcare coordination between multiple families.",
-        "Most existing products solve only one side of the problem. Calendar tools handle dates but not shared care responsibility, and childcare tools help with provider search but not ongoing schedule coordination. Tandem was designed to combine both in one mobile-first flow so families can plan, share, and adjust in the same place.",
-        "Primary persona research reinforced this direction by documenting recurring stress points in shift-based households, including sudden schedule changes, fragmented communication channels, and limited time to evaluate childcare options.",
+        "Tandem was built for parents in the skilled trades, who deal with early starts, overtime, and sudden shift changes. Competitive analysis showed that scheduling tools and childcare platforms exist separately, but none support shared childcare coordination between families in one place.",
+        "Persona research confirmed the recurring pain points in shift-based households: sudden schedule changes, fragmented communication, and little time to evaluate childcare. Tandem combines scheduling and care coordination in a single mobile-first flow.",
       ],
       highlights: [
-        "Primary user need: fast childcare planning around variable work schedules.",
-        "Competitive gap: no unified tool for scheduling + childcare + shared responsibility.",
-        "Product direction: one flow for availability, requests, and family coordination.",
+        "User need: fast childcare planning around variable work schedules.",
+        "Gap: no unified tool for scheduling + childcare + shared responsibility.",
       ],
       citations: [
         {
@@ -90,28 +83,14 @@ const caseStudyProject = {
         {
           title: "Tandem dashboard on mobile",
           caption:
-            "Live app dashboard view showing daily schedule context and childcare coordination on mobile.",
+            "Live app dashboard showing daily schedule context and childcare coordination on mobile.",
           src: "/case-study/tandem/context/tandem-dashboard-mobile.png",
           imageAlt: "Tandem mobile dashboard showing childcare schedule overview",
         },
         {
-          title: "Tandem dashboard on desktop",
-          caption:
-            "Desktop dashboard layout used to keep planning, visibility, and updates clear on larger screens.",
-          src: "/case-study/tandem/context/tandem-dashboard-desktop.png",
-          imageAlt: "Tandem desktop dashboard showing scheduling and coordination view",
-        },
-        {
-          title: "Tandem dashboard mobile variant",
-          caption:
-            "Additional mobile state confirming readability and hierarchy during active schedule management.",
-          src: "/case-study/tandem/context/tandem-dashboard-mobile-alt.png",
-          imageAlt: "Tandem mobile screen with schedule cards and controls",
-        },
-        {
           title: "Primary user persona",
           caption:
-            "Primary persona profile used to define goals, behavior patterns, and childcare pain points for shift-based families.",
+            "Primary persona used to define goals, behavior patterns, and childcare pain points for shift-based families.",
           src: "/case-study/tandem/context/tandem-user-persona.png",
           imageAlt:
             "Primary Tandem user persona showing behavior, goals, frustrations, scenarios, and key tasks.",
@@ -122,24 +101,15 @@ const caseStudyProject = {
     {
       title: "Role and Technical Ownership",
       paragraphs: [
-        "This part of Tandem was implemented 100% by me: I owned guest access, real-time collaboration plumbing, and profile-linked nanny-sharing data foundations that support multi-user coordination.",
-        "For guest authentication, I implemented the full lifecycle: create session in `/api/auth/guest`, consume identity through `guestSession` utilities, and clear cookies plus user data in `/api/auth/clear-data`. Cookie settings were tuned for cross-origin iframe behavior with `HttpOnly`, `Secure`, and `SameSite=None`.",
-        "I also built the typed Socket.IO layer with centralized event contracts and room-scoped handlers for shared groups and direct messages, then paired it with persistence-first messaging (save over HTTP before WebSocket fanout) so refreshes and dropped packets do not lose message state.",
+        "I owned guest access, the real-time collaboration layer, and the profile-linked nanny-sharing data models that support multi-user coordination.",
+        "For guest auth I built the full lifecycle (create, consume, clear) with cookies tuned for cross-origin iframe embedding (`HttpOnly`, `Secure`, `SameSite=None`). The typed Socket.IO layer uses centralized event contracts and room-scoped handlers for group and direct messages, paired with persist-first messaging (save over HTTP before WebSocket fanout) so refreshes and dropped packets never lose state.",
       ],
       highlights: [
-        "Security constraint solved: cross-origin iframe guest auth with hardened cookie settings.",
-        "Architecture choice: typed Socket.IO contracts in one place, enforced across handlers and hooks.",
-        "Scalability pattern: room-scoped channels for group rooms and direct rooms instead of global broadcast.",
-        "Reliability: full guest session lifecycle plus E2E checks for session persistence and cleanup.",
+        "Cross-origin iframe guest auth with hardened cookie settings and a full session lifecycle.",
+        "Typed Socket.IO contracts enforced across handlers and hooks.",
+        "Room-scoped channels instead of global broadcast; persist-first messaging for durability.",
       ],
       assets: [
-        {
-          title: "Profile system implementation",
-          caption:
-            "Profile screen implemented by me and connected to the underlying `users` schema for identity, account context, and reusable preferences.",
-          src: "/case-study/tandem/role/tandem-profile-screen.png",
-          imageAlt: "Tandem profile screen used in the live app",
-        },
         {
           title: "Guest auth cookie lifecycle (API route snippet)",
           caption:
@@ -156,187 +126,57 @@ const caseStudyProject = {
             "Code snippet of typed Socket.IO room handlers for share and direct message rooms",
         },
         {
-          title: "Users table schema",
-          caption:
-            "Schema supporting account identity, profile attributes, and guest-user flags that power authenticated and anonymous flows.",
-          src: "/case-study/tandem/role/tandem-schema-users.png",
-          imageAlt: "Database schema view for Tandem users table",
-        },
-        {
-          title: "Pending nanny requests schema",
-          caption:
-            "Request-state schema used to track user request lifecycle and enforce per-user/per-date uniqueness constraints.",
-          src: "/case-study/tandem/role/tandem-schema-pending-nanny-requests.png",
-          imageAlt: "Database schema view for pending nanny requests table",
-        },
-        {
           title: "Nanny shares schema",
           caption:
             "Shared coordination schema storing timing, price, capacity, and JSONB members/messages for active nanny-share collaboration.",
           src: "/case-study/tandem/role/tandem-schema-nanny-shares.png",
           imageAlt: "Database schema view for nanny shares table",
         },
+        {
+          title: "Profile system implementation",
+          caption:
+            "Profile screen connected to the `users` schema for identity, account context, and reusable preferences.",
+          src: "/case-study/tandem/role/tandem-profile-screen.png",
+          imageAlt: "Tandem profile screen used in the live app",
+        },
       ],
       gradientVariant: "teal",
-    },
-    {
-      title: "Challenge Breakdown",
-      paragraphs: [
-        "A core challenge was making one experience work clearly on both mobile and desktop without changing how key flows behave. Early layouts created uneven hierarchy across screens, so users needed more visual guidance to understand current status and next actions.",
-        "Existing tools also failed to solve shared childcare coordination in one place. Families had to switch between calendars, messaging apps, and service platforms, which made responsibility and availability harder to track during schedule changes.",
-        "Hi-fi scheduling passes exposed concrete friction points in monthly planning: unclear pending-work states, repetitive month switching, and weak visual feedback when users added or adjusted work blocks.",
-      ],
-      highlights: [
-        "Problem: mobile and desktop hierarchy drifted -> Decision: switched to relative layout stacking -> Result: clearer cross-device readability.",
-        "Problem: shared status was fragmented -> Decision: unified request and participation states -> Result: faster understanding of who is responsible.",
-        "Problem: schedule transfer mismatches -> Decision: structured date handling and persistence rules -> Result: more reliable shared updates.",
-      ],
-      assets: [
-        {
-          title: "Hi-fi monthly scheduling board",
-          caption:
-            "High-fidelity monthly planning surface used to validate day density, readability, and action hierarchy before implementation tuning.",
-          src: "/case-study/tandem/challenge/tandem-hifi-monthly-schedule.png",
-          imageAlt: "Tandem high-fidelity monthly scheduling board view",
-        },
-        {
-          title: "Hi-fi pending work state",
-          caption:
-            "Pending-work state used during design QA to ensure in-progress schedule edits remained visible and understandable.",
-          src: "/case-study/tandem/challenge/tandem-hifi-add-work-pending.png",
-          imageAlt: "Tandem high-fidelity pending work scheduling state",
-        },
-      ],
-      gradientVariant: "amber",
-    },
-    {
-      title: "Solution Strategy and Implementation",
-      paragraphs: [
-        "The solution combined scheduling and childcare coordination into one system so parents did not need multiple apps to manage the same task. The nanny-sharing feature was structured as one continuous journey: request, review, join, and schedule visibility.",
-        "Flow states were designed to keep responsibility clear at each step. Parents can see open requests, member status, and shared availability without leaving the core schedule context.",
-        "Features were separated into stable modules so updates to one part of the flow did not break other interactions. This kept the experience consistent while the sharing logic expanded.",
-        "Implementation evidence in this section focuses on setup and transition states: first entry, participant review, schedule upload, month creation, and confirmation messaging.",
-      ],
-      highlights: [
-        "Competitive gap solved: scheduling and childcare coordination now happen in one place.",
-        "Nanny-sharing introduced as a structured feature, not a separate disconnected tool.",
-        "Group participation states show availability and responsibility clearly.",
-        "Hybrid delivery model (persist first, then socket fanout) keeps shared schedules responsive and durable.",
-      ],
-      assets: [
-        {
-          title: "Nanny-sharing empty state",
-          caption:
-            "Starting state where no requests exist yet, used to guide first-time user action.",
-          src: "/case-study/tandem/solution/tandem-nanny-empty-state.png",
-          imageAlt: "Tandem nanny sharing empty state",
-        },
-        {
-          title: "Nanny request user details",
-          caption:
-            "Detailed request view used to review participant context before joining a shared plan.",
-          src: "/case-study/tandem/solution/tandem-nanny-user-details.png",
-          imageAlt: "Tandem nanny request user details screen",
-        },
-        {
-          title: "Schedule upload flow (hi-fi)",
-          caption:
-            "Upload pathway used to transfer schedule inputs into the monthly planning experience with clear progression feedback.",
-          src: "/case-study/tandem/solution/tandem-hifi-upload-schedule.png",
-          imageAlt: "Tandem high-fidelity upload schedule flow",
-        },
-        {
-          title: "New monthly schedule state (hi-fi)",
-          caption:
-            "Hi-fi month-creation view used to validate faster transition between planning cycles and cleaner initial setup.",
-          src: "/case-study/tandem/solution/tandem-hifi-new-monthly.png",
-          imageAlt: "Tandem high-fidelity new monthly schedule state",
-        },
-        {
-          title: "Single-message confirmation state (hi-fi)",
-          caption:
-            "Targeted messaging state used to keep confirmations concise and reduce ambiguity during coordination handoff.",
-          src: "/case-study/tandem/solution/tandem-hifi-apply-single-message.png",
-          imageAlt: "Tandem high-fidelity single message confirmation state",
-        },
-      ],
-      gradientVariant: "mint",
     },
     {
       title: "Outcomes & Delivery Impact",
       paragraphs: [
-        "The final experience reduced the main scheduling path from approximately 6 to 7 interactions down to 3 to 4 focused actions for common planning tasks. This made fast updates easier during time-sensitive schedule changes.",
-        "Availability and group status became easier to interpret after shared states were consolidated into one visible flow. The final system also removed repeated switching between external calendar and chat tools for core coordination steps.",
-        "Final hi-fi validation screens confirmed that monthly childcare edits and scheduling confirmations were readable at a glance, helping preserve confidence during rapid plan changes.",
+        "Consolidating scheduling and sharing into one flow cut the common scheduling path from ~6-7 interactions to ~3-4 focused actions, making fast updates easier during time-sensitive changes.",
+        "Shared availability and group status became readable at a glance, removing the need to switch between separate calendar and chat tools for core coordination.",
       ],
       highlights: [
-        "Reduced core scheduling flow from ~6-7 steps to ~3-4 actions for common tasks.",
-        "Improved clarity of availability and group participation status in shared care flows.",
-        "Reduced navigation confusion between scheduling and sharing through unified flow states.",
-        "Removed dependency on external coordination tools for core schedule + share actions.",
+        "Core scheduling flow reduced from ~6-7 steps to ~3-4 actions.",
+        "Shared availability and participation status unified into one view.",
+        "Removed dependency on external calendar/chat tools for core coordination.",
       ],
       assets: [
         {
-          title: "Final request queue state",
+          title: "Scheduling outcome",
           caption:
-            "Delivered request-list state that made open sharing opportunities easier to scan and act on quickly.",
-          src: "/case-study/tandem/solution/tandem-nanny-request-cards.png",
-          imageAlt: "Final Tandem request queue state for nanny sharing",
+            "Delivered scheduling view showing the streamlined planning flow in the live app.",
+          src: "/case-study/tandem/outcomes/tandem-outcome-scheduling.png",
+          imageAlt: "Tandem scheduling outcome screen",
         },
         {
-          title: "Final group join state",
+          title: "Care-sharing outcome",
           caption:
-            "Delivered join-confirmed state showing clear transition from request acceptance to shared coordination.",
-          src: "/case-study/tandem/solution/tandem-nanny-group-join.png",
-          imageAlt: "Final Tandem group join outcome state",
+            "Shared care coordination view bringing availability and participation status into one place.",
+          src: "/case-study/tandem/outcomes/tandem-outcome-sharing.png",
+          imageAlt: "Tandem care sharing outcome screen",
         },
         {
-          title: "Final availability quality snapshot (hi-fi)",
+          title: "Dashboard outcome",
           caption:
-            "Finalized availability-focused state showing improved visibility of childcare readiness during decision-making.",
-          src: "/case-study/tandem/solution/tandem-hifi-nanny-available.png",
-          imageAlt: "Final Tandem high-fidelity nanny availability outcome screen",
-        },
-        {
-          title: "Final childcare edit success state (hi-fi)",
-          caption:
-            "Completed monthly childcare edit state showing explicit success feedback after user updates were saved.",
-          src: "/case-study/tandem/outcomes/tandem-hifi-childcare-edit-success.png",
-          imageAlt: "Tandem high-fidelity monthly childcare edit success state",
+            "Final dashboard combining daily schedule context and coordination in a single view.",
+          src: "/case-study/tandem/outcomes/tandem-outcome-dashboard.png",
+          imageAlt: "Tandem dashboard outcome screen",
         },
       ],
-      gradientVariant: "teal",
-    },
-    {
-      title: "Process Evidence and Iteration",
-      paragraphs: [
-        "This section compares the same core flows in mid-fi and hi-fi component files to show the iteration path from rough structure to production-ready interaction quality.",
-        "The mid-fi pass exposed weak hierarchy, fragmented transitions, and unclear status visibility in dense scheduling states.",
-        "The hi-fi pass applied those findings into clearer action order, stronger state communication, and more reliable request-to-join continuity.",
-        "Together, the two files document the full process loop: diagnose in mid-fi, refine through implementation, and validate in hi-fi.",
-      ],
-      highlights: [
-        "Mid-fi evidence: surfaced unclear hierarchy and fragmented state transitions in scheduling + sharing flows.",
-        "Hi-fi outcome: delivered clearer visual hierarchy and stronger continuity from request review to group participation.",
-        "Process result: improved responsive consistency and faster user understanding under time pressure.",
-      ],
-      assets: [
-        {
-          title: "Mid-fi component flow",
-          caption:
-            "Left preview shows the mid-fi component-file pass used to map structure and expose weak interaction points before refinement.",
-          figmaEmbedUrl:
-            "https://embed.figma.com/design/iTXfQJ6RyLxkGQFTo1kA4i/Tandem-Mid-fi?node-id=2533-3139&embed-host=share",
-        },
-        {
-          title: "Hi-fi component flow",
-          caption:
-            "Right preview shows the hi-fi component-file pass that documents the improved path from rough, confusing states to clearer production-ready behavior.",
-          figmaEmbedUrl:
-            "https://embed.figma.com/design/98OrmiJpKUOwDCuckMRcah/Tandem-High-fi?node-id=2533-3139&embed-host=share",
-        },
-      ],
-      gradientVariant: "slate",
+      gradientVariant: "mint",
     },
   ],
   caseStudyOutcomes: [
@@ -404,18 +244,6 @@ const caseStudyProject = {
     {
       label: "CCOHS: Rotational shiftwork effects on family and childcare",
       href: "https://www.ccohs.ca/oshanswers/ergonomics/shiftwrk.html",
-    },
-    {
-      label: "Government of Canada: Federal early learning and child care overview",
-      href: "https://www.canada.ca/en/employment-social-development/programs/early-learning-child-care.html",
-    },
-    {
-      label: "Statistics Canada: Canadian Income Survey (2020)",
-      href: "https://www150.statcan.gc.ca/n1/daily-quotidien/220323/dq220323a-eng.htm",
-    },
-    {
-      label: "CDC NIOSH: Shift work and long work hours training",
-      href: "https://www.cdc.gov/niosh/work-hour-training-for-nurses/longhours/mod2/08.html",
     },
   ],
   caseStudyPreview: {

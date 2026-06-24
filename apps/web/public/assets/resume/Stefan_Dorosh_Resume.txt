@@ -15,12 +15,12 @@ Engineering: Auth/session security, i18n localization, SEO strategy, Lighthouse 
 Tools: Git, GitHub, GitLab, GitHub Actions, VS Code, Linux, AWS, Vercel, Render, Jira, Trello, Figma
 
 SELECTED TECHNICAL WORK
-RUDI | rudi.asia
-Full-Stack Developer Intern | Jan 2026 - Apr 2026
-- Built features in a production Next.js App Router platform for long-term housing discovery within established architecture constraints.
-- Implemented API-integrated product flows and localization across listing, discovery, and account experiences.
-- Improved performance and UX with Lighthouse-driven optimization, lazy-loading strategies, and page-level reformatting.
-- Strengthened SEO and technical foundations with metadata updates, React refactors, and Agile bug-fix cycles.
+RUDI | rudi.asia | Private Codebase
+Full-Stack Developer | Jan 2026 - Present
+- Build across frontend, backend, and infrastructure of an AI-native real-estate platform (2,000+ verified-villa marketplace); final-round applicant (decision pending) to the a16z Speedrun and HF0 accelerators, named as a developer.
+- Worked on the flagship "Ask RUDI" voice + text AI assistant with real-time response streaming, conversation history, and reliable session handling.
+- Built responsive, mobile-first interfaces across catalog, listing, and detail pages; integrated the Google Maps API and Google OAuth + email authentication.
+- Delivered full EN/ID/RU localization on every user-facing change and drove Lighthouse/PageSpeed performance plus the SEO/manifest baseline.
 
 Vero Ventures | InsurFlow | insurflow.biz
 Full-Stack Developer Intern | Jan 2026 - Apr 2026

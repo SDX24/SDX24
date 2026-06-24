@@ -49,7 +49,7 @@ export const ProjectsScrollSection = ({ className }: ProjectsScrollSectionProps)
       "AI-Assisted Listing Workflows",
     ],
     expandedDescription:
-      "RUDI is an AI-powered and AI-native real estate system built for long-term living workflows. The platform combines multilingual video-to-listing pipelines, automated listing generation, lifestyle-first mapping through SenseMap, recommendation logic via the Best Offer Engine, and secure transaction messaging through Safe Payment. It keeps the original goal of making real estate interactions simpler and faster while adding stronger verified-inventory and AI-assisted operations at scale.",
+      'RUDI is an AI-native real-estate platform for long-term villa rentals in Bali. It combines multilingual video-to-listing pipelines, automated listing generation, lifestyle-first mapping through SenseMap, rental matching via the Best Offer Engine, and verified transaction messaging through Safe Payment, all on top of a 2,000+ verified-villa marketplace and an "Ask RUDI" voice/text assistant. RUDI is a final-round applicant (decision pending) to the a16z Speedrun and HF0 accelerators, where I am named as a developer working across the frontend, backend, and infrastructure.',
   };
 
   const insurFlowProject: ProjectWithRationale = {
