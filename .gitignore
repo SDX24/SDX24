@@ -46,6 +46,7 @@ test-results/
 Stefan_Dorosh_Assignment05.txt
 ASSIGNMENT05_TODO.md
 AGENTS.md
+CLAUDE.md
 
 # Resume / career source-of-truth (local-only, includes ~24MB tectonic binary).
 # The downloadable resume is served from apps/web/public/assets/resume/ (tracked) instead.
