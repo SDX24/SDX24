@@ -8,20 +8,6 @@ Product-minded full-stack developer focused on TypeScript/Next.js applications, 
 
 ---
 
-### 🛠️ Tech Stack
-
-**Languages:** TypeScript · JavaScript · SQL · C# · PHP · HTML · CSS/Sass
-
-**Frameworks & Libraries:** React · Next.js · Node.js · Express · Socket.IO · Tailwind CSS · Drizzle ORM · Prisma · Clerk
-
-**Data & Infra:** PostgreSQL · MySQL · MongoDB · REST APIs · CI/CD · Multi-tenant SaaS · S3-style object storage
-
-**Engineering:** Auth/session security · i18n localization · SEO & Lighthouse optimization · AI API integration
-
-**Tools:** Git · GitHub · GitLab · GitHub Actions · AWS · Vercel · Render · Linux · Figma · Jira
-
----
-
 ### 💼 Selected Work
 
 **[RUDI](https://rudi.asia) — Full-Stack Developer** · Jan 2026–Present
@@ -34,15 +20,3 @@ Rebuilt a greenfield InsurTech SaaS in a team of 5 (Next.js, TypeScript, Postgre
 Built a collaborative scheduling platform with secure authentication and reliable multi-user sessions. Designed typed Socket.IO event contracts powering real-time sharing, live chat, and synchronized scheduling, plus AI-assisted pipelines turning voice, text, and PDF inputs into structured scheduling data.
 
 ---
-
-### 🎓 Education
-
-**British Columbia Institute of Technology (BCIT)** · Diploma, Full-Stack Web Development · Sep 2024–May 2026
-
----
-
-### 📂 This Repository
-
-Source for my portfolio site at [stefandorosh.com](https://stefandorosh.com) — a Turborepo monorepo built with **Next.js 16 (App Router)**, **React 19**, **TypeScript** (strict), **Tailwind CSS**, GSAP/Framer Motion, and Playwright E2E, with automated DevOps (pre-commit hooks, CI/CD, security scanning).
-
-📫 **Open to full-stack and frontend opportunities** — reach me at stefandorosh24@gmail.com.
