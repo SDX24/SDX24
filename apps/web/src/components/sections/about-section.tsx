@@ -12,7 +12,7 @@ import { SectionHeading } from "./section-heading";
 export const AboutSection = () => (
   <section id="about" className="mx-auto w-full max-w-5xl scroll-mt-24 px-4 py-20">
     <Reveal>
-      <SectionHeading eyebrow="About" title="Who's behind this" />
+      <SectionHeading eyebrow="About" title="Background" />
     </Reveal>
 
     <Reveal className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
@@ -22,9 +22,9 @@ export const AboutSection = () => (
           BCIT&apos;s Full-Stack Web Development diploma, graduating in May 2026.
         </p>
         <p className="text-pretty">
-          The work I do sits mostly on the parts users never see directly: session handling, schema
-          design, and the socket layer that has to survive a dropped connection. On Tandem those
-          were the pieces I owned.
+          I got my first computer at six and have been tinkering with them since. I&apos;ve built my
+          own PC twice, spent a lot of time optimizing it and digging through internal settings,
+          writing small automations, and reading forums.
         </p>
         <p className="text-pretty">
           I&apos;m currently building across the stack at RUDI and looking for a full-stack role.

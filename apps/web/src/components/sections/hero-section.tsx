@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 
 /** Checkable facts, each tied to something further down the page. */
 const PROOF_POINTS = [
-  { value: "2,000+", label: "Villas on the platform I build" },
+  { value: "3", label: "Products shipped to real users" },
   { value: "8-person", label: "Team I led development on" },
   { value: "2 yrs", label: "Shipping TypeScript" },
 ];
