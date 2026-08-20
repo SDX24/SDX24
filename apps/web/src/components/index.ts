@@ -1,20 +1,7 @@
 /**
- * Components barrel export
- *
- * Export all shared components here for easier imports:
- * import { Button, Card } from "@/components"
+ * Components barrel export.
  */
 
-// Example:
-// export { Button } from "./ui/button"
-// export { Card } from "./ui/card"
-
-export { HeroBackHoverCard } from "./cards/hero-back-hover-card";
-export { ProjectFocusCard } from "./cards/project-focus-card";
-export { HeroPhotoCard } from "./cards/hero-photo-card";
-export { CometCard } from "./ui/comet-card";
-export { MainTealCard } from "./ui/main-teal-card";
-export { ProjectCardCompact } from "./ui/project-card-compact";
-export { ProjectCardExpanded } from "./ui/project-card-expanded";
-export { HandEmbed } from "./ui/hand-embed";
 export { ScrollToTopOnLoad } from "./scroll-to-top-on-load";
+export { Reveal } from "./motion/reveal";
+export { LineReveal } from "./motion/line-reveal";

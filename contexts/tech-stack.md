@@ -435,3 +435,19 @@ Complete list of all packages, tools, and technologies used in the SDX24 portfol
 
 **Last Updated**: Initial setup
 **Maintainer**: Review and update when packages change
+
+---
+
+## Typography Loading (Aug 2026)
+
+Fonts are loaded with **`next/font/google`** via `apps/web/src/lib/fonts.ts` — Space Grotesk
+(display), IBM Plex Sans (body), IBM Plex Mono (labels). Next self-hosts and subsets them at
+build time and emits `--font-display` / `--font-sans` / `--font-mono`, which
+`tailwind.config.ts` maps to `font-display` / `font-sans` / `font-mono`.
+
+No font binaries live in `apps/web/public/fonts/`; the directory was removed. The build now
+needs network access to `fonts.googleapis.com` (Vercel builds have it) and a fetch failure
+becomes a build error rather than a silent fallback.
+
+`next/og` (bundled with Next) renders the static social card in `app/opengraph-image.tsx`.
+It runs in an isolated runtime without the `next/font` faces, so that file uses system fonts.

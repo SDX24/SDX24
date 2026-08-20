@@ -3,61 +3,80 @@
 @tailwind utilities;
 
 @layer base {
-  @font-face {
-    font-family: "Space Grotesk";
-    src: url("/fonts/SpaceGrotesk-Regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  :root {
+    /* Soft near-black rather than #000: less harsh, and panels can sit above it
+       without needing a bright border to separate them. */
+    --surface-0: #0c0d0f;
+    --surface-1: #121316;
+    --hairline: rgba(255, 255, 255, 0.07);
   }
 
-  @font-face {
-    font-family: "Space Grotesk";
-    src: url("/fonts/SpaceGrotesk-Bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
   }
 
-  * {
-    font-family:
-      "Space Grotesk",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      sans-serif;
-  }
-
-  /* Prevent white background on overscroll */
   html,
   body {
-    background-color: #000000;
-    overscroll-behavior: none;
+    background-color: var(--surface-0);
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme("colors.brand.teal.light");
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: rgba(0, 169, 145, 0.28);
+    color: #ffffff;
   }
 }
 
 @layer utilities {
-  .bg-grid-dot {
-    background-image:
-      linear-gradient(to right, rgba(0, 169, 145, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 169, 145, 0.1) 1px, transparent 1px),
-      radial-gradient(rgba(242, 197, 124, 0.42) 1px, transparent 1px);
-    background-size:
-      88px 88px,
-      88px 88px,
-      18px 18px;
-    background-position: center;
-    -webkit-mask-image: radial-gradient(
-      ellipse at center,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0.2) 78%,
-      transparent 95%
-    );
-    mask-image: radial-gradient(
-      ellipse at center,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0.2) 78%,
-      transparent 95%
-    );
+  .font-mono-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -190,6 +190,10 @@ apps/web/src/
 │       └── health/
 │           └── route.ts # GET /api/health
 ├── components/           # Reusable UI components
+│   ├── layout/           # SiteHeader (sticky nav), SiteFooter
+│   ├── motion/           # Reveal, LineReveal (GSAP scroll motion primitives)
+│   ├── sections/         # hero, work, experience, skills, about, contact
+│                         #   + SectionHeading (shared eyebrow/h2/lead pattern)
 │   ├── cards/            # Hero card variants
 │   │   ├── hero-back-hover-card.tsx # Hero back compact+expanded hover pair
 │   │   ├── hero-catch-scene.tsx # Experimental hand-object bundle scene
@@ -493,3 +497,44 @@ find apps/web/src -name "*.ts" -o -name "*.tsx"
 ---
 
 **Remember**: This structure is designed for scalability. As the project grows, update this file to reflect changes!
+
+---
+
+## Homepage Section Order (Aug 2026)
+
+`apps/web/src/app/page.tsx` composes the page in this order. Section `id`s are the nav
+anchor targets and must stay in sync with `NAV_SECTIONS` in `src/lib/site.ts`.
+
+| Order | Section             | `id`         | Component               |
+| ----- | ------------------- | ------------ | ----------------------- |
+| 1     | Hero                | `top`        | `HeroSection`           |
+| 2     | Selected work       | `work`       | `ProjectsScrollSection` |
+| 3     | Experience timeline | `experience` | `ExperienceSection`     |
+| 4     | Skills + education  | `skills`     | `SkillsSection`         |
+| 5     | About               | `about`      | `AboutSection`          |
+| 6     | Contact             | `contact`    | `ContactSection`        |
+
+`SiteHeader` and `SiteFooter` are rendered by `app/layout.tsx`, not by the page.
+
+### Content source of truth
+
+`src/lib/site.ts` holds identity, links, nav, experience, skills, and education. It mirrors
+`public/assets/resume/Stefan_Dorosh_Resume.txt` — update both together so the site and the
+PDF never drift.
+
+### Routes
+
+- `/` — the single-scroll homepage
+- `/work/tandem` — the Tandem case study (static, own metadata, in the sitemap)
+
+### Content source of truth (data modules)
+
+- `src/lib/site.ts` — identity, links, nav, experience, skills, education
+- `src/lib/projects.ts` — the project catalogue (problem / approach / outcome per project)
+- `src/lib/case-study-tandem.ts` — long-form case-study content
+
+### Generated routes
+
+- `app/sitemap.ts` → `/sitemap.xml`
+- `app/robots.ts` → `/robots.txt`
+- `app/opengraph-image.tsx` → `/opengraph-image` (1200×630 social card, built statically)

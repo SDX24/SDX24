@@ -64,29 +64,76 @@
 
 ### Font Family
 
-**Primary Font**: **Space Grotesk**
+Three faces, three roles. All are self-hosted by `next/font/google` from
+`apps/web/src/lib/fonts.ts` and exposed as CSS variables — never as `@font-face` blocks
+pointing at `/public/fonts`.
 
-- **Weights**: Regular (400), Bold (700)
-- **Styles**: Normal, Italic
-- **Usage**: Global site typography
+| Role        | Family        | Tailwind       | CSS variable     | Use case                                   |
+| ----------- | ------------- | -------------- | ---------------- | ------------------------------------------ |
+| **Display** | Space Grotesk | `font-display` | `--font-display` | h1–h4, brand lockups, stat values          |
+| **Body**    | IBM Plex Sans | `font-sans`    | `--font-sans`    | Paragraphs, UI labels, links (the default) |
+| **Mono**    | IBM Plex Mono | `font-mono`    | `--font-mono`    | Eyebrows, dates, tech chips, metric labels |
 
-**Project Brand Fonts (Tandem)**
+Space Grotesk remains the brand voice; it is **display only**. Setting it on body copy
+flattens the hierarchy and was the previous state of the site.
 
-- **Alan Sans**: Display + headings (`font-alan`)
-- **omnes-pro**: Body + supporting text (`font-omnes`)
+Use the `.font-mono-label` utility for eyebrow/kicker text rather than re-declaring
+`font-mono` + `uppercase` + `tracking` at each call site.
+
+> **Never** ship font binaries in `apps/web/public/fonts/`. The two `SpaceGrotesk-*.woff2`
+> files that lived there were HTML documents, failed to decode on every page load, and went
+> unnoticed because the CSS fallback stack silently absorbed it. `next/font` fetches and
+> subsets at build time, which makes that failure mode a build error instead of a silent one.
+
+### Type Scale
+
+Defined in `tailwind.config.ts` — use these instead of ad-hoc `text-8xl`-style jumps.
+
+| Token             | Size      | Use case                     |
+| ----------------- | --------- | ---------------------------- |
+| `text-display-lg` | 4rem      | Hero h1 (sm and up)          |
+| `text-display-md` | 3rem      | Hero h1 (mobile), section h2 |
+| `text-display-sm` | 2.25rem   | Section h2 (mobile)          |
+| `text-eyebrow`    | 0.6875rem | Section kickers              |
+
+### Restraint Rules (Aug 2026)
+
+The palette above is the full vocabulary; the site deliberately uses a small slice of it.
+
+- **Surfaces:** `--surface-0` (`#0C0D0F`) for the page, `--surface-1` (`#121316`) for panels.
+  Not pure black — it was harsh, and panels needed bright borders to separate from it.
+- **Borders:** `white/[0.07]` hairlines. `white/10` only where a panel needs more definition.
+- **Text:** white for headings, `gray-300` body, `gray-500`/`gray-600` for labels and meta.
+- **Teal** is the only accent in regular use, and almost only on the primary CTA, the
+  "Current" badge, and focus rings.
+- **Apricot, clay, and coral are not used in the UI.** They remain defined for future use.
+  They were previously applied to every eyebrow and link, which made the page busy and
+  read as decoration rather than hierarchy.
+- **No background patterns.** The dotted-grid backdrop was removed; a tinted grid with
+  scattered dots is a stock generative-template look.
+
+### Copy Tone
+
+Write plainly and in the first person. State what was built, for whom, and what changed.
+
+- **No whimsy.** No mascots, no jokes in error states, no "the comet wandered off course."
+  This is professional work presented to people deciding whether to hire.
+- **No adjective stacking.** "Product-minded, passionate, driven" says nothing. A number, a
+  date, or a named system says something.
+- **Every claim should be checkable** against the résumé, a live URL, or a repository.
 
 ### Font Styles
 
-| Style       | Weight | Use Case                           |
-| ----------- | ------ | ---------------------------------- |
-| **Bold**    | 700    | Headings (h1-h3), emphasis, CTAs   |
-| **Regular** | 400    | Body text, paragraphs, UI elements |
-| **Italic**  | 400    | Quotes, subtle emphasis, captions  |
+| Style        | Weight | Use Case                           |
+| ------------ | ------ | ---------------------------------- |
+| **Bold**     | 700    | Headings (h1-h3), emphasis, CTAs   |
+| **Semibold** | 600    | Sub-headings, buttons, chips       |
+| **Regular**  | 400    | Body text, paragraphs, UI elements |
 
-**Project brand text rules**:
+**Project card text rules**:
 
-- Compact project cards: `font-alan` for title/label, `font-omnes` for body.
-- Expanded project cards: `font-alan` for title, `font-omnes` for description + metadata.
+- Compact project cards: `font-display` for the title, default body face for description.
+- Expanded project cards: `font-display` for the title, default body face for description + metadata.
 
 ### Type Scale
 
@@ -281,12 +328,12 @@ When implementing dark mode:
 ## ⚠️ Implementation Notes
 
 1. **All colors must be defined in Tailwind config**
-2. **Space Grotesk must be loaded as web font**
+2. **Fonts load via `next/font/google` only** (see `src/lib/fonts.ts`) — no `/public/fonts` binaries
 3. **Logo variants stored in `/public/`**
 4. **No deviations without explicit approval**
 5. **Test accessibility for all color combinations**
 
 ---
 
-**Last Updated**: February 03, 2026  
+**Last Updated**: August 20, 2026  
 **Brand Owner**: SDX24

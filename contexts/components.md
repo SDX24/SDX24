@@ -394,3 +394,100 @@ Only the hero card components in `components/cards/` are supported outside the U
 ---
 
 **Last Updated**: March 23, 2026
+
+---
+
+## Layout & Section Components (Aug 2026)
+
+### `SiteHeader` (`components/layout/site-header.tsx`)
+
+Client component, rendered by `app/layout.tsx`. Fixed to the top; gains a border and
+blurred background past 24px of scroll. Section links come from `NAV_SECTIONS`
+(`src/lib/site.ts`).
+
+- Active link is tracked with an `IntersectionObserver` scroll-spy, **not** a GSAP trigger —
+  this is navigation state, not scroll-linked motion, so it stays outside the animation
+  layer (AGENTS.md §7). Active link gets `aria-current="true"`.
+- Mobile nav is a disclosure toggled by a button with `aria-expanded` / `aria-controls`.
+- `html { scroll-padding-top: 6.5rem }` in `globals.css` keeps anchor targets clear of the
+  fixed header. Changing the header height means changing that value too.
+
+### `SiteFooter` (`components/layout/site-footer.tsx`)
+
+Server component. Social icon links, copyright, and a link to the portfolio's own source.
+
+### `SectionHeading` (`components/sections/section-heading.tsx`)
+
+The single heading pattern for every section: mono eyebrow → `h2` in the display face →
+optional lead capped at `max-w-prose`. **Sections must use this rather than hand-rolling a
+heading**, otherwise the type hierarchy drifts.
+
+### Section components (`components/sections/`)
+
+`HeroSection`, `AboutSection`, `SkillsSection`, `ExperienceSection`, `ContactSection`.
+All are server components except `ContactSection` (clipboard state).
+
+Heading levels are fixed: one `h1` (hero), `h2` per section, `h3` per item. Project card
+titles are `h3` — raising them to `h2` breaks the document outline.
+
+### Flip-card accessibility contract
+
+`HeroBackHoverCard` keeps its expanded back face mounted for the flip transition. While
+collapsed that face carries `aria-hidden` **and** `inert`, so its heading and links are not
+announced or focusable. Removing either re-introduces duplicate headings in the a11y tree.
+
+The expanded face renders the project's own `stack` verbatim. It previously appended
+hardcoded `"Realtime"` and `"Trusted Reviews"` chips to every project — do not reintroduce
+per-project content at this layer.
+
+---
+
+## Architecture Reset (Aug 2026)
+
+The card-interaction system was removed: `CometCard`, `MainTealCard`, `HandEmbed`,
+`ProjectCardCompact`, `ProjectCardExpanded`, `HeroBackHoverCard`, `HeroPhotoCard`,
+`ProjectFocusCard`, and `ProjectsScrollSection` (~3,500 lines) are deleted. Sections above
+that describe them are historical.
+
+**Why:** the hover-to-fullscreen flow was unreachable in production (`featured` and
+`enableFullscreen` both defaulted to `false` and nothing passed them), the flying hero card
+required ~130vh of empty scroll as a runway, and the case study it gated had no URL — it
+could not be linked in a job application or indexed by a search engine.
+
+### Motion primitives (`components/motion/`)
+
+| Component    | Use                                                                    |
+| ------------ | ---------------------------------------------------------------------- |
+| `Reveal`     | Scroll-triggered fade + 18px rise, fires once. `stagger` for children. |
+| `LineReveal` | Masked line-by-line headline reveal. **Hero only.**                    |
+
+Both are GSAP (AGENTS.md §7: GSAP owns scroll-linked motion) and both **return early when
+`prefers-reduced-motion: reduce` matches** — no `gsap.set`, no ScrollTrigger, so content is
+never left stuck at `opacity: 0`. An e2e test asserts this; do not remove that guard.
+
+`LineReveal` is used exactly once. Applying it to every heading would recreate the
+"same generic fade-in on every element" pattern that reads as machine-generated.
+
+### Sections (`components/sections/`)
+
+`HeroSection`, `WorkSection`, `ExperienceSection`, `SkillsSection`, `AboutSection`,
+`ContactSection`, plus the shared `SectionHeading`. All server components except
+`ContactSection` (clipboard state).
+
+`WorkSection` renders three weights, driven by `tier` in `src/lib/projects.ts`:
+
+| `tier`      | Project(s)        | Treatment                                       |
+| ----------- | ----------------- | ----------------------------------------------- |
+| `primary`   | RUDI              | Full width, "Current" badge, full narrative     |
+| `secondary` | Tandem, InsurFlow | Half width, equal to each other, full narrative |
+| `minor`     | Bandit Breakout   | Small card, outcome only                        |
+
+RUDI is the primary because it is current work and the strongest single signal. Exactly one
+project should hold `primary`. Cards are static — no hover-to-open, no fullscreen layer;
+depth lives in the case-study route.
+
+### Case study route (`app/work/tandem/`)
+
+Content lives in `src/lib/case-study-tandem.ts` and renders at `/work/tandem`. It is
+statically prerendered, has its own metadata and canonical URL, and is listed in
+`sitemap.ts`. New case studies follow the same shape and must be added to the sitemap.

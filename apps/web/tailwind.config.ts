@@ -9,6 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        surface: {
+          DEFAULT: "var(--surface-0)",
+          raised: "var(--surface-1)",
+        },
         brand: {
           teal: {
             light: "#00A991",
@@ -29,9 +33,28 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Space Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
-        alan: ["Alan Sans", "Space Grotesk", "sans-serif"],
-        omnes: ["omnes-pro", "Space Grotesk", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      fontSize: {
+        // Deliberate scale (~1.25 major third) instead of ad-hoc text-8xl jumps.
+        eyebrow: ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.18em" }],
+        "display-sm": ["2.25rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        "display-md": ["3rem", { lineHeight: "1.05", letterSpacing: "-0.025em" }],
+        "display-lg": ["4rem", { lineHeight: "1", letterSpacing: "-0.03em" }],
+      },
+      maxWidth: {
+        prose: "68ch",
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
     },
   },
