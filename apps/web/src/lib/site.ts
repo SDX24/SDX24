@@ -10,13 +10,12 @@ export const SITE = {
   role: "Full-Stack Web Developer",
   url: "https://stefandorosh.com",
   email: "stefandorosh24@gmail.com",
-  location: "Vancouver, BC",
+  location: "Burnaby, BC",
   description:
-    "Full-stack developer in Vancouver building TypeScript and Next.js products, focused on auth and session security, relational data modeling, and real-time systems.",
+    "Full-stack developer in Burnaby (Metro Vancouver) building TypeScript and Next.js products, focused on auth and session security, relational data modeling, and real-time systems.",
   resumePath: "/assets/resume/Resume-Stefan-Dorosh.pdf",
   links: {
     github: "https://github.com/SDX24",
-    gitlab: "https://gitlab.com/SDX24",
     linkedin: "https://linkedin.com/in/stefan-dorosh",
     source: "https://github.com/SDX24/SDX24",
   },

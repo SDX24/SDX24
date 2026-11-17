@@ -1,49 +1,53 @@
 Stefan Dorosh
 Full-Stack Web Developer
-Vancouver, BC
+Burnaby, BC (Metro Vancouver) | Open Work Permit (PGWP)
 stefandorosh24@gmail.com | 604-977-1604
-stefandorosh.com | github.com/SDX24 | gitlab.com/SDX24 | linkedin.com/in/stefan-dorosh
+stefandorosh.com | github.com/SDX24 | linkedin.com/in/stefan-dorosh
 
 SUMMARY
-Product-minded full-stack developer focused on TypeScript/Next.js applications, secure auth/session workflows, and relational data design. Experience across live company platforms and large-scale academic product builds.
+Full-stack web developer and 2026 BCIT graduate; one of two developers at RUDI, building production features in TypeScript, Next.js and React, now across frontend and backend. Also experienced with AI-assisted development.
 
 TECHNICAL SKILLS
-Languages: TypeScript, JavaScript, SQL, C#, HTML, CSS/Sass, PHP
-Frameworks/Libraries: React, Next.js, Node.js, Express, Socket.IO, Drizzle ORM, Prisma, Clerk, Tailwind CSS
-Data/Infra: PostgreSQL, MySQL, MongoDB, REST APIs, CI/CD, multi-tenant SaaS, object storage (S3-style)
-Engineering: Auth/session security, i18n localization, SEO strategy, Lighthouse optimization, AI API integration
-Tools: Git, GitHub, GitLab, GitHub Actions, VS Code, Linux, AWS, Vercel, Render, Jira, Trello, Figma
+Languages: TypeScript, JavaScript, SQL, HTML, CSS, C#
+Frontend: React, Next.js (App Router), Tailwind CSS, Effector, Framer Motion, Radix UI, Responsive design
+Backend & Data: Node.js, Express, REST APIs, Socket.IO, PostgreSQL, MySQL, MongoDB, Drizzle ORM, Prisma
+Auth & AI: NextAuth, Clerk, Session and cookie security, Groq, IBM watsonx, AI coding agents (Claude Code)
+Tools: Git, GitHub Actions, CI/CD, Playwright, Vercel, Render, Sentry, Axiom, PostHog, Linux, Jira, Figma, Agile
+Web Quality: Accessibility, i18n, SEO, Lighthouse/PageSpeed performance audits
 
-SELECTED TECHNICAL WORK
-RUDI | rudi.asia | Private Codebase
-Full-Stack Developer | Jan 2026 - Present
-- Build across frontend, backend, and infrastructure of an AI-native real-estate platform (2,000+ verified-villa marketplace); final-round applicant (decision pending) to the a16z Speedrun and HF0 accelerators, named as a developer.
-- Worked on the flagship "Ask RUDI" voice + text AI assistant with real-time response streaming, conversation history, and reliable session handling.
-- Built responsive, mobile-first interfaces across catalog, listing, and detail pages; integrated the Google Maps API and Google OAuth + email authentication.
-- Delivered full EN/ID/RU localization on every user-facing change and drove Lighthouse/PageSpeed performance plus the SEO/manifest baseline.
+EXPERIENCE
+RUDI | Full-Stack Developer | Jan 2026 - Nov 2026
+AI-native rental marketplace for Bali with 2,000+ villas (Next.js, TypeScript) | rudi.asia
+- Built mobile-first catalog, listing and detail pages, plus lead capture (Telegram contact form, WhatsApp click-tracking).
+- Built the frontend of the site's AI assistant (voice and text), including streaming responses and conversation history.
+- Redesigned supplier onboarding and e-signing: found 18 usability problems, cut twelve stages to five steps.
+- Rebuilt three-language support around per-language URLs, with structured data and a multilingual sitemap for SEO.
+- Ran PageSpeed audits, optimized images and fixed SEO issues; contributed to a team release (mobile score 42 to 74).
+- Rebuilt internal admin tools and fixed accessibility issues (contrast, keyboard navigation).
 
-Vero Ventures | InsurFlow | insurflow.biz
-Full-Stack Developer Intern | Jan 2026 - Apr 2026
-- Rebuilt a greenfield InsurTech SaaS in a team of 5 using Next.js, TypeScript, PostgreSQL, and Drizzle ORM.
-- Developed advisor-facing calculation and dashboard features; integrated AI-assisted workflows using OpenAI APIs.
-- Implemented DevOps and CI/CD guardrails using GitHub Actions with Vercel preview and production flows.
+InsurFlow (Vero Ventures) | Full-Stack Developer Intern | Jan 2026 - Apr 2026
+Canadian term-life InsurTech (Next.js, TypeScript, PostgreSQL), team of 5 | insurflow.biz
+- Set up logging, error tracking and product analytics (Axiom, Sentry, PostHog).
+- Built authenticated REST APIs and the database schema (PostgreSQL, Drizzle), covered by Playwright end-to-end tests.
+- Built advisor calculation-trace and dashboard features, and maintained CI checks in GitHub Actions (SonarCloud).
+- Automated the collection of 3,000+ industry contacts for customer discovery, and joined discovery calls.
 
-Tandem | tandem-app.com
-Lead Full-Stack Developer (Academic Industry Project) | Sep 2025 - Dec 2025
-- Built a collaborative scheduling platform with secure authentication and reliable multi-user session flows.
-- Designed typed Socket.IO event contracts powering real-time sharing, live chat, and synchronized scheduling.
-- Implemented AI-assisted pipelines converting voice, text, and PDF inputs into structured scheduling-ready data.
-
-ADDITIONAL EXPERIENCE
 W3rlds | UI/UX Web Designer Intern (Remote) | Aug 2024
-- Designed layouts in Figma and Framer, improved usability from feedback, and supported SEO-oriented content structure.
+- Designed Figma and Framer layouts for an enterprise AR/metaverse web platform; improved usability from feedback.
 
 Platform 7 Coffee | Barista | Jul 2025 - Mar 2026
-- Delivered fast customer service, handled POS operations, and coordinated effectively in high-traffic team shifts.
+- Served customers and ran the POS through high-traffic shifts while studying at BCIT.
+
+PROJECTS
+Tandem | Lead Full-Stack Developer, Academic Industry Project | Sep 2025 - Dec 2025
+Real-time childcare scheduling for parents in the skilled trades; 3 developers, 5 designers | tandem-app.com
+- Led development; built typed Socket.IO messaging and a hardened-cookie guest mode for embedding without login.
+- Built profile and nanny-sharing data models in PostgreSQL (Drizzle ORM, Neon).
+- Built AI pipelines (Groq, IBM watsonx) turning voice, text and PDFs into schedules; core flow cut from 6-7 steps to 3-4.
+
+Side Projects | Built with AI coding agents | Jun 2026 - Present
+- Shipped a real-time multiplayer web game (Next.js, Socket.IO) that friends play live, and two published Roblox games.
 
 EDUCATION
-British Columbia Institute of Technology (BCIT) | Sep 2024 - May 2026
-Diploma, Full-Stack Web Development
-
-Canggu Community School | Sep 2021 - May 2024
-International Baccalaureate Diploma Programme
+British Columbia Institute of Technology (BCIT) | Diploma, Full-Stack Web Development | Sep 2024 - May 2026
+Canggu Community School | International Baccalaureate Diploma Programme | Sep 2021 - May 2024

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { LuArrowRight, LuGithub, LuGitlab, LuLinkedin } from "react-icons/lu";
+import { LuArrowRight, LuGithub, LuLinkedin } from "react-icons/lu";
 
 import { LineReveal } from "@/components/motion/line-reveal";
 import { Reveal } from "@/components/motion/reveal";
@@ -15,7 +15,6 @@ const PROOF_POINTS = [
 
 const SOCIAL_LINKS = [
   { label: "GitHub", href: SITE.links.github, Icon: LuGithub },
-  { label: "GitLab", href: SITE.links.gitlab, Icon: LuGitlab },
   { label: "LinkedIn", href: SITE.links.linkedin, Icon: LuLinkedin },
 ];
 

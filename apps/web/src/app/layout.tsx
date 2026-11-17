@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     "Next.js",
     "React",
     "Vancouver",
+    "Burnaby",
     "Stefan Dorosh",
     "SDX24",
   ],
@@ -59,12 +60,12 @@ const personJsonLd = {
   url: SITE.url,
   email: `mailto:${SITE.email}`,
   jobTitle: SITE.role,
-  address: { "@type": "PostalAddress", addressLocality: "Vancouver", addressRegion: "BC" },
+  address: { "@type": "PostalAddress", addressLocality: "Burnaby", addressRegion: "BC" },
   alumniOf: {
     "@type": "EducationalOrganization",
     name: "British Columbia Institute of Technology",
   },
-  sameAs: [SITE.links.github, SITE.links.gitlab, SITE.links.linkedin],
+  sameAs: [SITE.links.github, SITE.links.linkedin],
   knowsAbout: ["TypeScript", "Next.js", "React", "PostgreSQL", "Node.js", "Web Security"],
 };
 

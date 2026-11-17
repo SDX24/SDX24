@@ -1,10 +1,9 @@
-import { LuArrowUpRight, LuGithub, LuGitlab, LuLinkedin, LuMail } from "react-icons/lu";
+import { LuArrowUpRight, LuGithub, LuLinkedin, LuMail } from "react-icons/lu";
 
 import { SITE } from "@/lib/site";
 
 const SOCIALS = [
   { label: "GitHub", href: SITE.links.github, Icon: LuGithub },
-  { label: "GitLab", href: SITE.links.gitlab, Icon: LuGitlab },
   { label: "LinkedIn", href: SITE.links.linkedin, Icon: LuLinkedin },
   { label: "Email", href: `mailto:${SITE.email}`, Icon: LuMail },
 ];
